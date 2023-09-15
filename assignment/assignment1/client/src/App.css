@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: 20px;
   height: 100vh;
+  width: 100vw;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   background-color: #f8f9fd;
 }
@@ -37,9 +38,12 @@ input[type="submit"]:hover {
 
 .login-form {
   background-color: white;
-  padding: 2rem;
+  padding: 4rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  
 }
+
+
 
 .list-container {
   display: flex;
