@@ -1,42 +1,187 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+.app {
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  background-color: #f8f9fd;
+}
+
+input[type="text"],
+input[type="password"] {
+  height: 25px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+input[type="submit"] {
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  background: #01d28e;
+  border: 1px solid #01d28e;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+input[type="submit"]:hover {
+  background: #4ce9b2;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  background-color: white;
   padding: 2rem;
-  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.list-container {
+  display: flex;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error {
+  color: red;
+  font-size: 12px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.title {
+  font-size: 25px;
+  margin-bottom: 20px;
 }
 
-.card {
-  padding: 2em;
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.question-page {
+  /* Full width and height of the viewport */
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto; /* Enable vertical scroll when content overflows */
+  padding: 20px; /* Add padding as needed */
+  box-sizing: border-box; /* Include padding in width and height calculations */
+}
+
+.question-list-container {
+  max-height: 70vh; /* Set a maximum height for the question list container */
+  overflow-y: auto; /* Enable vertical scroll when content exceeds the maximum height */
+}
+
+/* Style individual question items */
+.question-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.question-item:hover {
+  background-color: #e2f6f8; /* Background color on hover */
+}
+
+/* Style question titles */
+.question-item h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* Style question descriptions */
+.question-item p {
+  font-size: 15px;
+}
+
+.add-question-form {
+  width: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.add-question-form h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.add-question-form label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.add-question-form input[type="text"],
+.add-question-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.add-question-form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-question-form button:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* Style the "Add Question" button */
+.add-button {
+background-color: #007bff;
+color: #fff;
+border: none;
+border-radius: 5px;
+padding: 8px 16px; /* Adjust padding to make the button smaller */
+font-size: 14px; /* Adjust font size */
+cursor: pointer;
+}
+
+.add-button:hover {
+background-color: #0056b3;
+}
+/* Style the "Delete" button */
+.delete-button {
+background-color: #ff3333; /* Red color */
+color: #fff;
+border: none;
+border-radius: 5px;
+padding: 8px 16px;
+font-size: 14px;
+cursor: pointer;
+}
+
+.delete-button:hover {
+background-color: #cc0000; /* Darker red on hover */
+}
+
+
+.code-editor textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
 }
