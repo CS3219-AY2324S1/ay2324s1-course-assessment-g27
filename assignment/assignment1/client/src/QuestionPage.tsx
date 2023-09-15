@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import AddQuestionForm from './AddQuestionForm';
+import React, { useState } from "react";
+import AddQuestionForm from "./AddQuestionForm";
 
 interface Question {
   id: number;
@@ -16,7 +16,12 @@ interface QuestionPageProps {
 const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   const [questionList, setQuestionList] = useState<Question[]>(questions);
   const [showForm, setShowForm] = useState<boolean>(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null
+  );
+  const [deleteConfirmation, setDeleteConfirmation] = useState<Question | null>(
+    null
+  );
 
   const handleAddQuestion = (newQuestion: Question) => {
     // Add the new question to the question list
@@ -26,19 +31,51 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   };
 
   const handleDeleteQuestion = (id: number) => {
-    // Filter out the question with the given id to delete it
-    const updatedQuestions = questionList.filter((question) => question.id !== id);
-    setQuestionList(updatedQuestions);
+    // Show the delete confirmation for the selected question
+    const questionToDelete = questionList.find(
+      (question) => question.id === id
+    );
+    setDeleteConfirmation(questionToDelete || null);
   };
 
-  const handleShowQuestion = (question: Question) => {
-    setSelectedQuestion(question);
+  const confirmDelete = () => {
+    if (deleteConfirmation) {
+      // Delete the question
+      const updatedQuestions = questionList.filter(
+        (question) => question.id !== deleteConfirmation.id
+      );
+      setQuestionList(updatedQuestions);
+      // Close the delete confirmation
+      setDeleteConfirmation(null);
+    }
   };
 
-  const QuestionModal: React.FC<{ question: Question | null; onClose: () => void }> = ({
-    question,
-    onClose,
-  }) => {
+  const cancelDelete = () => {
+    // Cancel the delete confirmation
+    setDeleteConfirmation(null);
+  };
+
+  const AddQuestionFormModal: React.FC<{
+    showForm: boolean;
+    onClose: () => void;
+  }> = ({ showForm, onClose }) => {
+    if (!showForm) return null;
+
+    return (
+      <div className="modal-container">
+        <div className="modal-card">
+          <h2>Add Question</h2>
+          <AddQuestionForm onAddQuestion={handleAddQuestion} />
+          <button onClick={onClose}>Close</button>
+        </div>
+      </div>
+    );
+  };
+
+  const QuestionModal: React.FC<{
+    question: Question | null;
+    onClose: () => void;
+  }> = ({ question, onClose }) => {
     if (!question) return null;
 
     return (
@@ -54,13 +91,35 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
     );
   };
 
+  const DeleteConfirmation: React.FC<{
+    question: Question;
+    onConfirm: () => void;
+    onCancel: () => void;
+  }> = ({ question, onConfirm, onCancel }) => {
+    return (
+      <div className="modal-container">
+        <div className="modal-card">
+          <p>Are you sure you want to delete the question:</p>
+          <h2>{question.title}</h2>
+          <div className="delete-buttons">
+            <button className="confirm-delete" onClick={onConfirm}>
+              Yes
+            </button>
+            <button className="cancel-delete" onClick={onCancel}>
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="question-page">
       <h1>LeetCode Questions</h1>
       <button className="add-button" onClick={() => setShowForm(!showForm)}>
         Add Question
       </button>
-      {showForm && <AddQuestionForm onAddQuestion={handleAddQuestion} />}
       <div className="question-list">
         <ul>
           {questionList.map((question) => (
@@ -68,7 +127,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
               {/* Make the entire question card clickable */}
               <div
                 className="question-card"
-                onClick={() => handleShowQuestion(question)}
+                onClick={() => setSelectedQuestion(question)}
               >
                 <button
                   className="delete-button"
@@ -79,13 +138,28 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
                 <h2>{question.title}</h2>
                 <h3>{question.complexity}</h3>
                 <h4>{question.category}</h4>
-                {/* <p>{question.description}</p> */}
               </div>
             </li>
           ))}
         </ul>
       </div>
-      <QuestionModal question={selectedQuestion} onClose={() => setSelectedQuestion(null)} />
+      {!deleteConfirmation && (
+        <QuestionModal
+          question={selectedQuestion}
+          onClose={() => setSelectedQuestion(null)}
+        />
+      )}
+      {deleteConfirmation && (
+        <DeleteConfirmation
+          question={deleteConfirmation}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+      <AddQuestionFormModal
+        showForm={showForm}
+        onClose={() => setShowForm(false)}
+      />
     </div>
   );
 };
