@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from "react";
 
 interface FormData {
   id: number;
@@ -15,13 +15,15 @@ interface AddQuestionFormProps {
 const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
   const [formData, setFormData] = useState<FormData>({
     id: -1,
-    title: '',
-    complexity: '',
-    category: '',
-    description: '',
+    title: "",
+    complexity: "",
+    category: "",
+    description: "",
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -36,16 +38,15 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
     // Reset the form
     setFormData({
       id: -1,
-      title: '',
-      complexity: '',
-      category: '',
-      description: '',
+      title: "",
+      complexity: "",
+      category: "",
+      description: "",
     });
   };
 
   return (
     <div className="add-question-form">
-    
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Title</label>

@@ -1,7 +1,6 @@
-import React, { useState, FormEvent } from "react";
-import ReactDOM from "react-dom";
-import LoginPage from "./LoginPage";
-import QuestionPage from "./QuestionPage";
+import { useState, FormEvent } from "react";
+import LoginPage from "./scenes/loginPage/LoginPage";
+import QuestionPage from "./scenes/questionPage/QuestionPage";
 
 import "./App.css";
 
@@ -24,42 +23,48 @@ interface Question {
 }
 
 function App() {
-  const [errorMessages, setErrorMessages] = useState<ErrorMessage>({ name: "", message: "" });
+  const [errorMessages, setErrorMessages] = useState<ErrorMessage>({
+    name: "",
+    message: "",
+  });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isSignupSubmitted, setIsSignupSubmitted] = useState(false);
-  const [signupErrorMessages, setSignupErrorMessages] = useState<ErrorMessage>({ name: "", message: "" });
+  const [signupErrorMessages, setSignupErrorMessages] = useState<ErrorMessage>({
+    name: "",
+    message: "",
+  });
 
   const questions: Question[] = [
     {
       id: 1,
-      title: 'Reverse a String',
-      description: 'Description for question 1',
-      complexity: 'Easy',
-      category: 'Strings, Algorithms'
+      title: "Reverse a String",
+      description: "Description for question 1",
+      complexity: "Easy",
+      category: "Strings, Algorithms",
     },
     {
       id: 2,
-      title: 'Linked List Cycle Detection',
-      description: 'Description for question 2',
-      complexity: 'Easy',
-      category: 'Data Structures, Algorithms'
+      title: "Linked List Cycle Detection",
+      description: "Description for question 2",
+      complexity: "Easy",
+      category: "Data Structures, Algorithms",
     },
     {
       id: 3,
-      title: 'Roman to Integer',
-      description: 'Description for question 3',
-      complexity: 'Easy',
-      category: 'Algorithms'
+      title: "Roman to Integer",
+      description: "Description for question 3",
+      complexity: "Easy",
+      category: "Algorithms",
     },
     {
       id: 4,
-      title: 'Add Binary',
-      description: 'Description for question 4',
-      complexity: 'Easy',
-      category: 'Bit Manipulation, Algorithms'
+      title: "Add Binary",
+      description: "Description for question 4",
+      complexity: "Easy",
+      category: "Bit Manipulation, Algorithms",
     },
     // Add more questions here...
   ];
@@ -68,12 +73,12 @@ function App() {
   const database: User[] = [
     {
       username: "user1",
-      password: "pass1"
+      password: "pass1",
     },
     {
       username: "user2",
-      password: "pass2"
-    }
+      password: "pass2",
+    },
   ];
 
   const errors: Record<string, string> = {
@@ -99,8 +104,12 @@ function App() {
   const handleSignupSubmit = (e: FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const unameInput = form.elements.namedItem("signup-uname") as HTMLInputElement;
-    const passInput = form.elements.namedItem("signup-pass") as HTMLInputElement;
+    const unameInput = form.elements.namedItem(
+      "signup-uname"
+    ) as HTMLInputElement;
+    const passInput = form.elements.namedItem(
+      "signup-pass"
+    ) as HTMLInputElement;
 
     if (unameInput && passInput) {
       const uname = unameInput.value;
@@ -109,7 +118,10 @@ function App() {
       const isUsernameTaken = database.some((user) => user.username === uname);
 
       if (isUsernameTaken) {
-        setSignupErrorMessages({ name: "signup-uname", message: "Username is already taken." });
+        setSignupErrorMessages({
+          name: "signup-uname",
+          message: "Username is already taken.",
+        });
       } else {
         const newUser: User = {
           username: uname,
@@ -143,7 +155,6 @@ function App() {
     </div>
   );
 
-
   const renderQuestionPage = (
     <div className="question-page">
       {currentUsername && <h1>Welcome, {currentUsername}!</h1>}
@@ -158,14 +169,12 @@ function App() {
           renderQuestionPage
         ) : isSignupSubmitted ? (
           <div>User is successfully signed up and logged in</div>
-        )  : (
+        ) : (
           renderForm
         )}
       </div>
     </div>
   );
 }
-
-
 
 export default App;

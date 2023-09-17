@@ -24,7 +24,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, errorMessages }) => {
     <div className="main">
       <div className="signup">
         <form>
-          <label htmlFor="chk" aria-hidden="true">Sign up</label>
+          <label htmlFor="chk" aria-hidden="true">
+            Sign up
+          </label>
           <input type="text" name="uname" placeholder="Username" required />
           <input type="password" name="pswd" placeholder="Password" required />
           <button>Sign up</button>
@@ -35,7 +37,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, errorMessages }) => {
 
       <div className="login">
         <form onSubmit={handleSubmit}>
-          <label htmlFor="chk" aria-hidden="true">Login</label>
+          <label htmlFor="chk" aria-hidden="true">
+            Login
+          </label>
           <input type="text" name="uname" placeholder="Username" required />
           <input type="password" name="pass" placeholder="Password" required />
           <button>Login</button>

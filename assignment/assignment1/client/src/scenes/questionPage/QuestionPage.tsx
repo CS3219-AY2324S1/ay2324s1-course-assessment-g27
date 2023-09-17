@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddQuestionForm from "./AddQuestionForm";
+import AddQuestionForm from "../widgets/AddQuestionForm";
 import "./QuestionPage.css";
 
 interface Question {
