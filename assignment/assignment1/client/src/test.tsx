@@ -1,6 +1,5 @@
 import React, { useState, FormEvent } from "react";
 import ReactDOM from "react-dom";
-import LoginPage from "./LoginPage";
 import QuestionPage from "./QuestionPage";
 
 import "./App.css";
@@ -81,18 +80,28 @@ function App() {
     pass: "invalid password",
   };
 
-  const handleLogin = (username: string, password: string) => {
-    const userData = database.find((user) => user.username === username);
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const unameInput = form.elements.namedItem("uname") as HTMLInputElement;
+    const passInput = form.elements.namedItem("pass") as HTMLInputElement;
 
-    if (userData) {
-      if (userData.password !== password) {
-        setErrorMessages({ name: "pass", message: errors.pass });
+    if (unameInput && passInput) {
+      const uname = unameInput.value;
+      const pass = passInput.value;
+
+      const userData = database.find((user) => user.username === uname);
+
+      if (userData) {
+        if (userData.password !== pass) {
+          setErrorMessages({ name: "pass", message: errors.pass });
+        } else {
+          setIsLoggedIn(true);
+          setCurrentUsername(uname);
+        }
       } else {
-        setIsLoggedIn(true);
-        setCurrentUsername(username);
+        setErrorMessages({ name: "uname", message: errors.uname });
       }
-    } else {
-      setErrorMessages({ name: "uname", message: errors.uname });
     }
   };
 
@@ -132,17 +141,42 @@ function App() {
 
   const renderForm = (
     <div className="form">
-      <LoginPage onLogin={handleLogin} errorMessages={errorMessages} />
-      <div className="toggle-signup">
-        {!isSignUpMode ? (
-          <p onClick={() => setIsSignUpMode(true)}>Sign up instead</p>
-        ) : (
-          <p onClick={() => setIsSignUpMode(false)}>Back to login</p>
-        )}
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="input-container">
+          <label>Username</label>
+          <input type="text" name="uname" required />
+          {renderErrorMessage("uname", errorMessages.message)}
+        </div>
+        <div className="input-container">
+          <label>Password</label>
+          <input type="password" name="pass" required />
+          {renderErrorMessage("pass", errorMessages.message)}
+        </div>
+        <div className="button-container">
+          <input type="submit" value="Log In" />
+        </div>
+      </form>
     </div>
   );
 
+  const renderSignupForm = (
+    <div className="form">
+      <form onSubmit={handleSignupSubmit}>
+        <div className="input-container">
+          <label>Username</label>
+          <input type="text" name="signup-uname" required />
+          {renderSignupError("signup-uname", signupErrorMessages.message)}
+        </div>
+        <div className="input-container">
+          <label>Password</label>
+          <input type="password" name="signup-pass" required />
+        </div>
+        <div className="button-container">
+          <input type="submit" value="Sign Up" />
+        </div>
+      </form>
+    </div>
+  );
 
   const renderQuestionPage = (
     <div className="question-page">
@@ -158,14 +192,21 @@ function App() {
           renderQuestionPage
         ) : isSignupSubmitted ? (
           <div>User is successfully signed up and logged in</div>
-        )  : (
+        ) : isSignUpMode ? (
+          renderSignupForm
+        ) : (
           renderForm
         )}
+        <div className="toggle-signup">
+          {!isSignUpMode ? (
+            <p onClick={() => setIsSignUpMode(true)}>Sign up instead</p>
+          ) : (
+            <p onClick={() => setIsSignUpMode(false)}>Back to login</p>
+          )}
+        </div>
       </div>
     </div>
   );
 }
-
-
 
 export default App;
