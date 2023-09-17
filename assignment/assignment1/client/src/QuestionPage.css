@@ -1,0 +1,137 @@
+/* QuestionPage.css */
+
+.question-page-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #ADD8E6;
+  }
+  
+  .add-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    margin-right: 10px;
+    font-size: 14px; /* Adjust the font size to make it smaller */
+    padding: 5px 10px; /* Adjust the padding to make it smaller */
+    width: 100px;
+  }
+  
+  .add-button:hover {
+    background-color: #0056b3;
+    background-size: 100% auto
+  }
+  
+  .question-list-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .question-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .question-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+
+  
+  .question-item:hover {
+    background-color: #e2f6f8;
+  }
+  
+  .delete-button {
+    background-color: #ff3333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 100px;
+    margin-left: 10px;
+  }
+  
+  .delete-button:hover {
+    background-color: #cc0000;
+  }
+  
+  .modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+    overflow: auto;
+  }
+  
+  .modal-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .modal-card label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .modal-card input[type="text"],
+  .modal-card textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .modal-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  .modal-card button:hover {
+    background-color: #0056b3;
+  }
+  

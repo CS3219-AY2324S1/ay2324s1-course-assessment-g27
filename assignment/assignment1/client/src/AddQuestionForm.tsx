@@ -45,7 +45,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
 
   return (
     <div className="add-question-form">
-      <h2>Add a New Question</h2>
+    
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Title</label>
