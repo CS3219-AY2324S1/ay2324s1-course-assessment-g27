@@ -38,6 +38,7 @@ label{
 	font-weight: bold;
 	cursor: pointer;
 	transition: .5s ease-in-out;
+
 }
 input{
 	width: 60%;
@@ -50,6 +51,7 @@ input{
 	border: none;
 	outline: none;
 	border-radius: 5px;
+	color:#000
 }
 button{
 	width: 60%;
@@ -81,6 +83,7 @@ button:hover{
 .login label{
 	color: #573b8a;
 	transform: scale(.6);
+	font-size: 30px;
 }
 
 #chk:checked ~ .login{

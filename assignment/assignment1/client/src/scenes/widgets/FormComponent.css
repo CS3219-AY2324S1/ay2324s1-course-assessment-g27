@@ -1,12 +1,9 @@
 /* styles.css */
 
-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+.form-component {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
     
   }
   
@@ -14,22 +11,25 @@ form {
     margin-bottom: 10px;
   }
   
-  label {
+  .form-label {
     font-weight: bold;
     display: block;
     color:#0056b3;
     font-size: 20px;
+    margin-left: 500px;
   }
-  
-  input[type="text"],
+
+  .form-input[type="text"],
   textarea {
-    width: 100%;
+    width: 60%;
+    height: 50%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-  }
-  
+    margin-left: 20%;
+  } 
+  /*
   input[type="text"] {
     height: 36px;
   }
@@ -67,4 +67,4 @@ form {
   button:hover {
     background-color: #0056b3;
   }
-  
+  */

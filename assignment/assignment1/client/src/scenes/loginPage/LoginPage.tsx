@@ -61,7 +61,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSignUp, errorMessages 
           <label htmlFor="chk" aria-hidden="true">Sign up</label>
           <input type="text" name="uname" placeholder="Username" required />
           <input type="password" name="pswd" placeholder="Password" required />
-          <button>Sign up</button>
+          <button className="signup-button">Sign up</button>
         </form>
         {signupError && <p className="error-message">{signupError}</p>}
       </div>
@@ -73,7 +73,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onSignUp, errorMessages 
           <label htmlFor="chk" aria-hidden="true">Login</label>
           <input type="text" name="uname" placeholder="Username" required />
           <input type="password" name="pass" placeholder="Password" required />
-          <button>Login</button>
+          <button className="login-button">Login</button>
         </form>
         {loginError && <p className="error-message">{loginError}</p>}
       </div>

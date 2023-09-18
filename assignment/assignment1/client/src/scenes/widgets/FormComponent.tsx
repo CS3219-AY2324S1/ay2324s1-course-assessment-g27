@@ -75,10 +75,12 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}
+    className='form-component'
+    >
       <div>
-        <label htmlFor="id">ID:</label>
-        <input
+        <label className="form-label" htmlFor="id">ID:</label>
+        <input className='form-input'
           type="text"
           id="id"
           name="id"
@@ -87,8 +89,9 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="title">Title:</label>
-        <input
+        <label className="form-label"
+        htmlFor="title">Title:</label>
+        <input className='form-input'
           type="text"
           id="title"
           name="title"
@@ -97,8 +100,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="description">Description:</label>
-        <textarea
+        <label className="form-label" htmlFor="description">Description:</label>
+        <input className='form-input'
           id="description"
           name="description"
           value={formData.description}
@@ -106,8 +109,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="difficulty">Difficulty:</label>
-        <input
+        <label className="form-label" htmlFor="difficulty">Difficulty:</label>
+        <input className='form-input'
           type="text"
           id="difficulty"
           name="difficulty"
@@ -116,8 +119,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="tags">Tags (comma-separated):</label>
-        <input
+        <label className="form-label" htmlFor="tags">Tags (comma-separated):</label>
+        <input className='form-input'
           type="text"
           id="tags"
           name="tags"
@@ -126,8 +129,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="examples">Examples (comma-separated):</label>
-        <input
+        <label className="form-label" htmlFor="examples">Examples (comma-separated):</label>
+        <input className='form-input'
           type="text"
           id="examples"
           name="examples"
@@ -136,8 +139,8 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
         />
       </div>
       <div>
-        <label htmlFor="constraints">Constraints (comma-separated):</label>
-        <input
+        <label className="form-label" htmlFor="constraints">Constraints (comma-separated):</label>
+        <input className='form-input'
           type="text"
           id="constraints"
           name="constraints"
