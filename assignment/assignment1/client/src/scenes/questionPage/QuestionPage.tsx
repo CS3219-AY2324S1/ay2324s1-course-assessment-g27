@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import AddQuestionForm from './AddQuestionForm';
-import "./QuestionPage.css"
-
+import './QuestionPage.css';
+import FormComponent from '../widgets/FormComponent';
 
 interface Question {
-  id: number;
+  id: string;
   title: string;
-  complexity: string;
-  category: string;
   description: string;
+  difficulty: string;
+  tags: Array<string>;
+  examples: Array<string>;
+  constraints: Array<string>;
 }
 
 interface QuestionPageProps {
@@ -17,53 +18,34 @@ interface QuestionPageProps {
 
 const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   const [questionList, setQuestionList] = useState<Question[]>(questions);
-  const [showForm, setShowForm] = useState<boolean>(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   const [deleteConfirmation, setDeleteConfirmation] = useState<Question | null>(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const handleAddQuestion = (newQuestion: Question) => {
-    // Add the new question to the question list
-    setQuestionList([...questionList, newQuestion]);
-    // Close the form after adding a question
-    setShowForm(false);
-  };
-
-  const handleDeleteQuestion = (id: number) => {
-    // Show the delete confirmation for the selected question
+  const handleDeleteQuestion = (id: string) => {
     const questionToDelete = questionList.find((question) => question.id === id);
     setDeleteConfirmation(questionToDelete || null);
   };
 
   const confirmDelete = () => {
     if (deleteConfirmation) {
-      // Delete the question
       const updatedQuestions = questionList.filter((question) => question.id !== deleteConfirmation.id);
       setQuestionList(updatedQuestions);
-      // Close the delete confirmation
       setDeleteConfirmation(null);
     }
   };
 
   const cancelDelete = () => {
-    // Cancel the delete confirmation
     setDeleteConfirmation(null);
   };
 
-  const AddQuestionFormModal: React.FC<{ showForm: boolean; onClose: () => void }> = ({
-    showForm,
-    onClose,
-  }) => {
-    if (!showForm) return null;
+  const toggleFormVisibility = () => {
+    setIsFormVisible(!isFormVisible);
+  };
 
-    return (
-      <div className="modal-container">
-        <div className="modal-card">
-          <h2>Add Question</h2>
-          <AddQuestionForm onAddQuestion={handleAddQuestion} />
-          <button onClick={onClose}>Close</button>
-        </div>
-      </div>
-    );
+  const handleAddQuestion = (newQuestion: FormData) => {
+    setQuestionList([...questionList, { ...newQuestion, id: String(Date.now()) }]); // Assign a unique ID
+    setIsFormVisible(false);
   };
 
   const DeleteConfirmation: React.FC<{
@@ -86,16 +68,14 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   };
 
   return (
-    <div className="question-page-container"> {/* Updated class name */}
+    <div className="question-page-container">
       <h1>Questions</h1>
-      <button className="add-button" onClick={() => setShowForm(!showForm)}>
-        Add Question
-      </button>
-      <div className="question-list-container"> {/* Updated class name */}
-        <ul className="question-list"> {/* Updated class name */}
+      <button className='add-button' onClick={toggleFormVisibility}>Add Questions</button>
+      {isFormVisible && <FormComponent onAddQuestion={handleAddQuestion} />}
+      <div className="question-list-container">
+        <ul className="question-list">
           {questionList.map((question) => (
             <li key={question.id} className="question-item">
-              {/* Make the entire question card clickable */}
               <div
                 className="question-card"
                 onClick={() => setSelectedQuestion(question)}
@@ -106,16 +86,17 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
                 >
                   Delete
                 </button>
-                <h2>{question.title}</h2>
-                <h3>{question.complexity}</h3>
-                <h4>{question.category}</h4>
+                <h2>{"Title: " + question.title}</h2>
+                <h2>{"Difficulty: " + question.difficulty}</h2>
+                <h2>{"Tags: " + question.tags.join(', ')}</h2>
+                <h2>{"Description: " + question.description}</h2>
+                <h2> {"Examples: " + question.examples.join(', ')}</h2>
+                <h2> {"Constraints: " + question.constraints.join(', ')}</h2>
               </div>
             </li>
           ))}
         </ul>
       </div>
-      {/* Render the modals */}
-      <AddQuestionFormModal showForm={showForm} onClose={() => setShowForm(false)} />
       {deleteConfirmation && (
         <DeleteConfirmation
           question={deleteConfirmation}
