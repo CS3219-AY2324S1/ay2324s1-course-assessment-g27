@@ -1,8 +1,6 @@
-import React, { useState, FormEvent } from "react";
-import ReactDOM from "react-dom";
-import LoginPage from "./LoginPage";
-import QuestionPage from "./QuestionPage";
-
+import React, { useState } from "react";
+import LoginPage from "./scenes/loginPage/LoginPage";
+import QuestionPage from "./scenes/questionPage/QuestionPage";
 import "./App.css";
 
 interface User {
@@ -10,162 +8,114 @@ interface User {
   password: string;
 }
 
-interface ErrorMessage {
-  name: string;
-  message: string;
-}
-
 interface Question {
-  id: number;
+  index: string;
   title: string;
   description: string;
-  complexity: string;
-  category: string;
+  difficulty: string;
+  tags: Array<string>;
+  examples: Array<string>;
+  constraints: Array<string>;
 }
 
 function App() {
-  const [errorMessages, setErrorMessages] = useState<ErrorMessage>({ name: "", message: "" });
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUsername, setCurrentUsername] = useState<string | null>(null);
-  const [isSignUpMode, setIsSignUpMode] = useState(false);
-  const [isSignupSubmitted, setIsSignupSubmitted] = useState(false);
-  const [signupErrorMessages, setSignupErrorMessages] = useState<ErrorMessage>({ name: "", message: "" });
+  const [loginError, setLoginError] = useState<string | string>("");
+  const [signUpError, setSignUpError] = useState<string | string>("");
 
+  // Sample questions data
   const questions: Question[] = [
     {
-      id: 1,
-      title: 'Reverse a String',
-      description: 'Description for question 1',
-      complexity: 'Easy',
-      category: 'Strings, Algorithms'
+      index: "1",
+      title: "Reverse a String",
+      description: "Write a function to reverse a given string.",
+      difficulty: "Easy",
+      tags: ["Strings", " Algorithms"],
+      examples: ["Input: 'hello', Output: 'olleh'"],
+      constraints: ["Do not use built-in reverse methods."],
     },
     {
-      id: 2,
-      title: 'Linked List Cycle Detection',
-      description: 'Description for question 2',
-      complexity: 'Easy',
-      category: 'Data Structures, Algorithms'
+      index: "2",
+      title: "Linked List Cycle Detection",
+      description: "Detect if a linked list contains a cycle.",
+      difficulty: "Medium",
+      tags: ["Data Structures", "Algorithms"],
+      examples: ["Input: [1 -> 2 -> 3 -> 4 -> 2], Output: true"],
+      constraints: ["You must use constant space."],
     },
     {
-      id: 3,
-      title: 'Roman to Integer',
-      description: 'Description for question 3',
-      complexity: 'Easy',
-      category: 'Algorithms'
-    },
-    {
-      id: 4,
-      title: 'Add Binary',
-      description: 'Description for question 4',
-      complexity: 'Easy',
-      category: 'Bit Manipulation, Algorithms'
+      index: "3",
+      title: "Roman to Integer",
+      description: "Convert a Roman numeral to an integer.",
+      difficulty: "Easy",
+      tags: ["Algorithms"],
+      examples: ["Input: 'III', Output: 3"],
+      constraints: ["Roman numerals are given in the range of 1 to 3999."],
     },
     // Add more questions here...
   ];
 
-  // User Login info
+  // Sample user data
   const database: User[] = [
     {
       username: "user1",
-      password: "pass1"
+      password: "pass1",
     },
     {
       username: "user2",
-      password: "pass2"
-    }
+      password: "pass2",
+    },
+    // Add more users here...
   ];
-
-  const errors: Record<string, string> = {
-    uname: "invalid username",
-    pass: "invalid password",
-  };
 
   const handleLogin = (username: string, password: string) => {
     const userData = database.find((user) => user.username === username);
 
-    if (userData) {
-      if (userData.password !== password) {
-        setErrorMessages({ name: "pass", message: errors.pass });
-      } else {
-        setIsLoggedIn(true);
-        setCurrentUsername(username);
-      }
+    if (userData && userData.password === password) {
+      setIsLoggedIn(true);
+      setCurrentUsername(username);
+      setLoginError(""); // Reset login error
     } else {
-      setErrorMessages({ name: "uname", message: errors.uname });
+      setLoginError("Invalid username or password"); // Set login error
     }
   };
 
-  const handleSignupSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const unameInput = form.elements.namedItem("signup-uname") as HTMLInputElement;
-    const passInput = form.elements.namedItem("signup-pass") as HTMLInputElement;
-
-    if (unameInput && passInput) {
-      const uname = unameInput.value;
-      const pass = passInput.value;
-
-      const isUsernameTaken = database.some((user) => user.username === uname);
-
-      if (isUsernameTaken) {
-        setSignupErrorMessages({ name: "signup-uname", message: "Username is already taken." });
-      } else {
-        const newUser: User = {
-          username: uname,
-          password: pass,
-        };
-        database.push(newUser);
-
-        setIsLoggedIn(true);
-        setCurrentUsername(uname);
-        setIsSignupSubmitted(true);
-      }
+  const handleSignUp = (username: string, password: string) => {
+    // Check if the username is already taken
+    if (database.some((user) => user.username === username)) {
+      setSignUpError("Username is already taken. Please choose another.");
+    } else {
+      // Add the new user to the list
+      database.push({ username, password });
+      setIsLoggedIn(true);
+      setCurrentUsername(username);
+      setSignUpError(""); // Reset signup error
     }
   };
-
-  const renderErrorMessage = (name: string, message: string) =>
-    name === errorMessages.name && <div className="error">{message}</div>;
-
-  const renderSignupError = (name: string, message: string) =>
-    name === signupErrorMessages.name && <div className="error">{message}</div>;
-
-  const renderForm = (
-    <div className="form">
-      <LoginPage onLogin={handleLogin} errorMessages={errorMessages} />
-      <div className="toggle-signup">
-        {!isSignUpMode ? (
-          <p onClick={() => setIsSignUpMode(true)}>Sign up instead</p>
-        ) : (
-          <p onClick={() => setIsSignUpMode(false)}>Back to login</p>
-        )}
-      </div>
-    </div>
-  );
-
-
-  const renderQuestionPage = (
-    <div className="question-page">
-      {currentUsername && <h1>Welcome, {currentUsername}!</h1>}
-      <QuestionPage questions={questions} />
-    </div>
-  );
 
   return (
     <div className="app">
       <div className="login-form">
         {isLoggedIn ? (
-          renderQuestionPage
-        ) : isSignupSubmitted ? (
-          <div>User is successfully signed up and logged in</div>
-        )  : (
-          renderForm
+          <div className="question-page">
+            {currentUsername && <h1>Welcome, {currentUsername}!</h1>}
+            <QuestionPage questions={questions} />
+          </div>
+        ) : (
+          <div>
+            <LoginPage
+              onLogin={handleLogin}
+              onSignUp={handleSignUp}
+              errorMessages={{ login: loginError, signUp: signUpError }}
+            />
+            {loginError && <p className="error-message">{loginError}</p>}
+            {signUpError && <p className="error-message">{signUpError}</p>}
+          </div>
         )}
       </div>
     </div>
   );
 }
-
-
 
 export default App;
