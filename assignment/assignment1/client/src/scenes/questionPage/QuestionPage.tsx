@@ -3,7 +3,7 @@ import './QuestionPage.css';
 import FormComponent from '../widgets/FormComponent';
 
 interface Question {
-  id: string;
+  index: string;
   title: string;
   description: string;
   difficulty: string;
@@ -22,14 +22,14 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   const [deleteConfirmation, setDeleteConfirmation] = useState<Question | null>(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const handleDeleteQuestion = (id: string) => {
-    const questionToDelete = questionList.find((question) => question.id === id);
+  const handleDeleteQuestion = (index: string) => {
+    const questionToDelete = questionList.find((question) => question.index === index);
     setDeleteConfirmation(questionToDelete || null);
   };
 
   const confirmDelete = () => {
     if (deleteConfirmation) {
-      const updatedQuestions = questionList.filter((question) => question.id !== deleteConfirmation.id);
+      const updatedQuestions = questionList.filter((question) => question.index !== deleteConfirmation.index);
       setQuestionList(updatedQuestions);
       setDeleteConfirmation(null);
     }
@@ -44,7 +44,7 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
   };
 
   const handleAddQuestion = (newQuestion: FormData) => {
-    setQuestionList([...questionList, { ...newQuestion, id: String(Date.now()) }]); // Assign a unique ID
+    setQuestionList([...questionList, { ...newQuestion, index: String(Date.now()) }]); // Assign a unique ID
     setIsFormVisible(false);
   };
 
@@ -75,14 +75,14 @@ const QuestionPage: React.FC<QuestionPageProps> = ({ questions }) => {
       <div className="question-list-container">
         <ul className="question-list">
           {questionList.map((question) => (
-            <li key={question.id} className="question-item">
+            <li key={question.index} className="question-item">
               <div
                 className="question-card"
                 onClick={() => setSelectedQuestion(question)}
               >
                 <button
                   className="delete-button"
-                  onClick={() => handleDeleteQuestion(question.id)}
+                  onClick={() => handleDeleteQuestion(question.index)}
                 >
                   Delete
                 </button>

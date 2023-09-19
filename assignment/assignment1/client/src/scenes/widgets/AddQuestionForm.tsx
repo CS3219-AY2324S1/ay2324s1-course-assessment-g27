@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import './AddQuestionForm.css';
 
 interface FormData {
-  id: string;
+  index: string;
   title: string;
   description: string;
   difficulty: string;
@@ -17,7 +17,7 @@ interface AddQuestionFormProps {
 
 const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
   const initialFormData: FormData = {
-    id: '',
+    index: '',
     title: '',
     description: '',
     difficulty: '',
@@ -49,13 +49,13 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>ID</label>
-          <input
+          {/* <input
             type="text"
             name="id"
             value={formData.id}
             onChange={handleChange}
             required
-          />
+          /> */}
         </div>
         <div className="form-group">
           <label>Title</label>

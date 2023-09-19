@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './FormComponent.css';
 
 interface FormData {
-  id: string;
+  index: string;
   title: string;
   description: string;
   difficulty: string;
@@ -16,7 +16,7 @@ interface FormComponentProps {
 }
 
 const initialFormData: FormData = {
-  id: '',
+  index: '',
   title: '',
   description: '',
   difficulty: '',
@@ -78,16 +78,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ onAddQuestion }) => {
     <form onSubmit={handleSubmit}
     className='form-component'
     >
-      <div>
-        <label className="form-label" htmlFor="id">ID:</label>
-        <input className='form-input'
-          type="text"
-          id="id"
-          name="id"
-          value={formData.id}
-          onChange={handleChange}
-        />
-      </div>
+    
       <div>
         <label className="form-label"
         htmlFor="title">Title:</label>

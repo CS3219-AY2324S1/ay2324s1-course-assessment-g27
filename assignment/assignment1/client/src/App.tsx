@@ -9,7 +9,7 @@ interface User {
 }
 
 interface Question {
-  id: string;
+  index: string;
   title: string;
   description: string;
   difficulty: string;
@@ -27,7 +27,7 @@ function App() {
   // Sample questions data
   const questions: Question[] = [
     {
-      id: "1",
+      index: "1",
       title: "Reverse a String",
       description: "Write a function to reverse a given string.",
       difficulty: "Easy",
@@ -36,7 +36,7 @@ function App() {
       constraints: ["Do not use built-in reverse methods."],
     },
     {
-      id: "2",
+      index: "2",
       title: "Linked List Cycle Detection",
       description: "Detect if a linked list contains a cycle.",
       difficulty: "Medium",
@@ -45,7 +45,7 @@ function App() {
       constraints: ["You must use constant space."],
     },
     {
-      id: "3",
+      index: "3",
       title: "Roman to Integer",
       description: "Convert a Roman numeral to an integer.",
       difficulty: "Easy",
