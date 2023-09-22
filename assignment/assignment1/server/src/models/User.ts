@@ -14,18 +14,18 @@ const userSchema = new mongoose.Schema(
       required: true,
       min: 5,
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    picturePath: {
-      type: String,
-      default: "",
-    },
-    questions: {
-      type: Array,
-      default: [],
-    },
+    // isAdmin: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // picturePath: {
+    //   type: String,
+    //   default: "",
+    // },
+    // questions: {
+    //   type: Array,
+    //   default: [],
+    // },
   }, {timestamps: true}
 );
 

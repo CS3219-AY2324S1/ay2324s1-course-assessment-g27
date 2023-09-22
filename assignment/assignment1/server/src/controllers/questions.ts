@@ -12,7 +12,7 @@ export const createQuestion = async (req: Request, res: Response) => {
       examples: examples,
       constraints: constraints,
       tags: tags,
-      picturePath: picturePath,
+      // picturePath: picturePath,
     });
 
     await newQuestion.save();
