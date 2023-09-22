@@ -10,7 +10,7 @@ import path from "path";
 // import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
-import postRoutes from "./routes/questions";
+import questionRoutes from "./routes/questions";
 import { register } from "./controllers/auth";
 import { createQuestion } from "./controllers/questions";
 import { verifyToken } from "./middleware/auth";
@@ -44,13 +44,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /* ROUTES WITH FILES */
-app.post("/auth/register", upload.single("picture"), register);
-app.post("/questions", verifyToken, upload.single("picture"), createQuestion);
+// app.post("/auth/register", upload.single("picture"), register);
+// app.post("/questions", verifyToken, upload.single("picture"), createQuestion);
 
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/questions", postRoutes);
+app.use("/questions", questionRoutes);
+app.post("/questions", verifyToken, createQuestion);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
