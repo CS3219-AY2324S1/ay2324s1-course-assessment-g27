@@ -73,13 +73,21 @@ const Form = () => {
       //   }
       // }
     }
+    let username = formData.get("username");
+    let password = formData.get("password");
     // formData.append("picturePath", values.picture!.name);
-
     const savedUserRespone = await fetch(
       `http://localhost:${PORT}/auth/register`,
       {
         method: "POST",
-        body: formData,
+        // body: formData,
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        },
       }
     );
     const savedUser = await savedUserRespone.json();
