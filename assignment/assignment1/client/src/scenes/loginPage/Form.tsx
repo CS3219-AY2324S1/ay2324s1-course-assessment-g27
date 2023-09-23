@@ -73,8 +73,8 @@ const Form = () => {
       //   }
       // }
     }
-    let username = formData.get("username");
-    let password = formData.get("password");
+    const username = formData.get("username");
+    const password = formData.get("password");
     // formData.append("picturePath", values.picture!.name);
     const savedUserRespone = await fetch(
       `http://localhost:${PORT}/auth/register`,
@@ -86,7 +86,7 @@ const Form = () => {
           password,
         }),
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       }
     );
