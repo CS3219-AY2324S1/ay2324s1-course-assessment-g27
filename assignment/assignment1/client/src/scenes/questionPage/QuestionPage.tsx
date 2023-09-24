@@ -71,7 +71,7 @@
 //     <div className="question-page-container">
 //       <h1>Questions</h1>
 //       <button className='add-button' onClick={toggleFormVisibility}>Add Questions</button>
-//       {isFormVisible && <FormComponent onAddQuestion={handleAddQuestion} />}
+//       {/* {isFormVisible && <FormComponent onAddQuestion={handleAddQuestion} />} */}
 //       <div className="question-list-container">
 //         <ul className="question-list">
 //           {questionList.map((question) => (
@@ -111,8 +111,7 @@
 // export default QuestionPage;
 import { Box, useMediaQuery } from "@mui/material";
 import Navbar from "../navBar";
-// import MyQuestionWidget from "../widgets/MyQuestionWidget";
-
+import {MyQuestionWidget, DisplayQuestionsTableWidget} from "../widgets/MyQuestionWidget";
 const QuestionPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
@@ -130,7 +129,8 @@ const QuestionPage = () => {
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
-          {/* <MyQuestionWidget></MyQuestionWidget> */}
+          <MyQuestionWidget/>
+          <DisplayQuestionsTableWidget/>
         </Box>
         {isNonMobileScreens && <Box flexBasis="26%"></Box>}
       </Box>
