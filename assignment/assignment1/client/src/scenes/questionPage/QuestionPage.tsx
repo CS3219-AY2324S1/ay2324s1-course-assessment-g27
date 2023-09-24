@@ -111,7 +111,7 @@
 // export default QuestionPage;
 import { Box, useMediaQuery } from "@mui/material";
 import Navbar from "../navBar";
-import {MyQuestionWidget, DisplayQuestionsTableWidget} from "../widgets/MyQuestionWidget";
+import MyQuestionWidget from "../widgets/MyQuestionWidget";
 const QuestionPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
@@ -130,7 +130,6 @@ const QuestionPage = () => {
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <MyQuestionWidget/>
-          <DisplayQuestionsTableWidget/>
         </Box>
         {isNonMobileScreens && <Box flexBasis="26%"></Box>}
       </Box>

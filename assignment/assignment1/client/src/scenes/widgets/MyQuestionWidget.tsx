@@ -44,6 +44,8 @@ const MyQuestionWidget = () => {
   const mediumMain = theme.palette.neutral.mediumMain;
   const medium = theme.palette.neutral.medium;
 
+  const[questionData, setQuestionData] = useState<Question[]>([]);
+
   const handleQuestion = async () => {
     const formData = new FormData();
     formData.append("title", title);
@@ -60,7 +62,7 @@ const MyQuestionWidget = () => {
     }
     // Get back the .json file
     const questions = await createQuestion(formData, token);
-
+    setQuestionData([...questionData, questions]);
     dispatch(setQuestions({ questions }));
     setTitle("");
     setDifficulty("");
@@ -69,6 +71,15 @@ const MyQuestionWidget = () => {
     setConstraints([]);
     setTags([]);
   };
+
+  // Get the questions
+  useEffect(() => {
+    async function getQuestions() {
+      const questionList = await getQuestionList(token);
+      setQuestionData(questionList);
+    }
+    getQuestions();
+  }, []);
 
   return (
     <WidgetWrapper>
@@ -129,30 +140,7 @@ const MyQuestionWidget = () => {
           Add
         </Button>
       </FlexBetween>
-    </WidgetWrapper>
-  );
-};
-
-const DisplayQuestionsTableWidget = () => {
-  const dispatch = useDispatch();
-  const theme: Theme = useTheme();
-  const { _id } = useSelector((state: State) => state.user);
-  const token = useSelector((state: State) => state.token);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const mediumMain = theme.palette.neutral.mediumMain;
-  const medium = theme.palette.neutral.medium;
-
-  const[data, setData] = useState<Question[]>([]);
-  useEffect(() => {
-    async function getQuestions() {
-      const questionList = await getQuestionList(token);
-      setData(questionList);
-    }
-    getQuestions();
-  }, []);
-
-  return (
-    <div>
+      <div>
       <div style={{width:"auto"}}>
         <table style={{width: 500}}>
           <tr>
@@ -160,7 +148,7 @@ const DisplayQuestionsTableWidget = () => {
             <th>Diffculties</th>
             <th>Description</th>
           </tr>
-          {data.map(i => {
+          {questionData.map(i => {
             return(
               <tr>
                 <td>{i.title}</td>
@@ -173,7 +161,9 @@ const DisplayQuestionsTableWidget = () => {
 
       </div>
     </div>
+    </WidgetWrapper>
   );
 };
 
-export  {MyQuestionWidget, DisplayQuestionsTableWidget};
+
+export default  MyQuestionWidget;
