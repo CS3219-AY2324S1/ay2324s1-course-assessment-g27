@@ -19,11 +19,15 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setQuestions } from "../../state";
+import { Question } from "../../state/question";
 import { Theme } from "@mui/system";
 import { PORT } from "../../constants/constants";
+import { createQuestion } from "../../api/questionAPI/createQuestion";
+import { getQuestionList } from "../../api/questionAPI/getQuestion";
+import { API_URL } from "../../api/config";
 
 const MyQuestionWidget = () => {
   const dispatch = useDispatch();
@@ -40,6 +44,8 @@ const MyQuestionWidget = () => {
   const mediumMain = theme.palette.neutral.mediumMain;
   const medium = theme.palette.neutral.medium;
 
+  const[questionData, setQuestionData] = useState<Question[]>([]);
+
   const handleQuestion = async () => {
     const formData = new FormData();
     formData.append("title", title);
@@ -54,13 +60,9 @@ const MyQuestionWidget = () => {
     for (let i = 0; i < tags.length; i++) {
       formData.append("tags[]", tags[i]);
     }
-
-    const response = await fetch(`http://localhost:${PORT}/questions`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const questions = await response.json();
+    // Get back the .json file
+    const questions = await createQuestion(formData, token);
+    setQuestionData([...questionData, questions]);
     dispatch(setQuestions({ questions }));
     setTitle("");
     setDifficulty("");
@@ -69,6 +71,15 @@ const MyQuestionWidget = () => {
     setConstraints([]);
     setTags([]);
   };
+
+  // Get the questions
+  useEffect(() => {
+    async function getQuestions() {
+      const questionList = await getQuestionList(token);
+      setQuestionData(questionList);
+    }
+    getQuestions();
+  }, []);
 
   return (
     <WidgetWrapper>
@@ -86,8 +97,8 @@ const MyQuestionWidget = () => {
         />
         <InputBase
           placeholder="Enter difficulty"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
+          onChange={(e) => setDifficulty(e.target.value)}
+          value={difficulty}
           sx={{
             width: "100%",
             backgroundColor: theme.palette.neutral.light,
@@ -97,8 +108,8 @@ const MyQuestionWidget = () => {
         />
         <InputBase
           placeholder="Enter description"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
           sx={{
             width: "100%",
             backgroundColor: theme.palette.neutral.light,
@@ -106,9 +117,53 @@ const MyQuestionWidget = () => {
             padding: "1rem 2rem",
           }}
         />
+        {/* <InputBase
+          placeholder="Enter example"
+          onChange={(e) => setExamples(e.target.value)}
+          value={examples}
+          sx={{
+            width: "100%",
+            backgroundColor: theme.palette.neutral.light,
+            borderRadius: "2rem",
+            padding: "1rem 2rem",
+          }}
+        /> */}
+        <Button
+          disabled={!title && !difficulty && ! description}
+          onClick={handleQuestion}
+          sx={{
+            color: theme.palette.background.alt,
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: "3rem",
+          }}
+        >
+          Add
+        </Button>
       </FlexBetween>
+      <div>
+      <div style={{width:"auto"}}>
+        <table style={{width: 500}}>
+          <tr>
+            <th>Name</th>
+            <th>Diffculties</th>
+            <th>Description</th>
+          </tr>
+          {questionData.map(i => {
+            return(
+              <tr>
+                <td>{i.title}</td>
+                <td>{i.difficulty}</td>
+                <td>{i.description}</td>
+              </tr>
+            );
+          })}
+        </table>
+
+      </div>
+    </div>
     </WidgetWrapper>
   );
 };
 
-export default MyQuestionWidget;
+
+export default  MyQuestionWidget;
