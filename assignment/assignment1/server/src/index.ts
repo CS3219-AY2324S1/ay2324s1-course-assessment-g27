@@ -21,7 +21,7 @@ import { users, questions } from "./data/index";
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
-dotenv.config(); 
+require("dotenv").config('./.env');
 const app = express();
 app.use(express.json()); 
 app.use(helmet()); 
