@@ -62,7 +62,7 @@ const MyQuestionWidget = () => {
     }
     // Get back the .json file
     const questions = await createQuestion(formData, token);
-    setQuestionData([...questionData, questions]);
+    setQuestionData(questions);
     dispatch(setQuestions({ questions }));
     setTitle("");
     setDifficulty("");
@@ -72,7 +72,7 @@ const MyQuestionWidget = () => {
     setTags([]);
   };
 
-  // Get the questions
+  // Get the questions from DB
   useEffect(() => {
     async function getQuestions() {
       const questionList = await getQuestionList(token);
