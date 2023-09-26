@@ -21,11 +21,16 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 
   const handleSave = () => {
     onSave(updatedData);
-    onClose();
+    clearForm();
   };
 
+  const clearForm =() => {
+    onClose();
+    setUpdatedData({ ...updatedData, title:"", description:"",difficulty:"",tags:[],examples:[],constraints:[]});
+  }
+
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={clearForm}>
       <Box sx={{position: "absolute", top: "50%", left: "80%", transform: "translate(-50%, -50%)", padding:"0", width:"500px" }}>
         <div>
           <TextField sx={{width:"100%"}}
