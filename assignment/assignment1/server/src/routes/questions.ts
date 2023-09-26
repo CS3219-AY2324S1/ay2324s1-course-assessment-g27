@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllQuestions, getUserQuestions, likeQuestion } from "../controllers/questions";
+import { getAllQuestions, createQuestion, deleteQuestion, getUserQuestions, likeQuestion, updateQuestion } from "../controllers/questions";
 import { verifyToken } from "../middleware/auth";
 
 const router = express.Router();
@@ -7,6 +7,15 @@ const router = express.Router();
 /* READ */
 router.get("/", verifyToken, getAllQuestions);
 // router.get("/:userId/questions", verifyToken, getUserQuestions);
+
+/* CREATE */
+router.post("/", verifyToken, createQuestion);
+
+/* DELETE */
+router.delete("/:id", verifyToken, deleteQuestion);
+
+/* UPDATE */
+router.put("/:id", verifyToken, updateQuestion);
 
 /* UPDATE */
 // router.patch("/:id/like", verifyToken, likeQuestion);
