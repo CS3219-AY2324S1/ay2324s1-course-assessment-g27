@@ -21,7 +21,7 @@ import { users, questions } from "./data/index";
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
-dotenv.config(); 
+require("dotenv").config('./.env');
 const app = express();
 app.use(express.json()); 
 app.use(helmet()); 
@@ -51,8 +51,6 @@ const upload = multer({ storage });
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/questions", questionRoutes);
-app.post("/questions", verifyToken, createQuestion);
-app.get("/questions", verifyToken, getAllQuestions);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

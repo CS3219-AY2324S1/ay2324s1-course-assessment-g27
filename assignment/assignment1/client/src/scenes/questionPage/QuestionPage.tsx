@@ -125,8 +125,8 @@ const QuestionPage = () => {
         gap="0.5rem"
         justifyContent="space-between"
       >
-        <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+        <Box sx={{width:"100%", padding:"0"}}
+          flexBasis={isNonMobileScreens ? "69%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <MyQuestionWidget/>
