@@ -17,7 +17,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
     tags: question.tags,
     examples: question.examples,
     constraints: question.constraints,
-});
+  });
 
   const handleSave = () => {
     onSave(updatedData);
@@ -69,7 +69,10 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
             onChange={(e) => setUpdatedData({ ...updatedData, constraints: e.target.value.split(",") })}
           />
         </div>
-        <Button variant="outlined" onClick={handleSave}>
+        <Button 
+          disabled={updatedData.title == "" || updatedData.difficulty == "" || updatedData.description ==""} 
+          variant="outlined" 
+          onClick={handleSave}>
           Save
         </Button>
       </Box>

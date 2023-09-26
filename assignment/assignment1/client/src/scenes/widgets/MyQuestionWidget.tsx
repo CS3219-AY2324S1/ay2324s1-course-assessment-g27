@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import './MyQuestionWidget.css';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setQuestions } from "../../state";
@@ -23,12 +24,15 @@ import EditQuestionPopup from "./editQuestionPopup";
 
 const MyQuestionWidget = () => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState("");
-  const [difficulty, setDifficulty] = useState("");
-  const [description, setDescription] = useState("");
-  const [examples, setExamples] = useState([]);
-  const [constraints, setConstraints] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [newData, setData] = useState<Partial<Question>>({
+    title: "",
+    difficulty: "",
+    description: "",
+    tags: [],
+    examples: [],
+    constraints: [],
+  });
+
   const theme: Theme = useTheme();
   const { _id } = useSelector((state: State) => state.user);
   const token = useSelector((state: State) => state.token);
@@ -50,33 +54,13 @@ const MyQuestionWidget = () => {
     tags: []
   };
 
-  const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);
-
-  
+  const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);  
   const handleQuestion = async () => {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("difficulty", difficulty);
-    formData.append("description", description);
-    for (let i = 0; i < examples.length; i++) {
-      formData.append("examples[]", examples[i]);
-    }
-    for (let i = 0; i < constraints.length; i++) {
-      formData.append("constraints[]", constraints[i]);
-    }
-    for (let i = 0; i < tags.length; i++) {
-      formData.append("tags[]", tags[i]);
-    }
     // Get back the .json file
-    const questions = await createQuestion(formData, token);
+    const questions = await createQuestion(newData, token);
     setQuestionData(questions);
     dispatch(setQuestions({ questions }));
-    setTitle("");
-    setDifficulty("");
-    setDescription("");
-    setExamples([]);
-    setConstraints([]);
-    setTags([]);
+    setData(NoQuestionSelected);
   };
 
   // Get the questions from DB
@@ -119,55 +103,50 @@ const MyQuestionWidget = () => {
     }
   };
 
+  const InputBaseSxCSS = {
+    width: "100%",
+    backgroundColor: theme.palette.neutral.light,
+    borderRadius: "2rem",
+    padding: "1rem 2rem",
+  };
+
   return (
     <WidgetWrapper sx={{width:"100%"}}>
       <FlexBetween gap="1.5rem">
         <InputBase
           placeholder="Enter title"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
+          onChange={(e) => setData({ ...newData, title: e.target.value})}
+          value={newData.title}
           sx={{
-            width: "100%",
-            backgroundColor: theme.palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            ...InputBaseSxCSS
           }}
         />
         <InputBase
           placeholder="Enter difficulty"
-          onChange={(e) => setDifficulty(e.target.value)}
-          value={difficulty}
+          onChange={(e) => setData({ ...newData, difficulty: e.target.value})}
+          value={newData.difficulty}
           sx={{
-            width: "100%",
-            backgroundColor: theme.palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            ...InputBaseSxCSS
           }}
         />
         <InputBase
           placeholder="Enter description"
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
+          onChange={(e) => setData({ ...newData, description: e.target.value})}
+          value={newData.description}
           sx={{
-            width: "100%",
-            backgroundColor: theme.palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            ...InputBaseSxCSS
           }}
         />
-        {/* <InputBase
-          placeholder="Enter example"
-          onChange={(e) => setExamples(e.target.value)}
-          value={examples}
+        <InputBase
+          placeholder="Enter tags"
+          onChange={(e) => setData({ ...newData, tags: [e.target.value]})}
+          value={newData.tags}
           sx={{
-            width: "100%",
-            backgroundColor: theme.palette.neutral.light,
-            borderRadius: "2rem",
-            padding: "1rem 2rem",
+            ...InputBaseSxCSS
           }}
-        /> */}
+        /> 
         <Button
-          disabled={!title && !difficulty && ! description}
+          disabled={newData.title == "" || newData.difficulty == "" || newData.description ==""}
           onClick={handleQuestion}
           sx={{
             color: theme.palette.background.alt,
@@ -179,12 +158,13 @@ const MyQuestionWidget = () => {
         </Button>
       </FlexBetween>
       <div>
-      <div style={{width:"auto"}}>
-        <table style={{width:"100%"}}>
+      <div className="questionTable">
+        <table className="questionTableList">
           <tr>
-            <th>Name</th>
+            <th>Title</th>
             <th>Difficulty</th>
             <th>Description</th>
+            <th>Tags</th>
           </tr>
           {questionData.map(i => {
             return(
@@ -192,6 +172,7 @@ const MyQuestionWidget = () => {
                 <td>{i.title}</td>
                 <td>{i.difficulty}</td>
                 <td>{i.description}</td>
+                <td>{i.tags}</td>
                 <td style={{padding:"0"}}> <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
                 <EditOutlined /></Button></td>
                 <td ><Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>

@@ -1,0 +1,11 @@
+.questionTable {
+    width:"auto";
+}
+
+.questionTableList {
+    width: 100%;
+}
+
+.questionTableList td {
+    text-align: center;
+}
