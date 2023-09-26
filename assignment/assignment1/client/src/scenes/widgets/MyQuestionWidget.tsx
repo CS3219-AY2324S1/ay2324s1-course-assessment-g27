@@ -183,7 +183,7 @@ const MyQuestionWidget = () => {
         <table style={{width:"100%"}}>
           <tr>
             <th>Name</th>
-            <th>Diffculties</th>
+            <th>Difficulty</th>
             <th>Description</th>
           </tr>
           {questionData.map(i => {

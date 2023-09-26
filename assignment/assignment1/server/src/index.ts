@@ -51,8 +51,6 @@ const upload = multer({ storage });
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/questions", questionRoutes);
-app.post("/questions", verifyToken, createQuestion);
-app.get("/questions", verifyToken, getAllQuestions);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
