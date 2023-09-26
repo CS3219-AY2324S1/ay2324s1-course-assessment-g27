@@ -48,6 +48,40 @@ export const getUserQuestions = async (req: Request, res: Response) => {
   }
 }
 
+/* DELETE */
+export const deleteQuestion = async(req: Request, res: Response) => {
+  try {
+    const questionId = req.params.id; 
+    
+    const deletedQuestion = await Question.deleteOne({ _id: questionId });
+
+    if (!deletedQuestion) {
+      return res.status(404).json({ message: 'Question is not found' });
+    }
+
+    res.status(200).json({deletedQuestion});
+  } catch (err: any) {
+    res.status(409).json({ message: err.message });
+  }
+
+}
+/* UPDATE */
+export const updateQuestion = async (req: Request, res: Response) => {
+  try {
+    const questionId = req.params.id;
+    const {title, difficulty, description, examples, constraints, tags} = req.body;
+
+    const updatedQuestion = await Question.findByIdAndUpdate( questionId, {title, difficulty, description, examples, constraints, tags});
+
+    if (!updatedQuestion) {
+      return res.status(404).json({ message: 'Question is not found' });
+    }
+    res.json(updatedQuestion);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
 /* UPDATE */
 /**
  * TODO: Update number of likes.
