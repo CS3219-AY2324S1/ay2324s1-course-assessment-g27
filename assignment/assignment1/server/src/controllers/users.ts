@@ -4,8 +4,22 @@ import { QueryResult } from "pg";
 import { pool } from "./dbConnection";
 import * as queries from "../models/Queries"
 
+
+/* this is the original getUser using mongo */
+// /* READ */
+// export const getUser = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const user = await User.findById(id);
+//     res.status(200).json(user);
+//   } catch (err: any) {
+//     res.status(404).json( {message: err.message });
+//   }
+// }
 /* ALL FUNCTIONS USES UNAME AND PWD TO QUERY */
 /* can also change to using id if need be */
+
+
 /**
  * create new user in db with input uname and pwd
  * @param req 
