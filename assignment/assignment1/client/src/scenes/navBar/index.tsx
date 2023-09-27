@@ -35,7 +35,7 @@ const Navbar = () => {
   // const username = "dummy";
 
   return (
-    <FlexBetween padding="1rem 6%" sx={{ backgroundColor: alt }}>
+    <FlexBetween padding="1rem 6%">
       <FlexBetween gap="1.75rem">
         <Typography
           fontWeight="bold"

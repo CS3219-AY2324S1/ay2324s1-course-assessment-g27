@@ -15,11 +15,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setQuestions } from "../../state";
 import { Question } from "../../state/question";
-import { Theme } from "@mui/system";
+import { Theme, style } from "@mui/system";
 import { createQuestion } from "../../api/questionAPI/createQuestion";
 import { getQuestionList } from "../../api/questionAPI/getQuestion";
 import { deleteQuestionByID } from "../../api/questionAPI/deleteQuestion";
 import { editQuestionById } from "../../api/questionAPI/editQuestion";
+import DisplayDescription from "./DisplayDescriptionForm"
 import EditQuestionPopup from "./editQuestionPopup";
 
 const MyQuestionWidget = () => {
@@ -42,6 +43,7 @@ const MyQuestionWidget = () => {
 
   const[questionData, setQuestionData] = useState<Question[]>([]);
   const [openEditPopup, setOpenEditPopup] = useState(false);
+  const [openDescriptionPopup, setOpenDescriptionPopup] = useState(false);
 
   //for empty selected question state
   const NoQuestionSelected: Question = {
@@ -83,6 +85,11 @@ const MyQuestionWidget = () => {
       console.error(`Error deleting question: ${err.message}`);
     }
   }
+  //Toggle popup window for description of the question
+  const openDescriptionPopupWindow = (question: Question) => {
+    setSelectedQuestion(question);
+    setOpenDescriptionPopup(true);
+  };
 
   //Toggle popup window for edit question
   const openEditPopupWindow = (question: Question) => {
@@ -163,21 +170,29 @@ const MyQuestionWidget = () => {
           <tr>
             <th>Title</th>
             <th>Difficulty</th>
-            <th>Description</th>
             <th>Tags</th>
           </tr>
           {questionData.map(i => {
             return(
               <tr>
-                <td>{i.title}</td>
+                <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
                 <td>{i.difficulty}</td>
-                <td>{i.description}</td>
                 <td>{i.tags}</td>
                 <td style={{padding:"0"}}> <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
-                <EditOutlined /></Button></td>
-                <td ><Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
-                <DeleteOutlined />
-              </Button></td>
+                  <EditOutlined /></Button>
+                </td>
+                <td>
+                  <Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
+                  <DeleteOutlined />
+                  </Button>
+                </td>
+                <DisplayDescription
+                  open={openDescriptionPopup}
+                  onClose={() => {
+                    setOpenDescriptionPopup(false);
+                    setSelectedQuestion(NoQuestionSelected);
+                  }}
+                  question={selectedQuestion!}/>
               </tr>
             );
           })}
@@ -185,16 +200,16 @@ const MyQuestionWidget = () => {
       </div>
     </div>
     <div>
-        <EditQuestionPopup
-          open={openEditPopup}
-          onClose={() => {
-            setOpenEditPopup(false);
-            setSelectedQuestion(NoQuestionSelected);
-          }}
-          question={selectedQuestion!}
-          onSave={editQuestion}
-        />
-      </div>
+      <EditQuestionPopup
+        open={openEditPopup}
+        onClose={() => {
+          setOpenEditPopup(false);
+          setSelectedQuestion(NoQuestionSelected);
+        }}
+        question={selectedQuestion!}
+        onSave={editQuestion}
+      />
+    </div>
     </WidgetWrapper>
   );
 };
