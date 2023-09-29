@@ -14,7 +14,7 @@ export const pool = new Pool({
     port: 5432,
 });
 
-const table = "CREATE TABLE IF NOT EXISTS users (id SERIAL,uname VARCHAR(20) UNIQUE NOT NULL,pwd TEXT NOT NULL,PRIMARY KEY(id));";
+const table = "CREATE TABLE IF NOT EXISTS users (id SERIAL,username VARCHAR(20) UNIQUE NOT NULL,password TEXT NOT NULL,PRIMARY KEY(id));";
 
 async function seedDb() {
     const conn = await pool.connect();

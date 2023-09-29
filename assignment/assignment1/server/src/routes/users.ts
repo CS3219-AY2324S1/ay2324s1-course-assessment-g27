@@ -6,10 +6,10 @@ const router = express.Router();
 
 /* READ */
 //router.get("/:id", verifyToken, userControl.getAllUser); //idk if need to use the :id
-router.get("/", verifyToken, userControl.getAllUser);
-router.get("/find", userControl.getUserByUname);
-router.post("/register", userControl.newUser);
-router.delete("/", userControl.deleteUser);
+router.get("/", userControl.getAllUser);
+router.get("/:id", userControl.findUserById);
+router.put("/:id", userControl.updateUser);
+router.delete("/:id", userControl.deleteUser);
 
 
 export default router;
