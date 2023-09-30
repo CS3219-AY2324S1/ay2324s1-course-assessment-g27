@@ -1,11 +1,12 @@
 class User {
   username: String;
   password: String;
-  //private isAdmin: Boolean;
+  isAdmin: Boolean;
 
-  constructor(username: String, password: String) {
+  constructor(username: String, password: String, isAdmin: Boolean) {
     this.username = username;
     this.password = password;
+    this.isAdmin = isAdmin;
   }
 }
 
