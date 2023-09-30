@@ -123,13 +123,12 @@ const Form = () => {
       body: JSON.stringify(values),
     });
     const loggedIn = await loggedInRespone.json();
-    console.log("loggedIn:", loggedIn);
 
     onSubmitProps.resetForm();
     if (loggedIn) {
       dispatch(
         setLogin({
-          user: loggedIn.userWithoutPassword,
+          user: loggedIn.userWithoutPassword.user,
           token: loggedIn.token,
         })
       );

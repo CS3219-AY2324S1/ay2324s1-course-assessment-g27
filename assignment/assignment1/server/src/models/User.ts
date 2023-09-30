@@ -26,10 +26,10 @@ class User {
 //       required: true,
 //       min: 5,
 //     },
-//     // isAdmin: {
-//     //   type: Boolean,
-//     //   default: false,
-//     // },
+    // isAdmin: {
+    //   type: Boolean,
+    //   default: false,
+    // },
 //     // picturePath: {
 //     //   type: String,
 //     //   default: "",
