@@ -1,0 +1,58 @@
+/* RoomPage.css */
+
+.leetcode-layout {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f5f5f5; /* Set the background color as needed */
+  }
+  
+  .questions-panel {
+    flex-basis: 40%; /* Adjust the width of the questions panel as needed */
+    padding: 20px;
+    background-color: #fff; /* Set the background color as needed */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+  }
+  
+  .questions-panel h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .questions-panel p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .code-editor {
+    flex-basis: 58%; /* Adjust the width of the code editor as needed */
+    padding: 20px;
+    background-color: #fff; /* Set the background color as needed */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+  }
+  
+  .code-editor textarea {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  pre {
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-family: Menlo, sans-serif;
+    font-size: 0.875rem;
+    overflow: visible;
+    padding-left: 0.5rem;
+    white-space: pre-wrap;
+
+}
+.pre-background{
+    background-color:#FAFAFA;
+}
+  

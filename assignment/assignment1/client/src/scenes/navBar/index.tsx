@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Box,
   IconButton,
+  Button,
   InputBase,
   Typography,
   Select,
@@ -41,7 +42,7 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           color="primary"
-          onClick={() => navigate("/questions")}
+          onClick={() => navigate("/homePage")}
           sx={{
             "&:hover": {
               color: primaryLight,
@@ -62,8 +63,11 @@ const Navbar = () => {
             <IconButton>
               <Search />
             </IconButton>
+            
           </FlexBetween>
         )}
+        <Button onClick={() => navigate("/homePage")}>HomePage</Button>
+        <Button onClick={() => navigate("/questions")}>QuestionPage</Button>
       </FlexBetween>
 
       {/* DESKTOP NAV */}
