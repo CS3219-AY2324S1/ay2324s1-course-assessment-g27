@@ -28,7 +28,6 @@ const MyQuestionWidget = () => {
 
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
-  console.log("user: ", user);
   const isAdmin = user.isadmin;
   console.log(isAdmin);
   const token = useSelector((state: State) => state.token);
