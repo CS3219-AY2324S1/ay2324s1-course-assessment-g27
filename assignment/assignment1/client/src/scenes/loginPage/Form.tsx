@@ -133,7 +133,7 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
-      navigate("/questions");
+      navigate("/homePage");
     }
   };
 
