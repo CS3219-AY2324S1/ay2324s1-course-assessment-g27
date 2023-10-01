@@ -2,7 +2,7 @@ export interface User {
   _id: string,
   username: string,
   password: string,
-  isAdmin: boolean,
+  isadmin: boolean,
   // picturePath: string,
   // questionsCompleted: [],
 }
