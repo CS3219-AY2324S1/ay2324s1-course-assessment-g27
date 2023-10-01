@@ -5,7 +5,7 @@ import { Pool } from "pg";
  * (using local db for now)
  */
 export const pool = new Pool({
-    user: "elizabethhong",
+    user: "postgres",
     host: "localhost",
     database: "postgres",
     password: "postgres",
