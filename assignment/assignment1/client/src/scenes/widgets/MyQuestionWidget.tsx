@@ -22,18 +22,11 @@ import { deleteQuestionByID } from "../../api/questionAPI/deleteQuestion";
 import { editQuestionById } from "../../api/questionAPI/editQuestion";
 import DisplayDescription from "./DisplayDescriptionForm"
 import EditQuestionPopup from "./editQuestionPopup";
+import AddQuestionFormPopup from "./AddQuestionForm";
+
 
 const MyQuestionWidget = () => {
   const dispatch = useDispatch();
-  const [newData, setData] = useState<Partial<Question>>({
-    title: "",
-    difficulty: "",
-    description: "",
-    tags: [],
-    examples: [],
-    constraints: [],
-  });
-
   const theme: Theme = useTheme();
   const { _id } = useSelector((state: State) => state.user);
   const token = useSelector((state: State) => state.token);
@@ -42,6 +35,7 @@ const MyQuestionWidget = () => {
   const medium = theme.palette.neutral.medium;
 
   const[questionData, setQuestionData] = useState<Question[]>([]);
+  const [openAddFormPopup, setOpenAddFormPopup] = useState(false);
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [openDescriptionPopup, setOpenDescriptionPopup] = useState(false);
 
@@ -57,12 +51,12 @@ const MyQuestionWidget = () => {
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);  
-  const handleQuestion = async () => {
+  
+  const addQuestion = async (newData: Partial<Question>) => {
     // Get back the .json file
     const questions = await createQuestion(newData, token);
     setQuestionData(questions);
     dispatch(setQuestions({ questions }));
-    setData(NoQuestionSelected);
   };
 
   // Get the questions from DB
@@ -85,6 +79,12 @@ const MyQuestionWidget = () => {
       console.error(`Error deleting question: ${err.message}`);
     }
   }
+
+  //Toggle popup window for add question form
+  const openAddQuestionPopupWindow = () => {
+    setOpenAddFormPopup(true);
+  };
+
   //Toggle popup window for description of the question
   const openDescriptionPopupWindow = (question: Question) => {
     setSelectedQuestion(question);
@@ -110,90 +110,59 @@ const MyQuestionWidget = () => {
     }
   };
 
-  const InputBaseSxCSS = {
-    width: "100%",
-    backgroundColor: theme.palette.neutral.light,
-    borderRadius: "2rem",
-    padding: "1rem 2rem",
-  };
-
   return (
     <WidgetWrapper sx={{width:"100%"}}>
-      <FlexBetween gap="1.5rem">
-        <InputBase
-          placeholder="Enter title"
-          onChange={(e) => setData({ ...newData, title: e.target.value})}
-          value={newData.title}
-          sx={{
-            ...InputBaseSxCSS
-          }}
-        />
-        <InputBase
-          placeholder="Enter difficulty"
-          onChange={(e) => setData({ ...newData, difficulty: e.target.value})}
-          value={newData.difficulty}
-          sx={{
-            ...InputBaseSxCSS
-          }}
-        />
-        <InputBase
-          placeholder="Enter description"
-          onChange={(e) => setData({ ...newData, description: e.target.value})}
-          value={newData.description}
-          sx={{
-            ...InputBaseSxCSS
-          }}
-        />
-        <InputBase
-          placeholder="Enter tags"
-          onChange={(e) => setData({ ...newData, tags: [e.target.value]})}
-          value={newData.tags}
-          sx={{
-            ...InputBaseSxCSS
-          }}
-        /> 
-        <Button
-          disabled={newData.title == "" || newData.difficulty == "" || newData.description ==""}
-          onClick={handleQuestion}
-          sx={{
-            color: theme.palette.background.alt,
-            backgroundColor: theme.palette.primary.main,
-            borderRadius: "3rem",
-          }}
-        >
-          Add
-        </Button>
-      </FlexBetween>
+      <Button
+        onClick={openAddQuestionPopupWindow}
+        sx={{
+          color: theme.palette.background.alt,
+          backgroundColor: theme.palette.primary.main,
+          borderRadius: "3rem",
+        }}>
+        Add
+      </Button>
+      <AddQuestionFormPopup
+        open={openAddFormPopup}
+        onClose={() => {
+          setOpenAddFormPopup(false);
+          // setData(NoQuestionSelected);
+        }}
+        onSave={addQuestion}
+      />
       <div>
       <div className="questionTable">
         <table className="questionTableList">
-          <tr>
-            <th>Title</th>
-            <th>Difficulty</th>
-            <th>Tags</th>
-          </tr>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Difficulty</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
           {questionData.map(i => {
             return(
-              <tr>
-                <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
-                <td>{i.difficulty}</td>
-                <td>{i.tags}</td>
-                <td style={{padding:"0"}}> <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
-                  <EditOutlined /></Button>
-                </td>
-                <td>
-                  <Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
-                  <DeleteOutlined />
-                  </Button>
-                </td>
-                <DisplayDescription
-                  open={openDescriptionPopup}
-                  onClose={() => {
-                    setOpenDescriptionPopup(false);
-                    setSelectedQuestion(NoQuestionSelected);
-                  }}
-                  question={selectedQuestion!}/>
-              </tr>
+              <tbody>
+                <tr>
+                  <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
+                  <td>{i.difficulty}</td>
+                  <td>{i.tags}</td>
+                  <td style={{padding:"0"}}> <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
+                    <EditOutlined /></Button>
+                  </td>
+                  <td>
+                    <Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
+                    <DeleteOutlined />
+                    </Button>
+                  </td>
+                  <DisplayDescription
+                    open={openDescriptionPopup}
+                    onClose={() => {
+                      setOpenDescriptionPopup(false);
+                      setSelectedQuestion(NoQuestionSelected);
+                    }}
+                    question={selectedQuestion!}/>
+                </tr>
+              </tbody>
             );
           })}
         </table>

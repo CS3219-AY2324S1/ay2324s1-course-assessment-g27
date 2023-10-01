@@ -4,6 +4,12 @@ export interface Question {
   difficulty: string,
   description: string,
   tags: string[],
-  examples: string[],
+  examples: Example[],
   constraints: string[],
+}
+
+export type Example = {
+  inputText: string,
+  outputText:string,
+  explanation:string,
 }

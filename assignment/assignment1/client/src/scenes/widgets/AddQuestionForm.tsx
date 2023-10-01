@@ -1,125 +1,115 @@
-// import React, { useState, ChangeEvent, FormEvent } from 'react';
-// import './AddQuestionForm.css';
+import {Button, Dialog, DialogTitle, DialogContent,FormControl,InputLabel, MenuItem, Select, TextField, useTheme} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { State, setQuestions } from "../../state";
+import { Question } from "../../state/question";
+import { Theme, style } from "@mui/system";
+import ExampleFields from "./QuestionFields/ExampleFields";
+import ConstraintsFields from "./QuestionFields/ConstraintsFields";
 
-// interface FormData {
-//   index: string;
-//   title: string;
-//   description: string;
-//   difficulty: string;
-//   tags: string[];
-//   examples: string[];
-//   constraints: string[];
-// }
+interface AddQuestionFormProps {
+    open: boolean;
+    onClose: () => void;
+    onSave: (newData: Partial<Question>) => void;
+}
 
-// interface AddQuestionFormProps {
-//   onAddQuestion: (formData: FormData) => void;
-// }
+const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}) => {
+    const theme: Theme = useTheme();
+    const [newData, setData] = useState<Partial<Question>>({
+      title: "",
+      difficulty: "",
+      description: "",
+      tags: [],
+      examples: [],
+      constraints: [],
+    });
 
-// const AddQuestionForm: React.FC<AddQuestionFormProps> = ({ onAddQuestion }) => {
-//   const initialFormData: FormData = {
-//     index: '',
-//     title: '',
-//     description: '',
-//     difficulty: '',
-//     tags: [],
-//     examples: [],
-//     constraints: [],
-//   };
+    const TextFieldCSS = {
+        width: "80%",
+        mb: 1, // mb= margin-bottom
+    };
+    
+    const handleSave = () => {
+        onSave(newData);
+        clearForm();
+    };
 
-//   const [formData, setFormData] = useState<FormData>(initialFormData);
+    const clearForm =() => {
+        onClose();
+        setData({ ...newData, title:"", description:"",difficulty:"",tags:[],examples:[],constraints:[]});
+      }
 
-//   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
+    return (
+        <Dialog open={open} onClose={clearForm} fullWidth={true} >
+            <DialogTitle color="primary" fontWeight="bold">Add Question</DialogTitle>
+            <DialogContent>
+                <div>
+                <TextField sx={{...TextFieldCSS}}
+                    label="Title"
+                    placeholder="Enter Title"
+                    onChange={(e) => setData({ ...newData, title: e.target.value})}
+                    value={newData.title}
+                />
+                </div>
+                <div>
+                <FormControl sx={{...TextFieldCSS}}>
+                    <InputLabel>Difficulty</InputLabel>
+                    <Select
+                        value={newData.difficulty}
+                        onChange={(e) => setData({ ...newData, difficulty: e.target.value})}
+                        inputProps={{
+                        name: 'max-width',
+                        id: 'max-width',
+                        }}
+                    >
+                        <MenuItem value="Easy">Easy</MenuItem>
+                        <MenuItem value="Medium">Medium</MenuItem>
+                        <MenuItem value="Hard">Hard</MenuItem>
+                    </Select>
+                </FormControl>
+                </div>
+                <div>
+                <TextField sx={{...TextFieldCSS}}
+                    label="Description"
+                    placeholder="Enter description"
+                    onChange={(e) => setData({ ...newData, description: e.target.value})}
+                    value={newData.description}
+                />
+                </div>
+                <div>
+                <TextField sx={{...TextFieldCSS}}
+                    label="Tags"
+                    placeholder="Enter tags"
+                    onChange={(e) => setData({ ...newData, tags: [e.target.value]})}
+                    value={newData.tags}
+                />
+                </div>
+                <div>
+                    <ExampleFields
+                        newData = {newData}
+                        setData = {setData}
+                    />
+                </div>
+                <div>
+                    <ConstraintsFields
+                        newData = {newData}
+                        setData = {setData}
+                    />
+                </div>
+                <Button 
+                disabled={newData.title == "" || newData.difficulty == "" || newData.description ==""} 
+                variant="outlined" 
+                onClick={handleSave}
+                sx={{
+                    color: theme.palette.background.alt,
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: "3rem",
+                }}>
+                Save
+                </Button>
+            </DialogContent>
+        </Dialog>
+    );
+};
 
-//   const handleSubmit = (e: FormEvent) => {
-//     e.preventDefault();
-//     // Call the onAddQuestion callback with the new question data
-//     onAddQuestion(formData);
-//     // Reset the form
-//     setFormData(initialFormData);
-//   };
-
-//   return (
-//     <div className="add-question-form">
-//       <form onSubmit={handleSubmit}>
-//         <div className="form-group">
-//           <label>ID</label>
-//           {/* <input
-//             type="text"
-//             name="id"
-//             value={formData.id}
-//             onChange={handleChange}
-//             required
-//           /> */}
-//         </div>
-//         <div className="form-group">
-//           <label>Title</label>
-//           <input
-//             type="text"
-//             name="title"
-//             value={formData.title}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label>Description</label>
-//           <textarea
-//             name="description"
-//             value={formData.description}
-//             onChange={handleChange}
-//             required
-//           ></textarea>
-//         </div>
-//         <div className="form-group">
-//           <label>Difficulty</label>
-//           <input
-//             type="text"
-//             name="difficulty"
-//             value={formData.difficulty}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label>Tags (comma-separated)</label>
-//           <input
-//             type="text"
-//             name="tags"
-//             value={formData.tags.join(', ')}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label>Examples (comma-separated)</label>
-//           <input
-//             type="text"
-//             name="examples"
-//             value={formData.examples.join(', ')}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label>Constraints (comma-separated)</label>
-//           <input
-//             type="text"
-//             name="constraints"
-//             value={formData.constraints.join(', ')}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <button type="submit">Add Question</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default AddQuestionForm;
+export default AddQuestionForm;
