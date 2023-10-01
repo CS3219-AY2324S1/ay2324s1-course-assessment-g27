@@ -1,13 +1,13 @@
 class User {
-  username: String;
-  password: String;
-  isAdmin: Boolean;
+  // username: String;
+  // password: String;
+  // isAdmin: Boolean;
 
-  constructor(username: String, password: String, isAdmin: Boolean) {
-    this.username = username;
-    this.password = password;
-    this.isAdmin = isAdmin;
-  }
+  // constructor(username: String, password: String, isAdmin: Boolean) {
+  //   this.username = username;
+  //   this.password = password;
+  //   this.isAdmin = isAdmin;
+  // }
 }
 
 // import mongoose from "mongoose";
