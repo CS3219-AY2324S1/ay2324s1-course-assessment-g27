@@ -129,6 +129,7 @@ import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
+import ProfilePage from "./scenes/profilePage/ProfilePage";
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);
@@ -145,6 +146,10 @@ function App() {
             <Route
               path="/questions"
               element={isAuth ? <QuestionPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/profile/:activePage"
+              element={<ProfilePage />}
             />
           </Routes>
         </ThemeProvider>

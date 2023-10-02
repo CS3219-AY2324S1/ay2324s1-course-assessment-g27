@@ -49,13 +49,17 @@ export const login = async (req: Request, res: Response) => {
     if (results.rowCount == 0) {
         return res.status(400).json({ msg: "User does not exist! "});
     }
-    const user = results.rows[0];
-
-    const isMatch = await bcrypt.compare(password, user.password);
+    const result = results.rows[0];
+    const isMatch = await bcrypt.compare(password, result.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. "});
 
-    const token = jwt.sign({ id: user.id}, process.env.JWT_SECRET!);
-    const userWithoutPassword = {...user, password: undefined};
+    const token = jwt.sign({ id: result.id}, process.env.JWT_SECRET!);
+
+    const id = result.id;
+    const uname = result.username;
+    const isAdmin = result.isadmin;
+    const userWithoutPassword = new User(id, uname, '', isAdmin)
+    //const userWithoutPassword = {...user, password: undefined};
     res.status(200).json({ token, userWithoutPassword});
   } catch (err: any) {
     console.error("login has error");

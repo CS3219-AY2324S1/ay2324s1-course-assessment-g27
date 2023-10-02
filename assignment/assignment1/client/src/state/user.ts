@@ -1,8 +1,8 @@
 export interface User {
-  _id: string,
+  _id: Number,
   username: string,
   password: string,
-  isadmin: boolean,
+  isAdmin: boolean,
   // picturePath: string,
   // questionsCompleted: [],
 }

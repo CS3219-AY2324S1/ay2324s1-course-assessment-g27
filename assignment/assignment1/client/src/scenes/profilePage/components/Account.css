@@ -1,0 +1,44 @@
+/* .account {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: right;
+} */
+
+.account h1 {
+    padding: 10px 20px;
+}
+
+.account .form {
+    display: flex;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    /* justify-content: space-between; */
+    width: 100%;
+    padding: 10px 20px;
+    padding-left: 0px;
+}
+
+.account .form .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    margin: 20px;
+}
+
+.account .form .form-group label{
+    font-size: 1rem;
+    padding-bottom: 5px;
+}
+.account .form .form-group input{
+    font-size: 1rem;
+    padding-bottom: 10px;
+    border: none;
+    line-height: 50%;
+    color:rgb(78, 78, 78);;
+}
+
+.account .mainbutton {
+    position: absolute;
+    bottom: 20%;
+}

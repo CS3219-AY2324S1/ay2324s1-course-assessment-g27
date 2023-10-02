@@ -1,0 +1,44 @@
+.basicinfo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: left;
+}
+
+.basicinfo h1 {
+    padding: 10px 20px;
+}
+
+.basicinfo .form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+    padding-left: 0px;
+}
+
+.basicinfo .form .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    margin: 20px;
+}
+
+.basicinfo .form .form-group label{
+    font-size: 1rem;
+    padding-bottom: 5px;
+}
+
+.basicinfo .form .form-group input{
+    font-size: 1rem;
+    padding-bottom: 10px;
+    border: none;
+    color: rgb(78, 78, 78);
+}
+
+.basicinfo .mainbutton {
+    position: absolute;
+    bottom: 20%;
+}

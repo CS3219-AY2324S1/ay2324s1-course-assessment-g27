@@ -33,6 +33,8 @@ const Navbar = () => {
 
   const username = user.username;
 
+  //const handleClickUsername = (event: )
+
   return (
     <FlexBetween padding="1rem 6%">
       <FlexBetween gap="1.75rem">
@@ -93,7 +95,7 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={username}>
+              <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                 <Typography>{username}</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
@@ -167,7 +169,7 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={username}>
+                <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                   <Typography>{username}</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>
