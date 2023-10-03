@@ -163,30 +163,3 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 };
 
 export default EditQuestionPopup;
-
-
-// {updatedData.constraints?.map((field, index) => (
-//   <div key={index}>
-//     <TextField sx={{...TextFieldCSS}}
-//       label="Constraints"
-//       value={field}
-//       onChange={(e) => {
-//         const updatedFields = updatedData.constraints;
-//         updatedFields![index] = e.target.value;
-//         handleConstraintsUpdateField(updatedFields);
-//       }}
-//     />
-//     {(updatedData.constraints || []).length > 1 && (
-//       <Button sx={{...ButtonIconCSS}} 
-//         onClick={() => handleConstraintsRemoveField(index)}>
-//         <DeleteOutlined/>
-//       </Button>
-//     )}
-//     {(updatedData.constraints || []).length - 1 === index && (updatedData.constraints || []).length < 4 && (
-//       <Button sx={{...ButtonIconCSS}} 
-//         onClick={handleConstraintsAddField}>
-//           <AddCircleOutlinedIcon/>
-//       </Button>
-//     )}
-//   </div> 
-// ))}

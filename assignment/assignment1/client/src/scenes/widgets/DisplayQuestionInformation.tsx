@@ -96,4 +96,3 @@ const displayConstraints= (question:Question) => {
 };
 
 export default DisplayDescription;
-//if(field.inputText == "" && field.outputText == "" && field.explanation == "") {
