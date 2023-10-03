@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setQuestions } from "../../state";
 import { Question } from "../../state/question";
-import { Theme, style } from "@mui/system";
+import { Theme } from "@mui/system";
 import ExampleFields from "./QuestionFields/ExampleFields";
 import ConstraintsFields from "./QuestionFields/ConstraintsFields";
 

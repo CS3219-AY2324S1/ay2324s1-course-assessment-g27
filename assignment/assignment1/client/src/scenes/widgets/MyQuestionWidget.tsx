@@ -20,7 +20,7 @@ import { createQuestion } from "../../api/questionAPI/createQuestion";
 import { getQuestionList } from "../../api/questionAPI/getQuestion";
 import { deleteQuestionByID } from "../../api/questionAPI/deleteQuestion";
 import { editQuestionById } from "../../api/questionAPI/editQuestion";
-import DisplayDescription from "./DisplayDescriptionForm"
+import DisplayDescription from "./DisplayQuestionInformation"
 import EditQuestionPopup from "./editQuestionPopup";
 import AddQuestionFormPopup from "./AddQuestionForm";
 

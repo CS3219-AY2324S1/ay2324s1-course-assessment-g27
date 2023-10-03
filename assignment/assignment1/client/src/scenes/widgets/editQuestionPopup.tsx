@@ -4,6 +4,7 @@ import { Question } from "../../state/question";
 import { Theme} from "@mui/system";
 import {DeleteOutlined} from "@mui/icons-material";
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import { ExampleFieldsUI, ConstraintsFieldsUI } from "./QuestionFields/QuestionFieldsFormUI";
 
 interface EditQuestionPopupProps {
   open: boolean;
@@ -35,13 +36,45 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
   if(updatedData.examples?.length === 0) {
     setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: ""}]});
   }
-  
-  const ButtonIconCSS = {
-    ml:1,
-    maxWidth: '30px', 
-    maxHeight: '30px', 
-    minWidth: '30px', 
-    minHeight: '30px'
+
+  const handleExampleAddField=() => {
+    setUpdatedData((prevState) => ({
+      title: updatedData.title,
+      difficulty: updatedData.difficulty,
+      description:updatedData.description,
+      tags:updatedData.tags,
+      constraints:updatedData.constraints,
+      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
+    }));
+  }
+
+  const handleExampleRemoveField = (index:any) => {
+    const filteredFields = (updatedData.examples || []).filter((_,i)=> i != index);
+    setUpdatedData({ ...updatedData, examples: filteredFields});
+  }
+
+  const handleExampleUpdateField = (updatedFields:any) => {
+    setUpdatedData({ ...updatedData, examples: updatedFields});
+  }
+
+  const handleConstraintsAddField=() => {
+    setUpdatedData((prevState) => ({
+      title: updatedData.title,
+      difficulty: updatedData.difficulty,
+      description:updatedData.description,
+      tags:updatedData.tags,
+      examples:updatedData.examples,
+      constraints: [...(prevState.constraints || []), ""],
+    }));
+  }
+
+  const handleConstraintsRemoveField = (index:any) => {
+    const filteredFields = (updatedData.constraints || []).filter((_,i)=> i != index);
+    setUpdatedData({ ...updatedData, constraints: filteredFields});
+  }
+
+  const handleConstraintsUpdateField = (updatedFields:any) => {
+    setUpdatedData({ ...updatedData, constraints: updatedFields});
   }
 
   const TextFieldCSS = {
@@ -98,103 +131,20 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
           />
         </div>
         <div>
-          {updatedData.examples?.map((field, index) => (
-            <div key={index}>
-              <TextField
-                  sx={{...TextFieldCSS }}
-                  label="Example Input"
-                  value={field.inputText}
-                  onChange={(e) => {
-                      const updatedFields = updatedData.examples;
-                      updatedFields![index].inputText = e.target.value;
-                      setUpdatedData({ ...updatedData, examples: updatedFields});
-                  }}
-              />
-              <TextField
-                  sx={{...TextFieldCSS }}
-                  label="Example Output"
-                  value={field.outputText}
-                  onChange={(e) => {
-                    const updatedFields = updatedData.examples;
-                    updatedFields![index].outputText = e.target.value;
-                    setUpdatedData({ ...updatedData, examples: updatedFields});
-                  }}
-              />
-              <TextField
-                  sx={{...TextFieldCSS }}
-                  label="Example Explanation"
-                  value={field.explanation}
-                  onChange={(e) => {
-                    const updatedFields = updatedData.examples;
-                    updatedFields![index].explanation = e.target.value;
-                    setUpdatedData({ ...updatedData, examples: updatedFields});
-                  }}
-              />
-              {(updatedData.examples || []).length > 1 && (
-                  <Button sx={{...ButtonIconCSS}} 
-                    onClick={() => {
-                      const filteredFields = (updatedData.examples || []).filter((_,i)=> i != index);
-                      setUpdatedData({ ...updatedData, examples: filteredFields});
-                    }}>
-                    <DeleteOutlined/>
-                  </Button>
-              )}
-              {(updatedData.examples || []).length - 1 === index && (updatedData.examples || []).length < 3 && (
-                  <Button sx={{...ButtonIconCSS}} 
-                  onClick={() => {
-                    setUpdatedData((prevState) => ({
-                      title: updatedData.title,
-                      difficulty: updatedData.difficulty,
-                      description:updatedData.description,
-                      tags:updatedData.tags,
-                      constraints:updatedData.constraints,
-                      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
-                    }));
-                }}>
-                      <AddCircleOutlinedIcon/>
-                  </Button>
-              )}
-          </div>
-          ))}
+          <ExampleFieldsUI
+            fields={updatedData.examples}
+            handleAddFields={handleExampleAddField}
+            handleUpdateFields={handleExampleUpdateField}
+            handleDeleteFields={handleExampleRemoveField}
+          />
         </div>
         <div>
-          {updatedData.constraints?.map((field, index) => (
-            <div key={index}>
-              <TextField sx={{...TextFieldCSS}}
-                label="Constraints"
-                value={field}
-                onChange={(e) => {
-                  const updatedFields = updatedData.constraints;
-                  updatedFields![index] = e.target.value;
-                  setUpdatedData({ ...updatedData, constraints: updatedFields});
-                }}
-              />
-              {(updatedData.constraints || []).length > 1 && (
-                <Button sx={{...ButtonIconCSS}} 
-                  onClick={() => {
-                    const filteredFields = (updatedData.constraints || []).filter((_,i)=> i != index);
-                    setUpdatedData({ ...updatedData, constraints: filteredFields});
-                }}>
-                  <DeleteOutlined/>
-                </Button>
-              )}
-              {(updatedData.constraints || []).length - 1 === index && (updatedData.constraints || []).length < 4 && (
-                <Button sx={{...ButtonIconCSS}} 
-                  onClick={() => {
-                    setUpdatedData((prevState) => ({
-                      title: updatedData.title,
-                      difficulty: updatedData.difficulty,
-                      description:updatedData.description,
-                      tags:updatedData.tags,
-                      examples:updatedData.examples,
-                      constraints: [...(prevState.constraints || []), ""],
-                    }));
-                }}>
-                    <AddCircleOutlinedIcon/>
-                </Button>
-              )}
-            </div> 
-          ))}
+          <ConstraintsFieldsUI
+            fields={updatedData.constraints}
+            handleAddFields={handleConstraintsAddField}
+            handleDeleteFields={handleConstraintsRemoveField}
+            handleUpdateFields={handleConstraintsUpdateField}
+          />
         </div>
         <Button 
           disabled={updatedData.title == "" || updatedData.difficulty == "" || updatedData.description ==""} 
@@ -213,3 +163,30 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 };
 
 export default EditQuestionPopup;
+
+
+// {updatedData.constraints?.map((field, index) => (
+//   <div key={index}>
+//     <TextField sx={{...TextFieldCSS}}
+//       label="Constraints"
+//       value={field}
+//       onChange={(e) => {
+//         const updatedFields = updatedData.constraints;
+//         updatedFields![index] = e.target.value;
+//         handleConstraintsUpdateField(updatedFields);
+//       }}
+//     />
+//     {(updatedData.constraints || []).length > 1 && (
+//       <Button sx={{...ButtonIconCSS}} 
+//         onClick={() => handleConstraintsRemoveField(index)}>
+//         <DeleteOutlined/>
+//       </Button>
+//     )}
+//     {(updatedData.constraints || []).length - 1 === index && (updatedData.constraints || []).length < 4 && (
+//       <Button sx={{...ButtonIconCSS}} 
+//         onClick={handleConstraintsAddField}>
+//           <AddCircleOutlinedIcon/>
+//       </Button>
+//     )}
+//   </div> 
+// ))}
