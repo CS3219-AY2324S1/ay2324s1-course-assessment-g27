@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Button, Dialog, DialogTitle, DialogContent, TextField, useTheme} from "@mui/material";
 import { Question } from "../../state/question";
 import { Theme} from "@mui/system";
@@ -94,15 +94,10 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
           <TextField sx={{...TextFieldCSS}}
             label="Tags"
             value={updatedData.tags}
-            onChange={(e) => setUpdatedData({ ...updatedData, tags: [e.target.value]})}
+            onChange={(e) => setUpdatedData({ ...updatedData, tags: e.target.value})}
           />
         </div>
         <div>
-          {/* <TextField sx={{...TextFieldCSS}}
-            label="Examples"
-            value={updatedData.examples}
-            onChange={(e) => setUpdatedData({ ...updatedData, examples: e.target.value.split(",") })}
-          /> */}
           {updatedData.examples?.map((field, index) => (
             <div key={index}>
               <TextField
@@ -127,7 +122,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
               />
               <TextField
                   sx={{...TextFieldCSS }}
-                  label="Example Explaination"
+                  label="Example Explanation"
                   value={field.explanation}
                   onChange={(e) => {
                     const updatedFields = updatedData.examples;

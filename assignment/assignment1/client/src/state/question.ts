@@ -3,7 +3,7 @@ export interface Question {
   title: string,
   difficulty: string,
   description: string,
-  tags: string[],
+  tags: string,
   examples: Example[],
   constraints: string[],
 }

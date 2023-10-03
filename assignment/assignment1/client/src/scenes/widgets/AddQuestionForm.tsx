@@ -19,8 +19,11 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}
       title: "",
       difficulty: "",
       description: "",
-      tags: [],
-      examples: [],
+      tags: "",
+      examples: [{
+        inputText: "",
+        outputText: "",
+        explanation: ""}],
       constraints: [],
     });
 
@@ -36,7 +39,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}
 
     const clearForm =() => {
         onClose();
-        setData({ ...newData, title:"", description:"",difficulty:"",tags:[],examples:[],constraints:[]});
+        setData({ ...newData, title:"", description:"",difficulty:"",tags:"",examples:[],constraints:[]});
       }
 
     return (
@@ -80,7 +83,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}
                 <TextField sx={{...TextFieldCSS}}
                     label="Tags"
                     placeholder="Enter tags"
-                    onChange={(e) => setData({ ...newData, tags: [e.target.value]})}
+                    onChange={(e) => setData({ ...newData, tags: e.target.value})}
                     value={newData.tags}
                 />
                 </div>

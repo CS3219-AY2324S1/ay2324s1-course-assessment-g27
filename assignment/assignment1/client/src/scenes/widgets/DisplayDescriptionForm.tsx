@@ -23,15 +23,48 @@ const DisplayDescription: React.FC<DisplayDesctiptionPopupProps> = ({open, onClo
         onClose={onClose}
         aria-labelledby="customized-dialog-title"
         open={open}
+        fullWidth
     >
       <DialogTitle id="customized-dialog-title" color="primary" fontWeight="bold" fontSize="clamp(1rem, 1rem, 2rem)">
-          {question.title} Description
+          {question.title} Additional Information
       </DialogTitle>
       <DialogContent dividers>
-          <Typography gutterBottom>{question.description}</Typography>
-        </DialogContent>
+        <Typography><b>Description:</b></Typography>
+        <Typography gutterBottom>{question.description}</Typography>
+      </DialogContent>
+      <DialogContent>
+        {question.examples?.map((field, index) => (
+          <div key={index}> {(() => {
+            if(field.inputText == "" && field.outputText == "" && field.explanation == "") {
+              return(<div></div>);
+            } else {
+              return(
+              <div>
+                <Typography><b>Example {index + 1}:</b></Typography>
+                <DialogContent>
+                  <Typography gutterBottom><b>Input: </b> {field.inputText}</Typography>
+                  <Typography gutterBottom><b>Output: </b> {field.outputText}</Typography>
+                  <Typography gutterBottom><b>Explanation: </b> {field.explanation}</Typography>
+                </DialogContent>
+              </div>);
+            }
+            })()}
+          </div>
+        ))}
+      </DialogContent>
+      <DialogContent>
+      <Typography><b>Constraints:</b></Typography>
+        {question.constraints?.map((field, index) => (
+          <div key={index}> 
+            <ul>
+              <li>{field}</li>
+            </ul>
+          </div>
+        ))}
+      </DialogContent>
     </BootstrapDialog>
   );
 };
 
 export default DisplayDescription;
+//if(field.inputText == "" && field.outputText == "" && field.explanation == "") {

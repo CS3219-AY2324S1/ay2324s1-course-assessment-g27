@@ -47,7 +47,7 @@ const MyQuestionWidget = () => {
     description: "",
     examples: [],
     constraints: [],
-    tags: []
+    tags: ""
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);  
