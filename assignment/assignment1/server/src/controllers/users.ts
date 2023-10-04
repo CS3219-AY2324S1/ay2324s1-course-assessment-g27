@@ -77,7 +77,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   pool.query(queries.findUserById, [id], (error: Error, results: QueryResult) => {
       if (error) throw error;
       if (results.rowCount == 0) {
-          res.status(404).json("User does not exist")
+          res.status(400).json("User does not exist")
       } else {
           pool.query(queries.deleteUser, [id], (error: Error, results: QueryResult) => {
               if (error) throw error;

@@ -103,3 +103,4 @@ export const updatePwd = async (req: Request, res: Response) => {
       res.status(200).json("updated successfully.");
   })
 };
+

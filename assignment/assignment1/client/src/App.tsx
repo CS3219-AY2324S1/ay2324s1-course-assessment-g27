@@ -123,13 +123,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./scenes/loginPage/LoginPage";
 import QuestionPage from "./scenes/questionPage/QuestionPage";
+import ProfilePage from "./scenes/profilePage/ProfilePage";
+import ChangePwdPage from "./scenes/changePwdPage/ChangePwdPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
-import ProfilePage from "./scenes/profilePage/ProfilePage";
+
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);
@@ -150,6 +152,10 @@ function App() {
             <Route
               path="/profile/:activePage"
               element={<ProfilePage />}
+            />
+            <Route
+              path="/password"
+              element={<ChangePwdPage />}
             />
           </Routes>
         </ThemeProvider>

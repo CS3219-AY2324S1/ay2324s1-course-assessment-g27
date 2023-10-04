@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import Navbar from "../navBar"; 
-import { State } from "../../state";
-import { User } from "../../state/user";
 import UserLeftBar from "../profilePage/components/UserLeftBar";
-import UserMainBar from "../profilePage/components/UserMainBar";
 import Account from "../profilePage/components/Account";
 import BasicInfo from "./components/BasicInfo";
-import { getUserById } from "../../api/usersAPI/getUserById";
 
 import "./ProfilePage.css";
 
