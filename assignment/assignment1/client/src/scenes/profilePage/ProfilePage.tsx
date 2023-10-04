@@ -13,24 +13,13 @@ import { getUserById } from "../../api/usersAPI/getUserById";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
-  //1. get username (from navbar)
+  //1. get username
   //2. find username in db and return values
   //3. ??
   //4. Profit
-  const user = useSelector((state: State) => state.user);
-  const token = useSelector((state: State) => state.token);
-  const id = user.id;
+  
   const {activePage} = useParams();
   const currPage: String = activePage ? activePage : '';
-  
-  useEffect(() => {
-    async function getUser() {
-        const user = await getUserById(token, id);
-        //setUserData(user[0]);
-        console.log('user in profile effect: ', user);
-    }
-    getUser();
-    }, [])
 
   return (
     <div className="userprofile">
@@ -40,7 +29,7 @@ const ProfilePage = () => {
             <UserLeftBar activePage={currPage}/> 
           </div>
           <div className="mainbar">
-            {activePage === 'info' && <BasicInfo username={user.username} id={id} />}
+            {activePage === 'info' && <BasicInfo/>}
             {activePage === `account` && <Account/>}
           </div>
         </div>

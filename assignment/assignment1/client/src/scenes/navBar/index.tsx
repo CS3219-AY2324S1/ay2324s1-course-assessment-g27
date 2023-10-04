@@ -4,6 +4,7 @@ import {
   IconButton,
   InputBase,
   Typography,
+  InputLabel,
   Select,
   MenuItem,
   FormControl,
@@ -32,7 +33,12 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const username = user.username;
+  console.log(username);
 
+  const handleLogOut = () => {
+    navigate(`/`);
+    dispatch(setLogout());
+  }
   //const handleClickUsername = (event: )
 
   return (
@@ -78,7 +84,9 @@ const Navbar = () => {
             )}
           </IconButton>
           <FormControl variant="standard">
+            <InputLabel id="Options">Age</InputLabel>
             <Select
+              labelId="Options"
               value={username}
               sx={{
                 backgroundColor: neutralLight,
@@ -98,7 +106,7 @@ const Navbar = () => {
               <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                 <Typography>{username}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -172,7 +180,7 @@ const Navbar = () => {
                 <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                   <Typography>{username}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem onClick={handleLogOut}>
                   Log Out
                 </MenuItem>
               </Select>

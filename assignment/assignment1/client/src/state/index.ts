@@ -36,6 +36,7 @@ export const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload.user;
+      //console.log('curr state : ', state.user)
     }
 
     // setQuestion: (state, action) => {
