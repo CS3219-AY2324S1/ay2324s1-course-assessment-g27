@@ -3,49 +3,54 @@ import { useDispatch, useSelector } from "react-redux";
 import { State, setLogin, setUser } from "../../../state";
 import { getUserById } from "../../../api/usersAPI/getUserById";
 import { editUserById } from "../../../api/usersAPI/editUserById";
+import { User } from "../../../state/user";
 import "./BasicInfo.css";
 //import { useNavigate } from "react-router-dom";
 
-const BasicInfo = () => {
-    const user = useSelector((state: State) => state.user);
+interface userProp {
+    username: string;
+    id: number;
+}
+const BasicInfo = ({ username, id }: userProp) => { 
+    //const user = getUserById(token, id);
+    console.log('initial user: ', username);
     const token = useSelector((state: State) => state.token);
-    const { id, username, password, isAdmin } = user;
-    //const navigate = useNavigate();
+    // const id = user.id;
+
     const dispatch = useDispatch();
-    const [userData, setUserData] = useState(user);
-    const [uname, setUname] = useState(userData.username);
-    var edited: Boolean = false;
+    const [uname, setUname] = useState(username);
 
     
 
-    const editUname = async () => {
-        const response = await editUserById(token, id, uname);
-        const user = await getUserById(token, id);
-        setUserData(user[0]);
-        setUname(userData.username);
-        setUser(userData);
-        edited = true
-        console.log(uname);
-        console.log(response);
-        
-        //dispatch(setUser(userData));
-        //console.log(useSelector((state: State) => state.user));
-        
-    }
+    // const editUname = async () => {
+    //     const user = await getUserById(token, id);
+    //     console.log('get user: ', user);
+    //     setUname(user[0].username);
+    //     dispatch(setUser(userData));
+    //     console.log("changed user");
+    //     console.log(username);
+    // }
 
     useEffect(() => {
         async function getUser() {
             const user = await getUserById(token, id);
-            setUserData(user[0]);
+            setUname(user[0].username);
+            console.log('username in info: ', username);
         }
         getUser();
     }, [])
 
-    if (edited) {
-        dispatch(setUser({ id, uname, password, isAdmin}))
-    }
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = async (event) => {
+        //event.preventDefault();
+        const response = await editUserById(token, id, uname);
+        const user = await getUserById(token, id);
+        console.log('get user: ', user);
+        //setUserData(user[0]);
+        //console.log('userdata: ', userData);
+        //setUname(userData.username);
+        //console.log('uname: ', uname);
+        dispatch(setUser(user));
+        // editUname();
     }
     return (
         <div className="basicinfo">
@@ -59,7 +64,6 @@ const BasicInfo = () => {
                     type="text" 
                     name="name" 
                     id="name" 
-                    defaultValue={user.username}
                     onChange={(event) => {
                         setUname(event.target.value);
                     }}
@@ -68,8 +72,8 @@ const BasicInfo = () => {
                 </div>
                 <button 
                 className="mainbutton" 
-                type="submit"
-                onClick={editUname}>Save Changes</button>
+                type="submit">
+                Save Changes</button>
             </form>
         </div>
     )
