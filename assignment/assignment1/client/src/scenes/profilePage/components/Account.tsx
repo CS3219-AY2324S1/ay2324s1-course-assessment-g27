@@ -28,10 +28,12 @@ const Account = () => {
             }
             const isMatchRes = await comparePwd(token, id, oldPwd);
             const changePwdRes = await changePwdById(token, id, newPwd);
-            setAlertVisible(true);
+            
             if (errorVisible) {
                 setErrorVisible(false);
+                setMsg("password updated successfully");
             }
+            setAlertVisible(true);
         } catch (error: any) {
             setMsg(error.message);
             if (alertVisible) {

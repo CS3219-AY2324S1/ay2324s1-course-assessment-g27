@@ -16,9 +16,10 @@ export const changePwdById = async (token: any, id: Number, password: string) =>
     if (response.ok) {
       return await response.json(); 
     } else {
-      throw new Error(`Error updating password: ${response.statusText}`);
+      const res = await response.json();
+      throw new Error(`${res}`);
     }
   } catch (err:any) {
-    throw new Error(`Error updating password: ${err.message}`);
+    throw new Error(`${err.message}`);
   }
 };

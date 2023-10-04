@@ -5,6 +5,7 @@ import { getUserById } from "../../../api/usersAPI/getUserById";
 import { editUserById } from "../../../api/usersAPI/editUserById";
 import { Alert, AlertTitle } from "@mui/material";
 import "./BasicInfo.css";
+import { set } from "mongoose";
 
 
 const BasicInfo = () => { 
@@ -15,6 +16,7 @@ const BasicInfo = () => {
     const [uname, setUname] = useState(user.username);
     const [alertVisible, setAlertVisible] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
+    const [msg, setMsg] = useState("username updated successfully");
 
     useEffect(() => {
         async function getUser() {
@@ -28,22 +30,25 @@ const BasicInfo = () => {
         event.preventDefault();
         try {
             if (uname.length == 0) {
-                throw new Error();
+                throw new Error("Your username cannot be blank.");
             }
             const response = await editUserById(token, id, uname);
             const updatedUser = await getUserById(token, id);
             const username = updatedUser[0].username;
             const password = "";
             const isAdmin = updatedUser[0].isadmin;
-            setAlertVisible(true);
+            
             if (errorVisible) {
                 setErrorVisible(false);
+                setMsg("username updated successfully");
             }
+            setAlertVisible(true);
             dispatch(setUser({ user: { id, username, password, isAdmin } }));
         } catch (error: any) {
+            setMsg(error.message);
             if (alertVisible) {
                 setAlertVisible(false);
-            }
+            }      
             setErrorVisible(true);
         }
     }
@@ -78,7 +83,7 @@ const BasicInfo = () => {
                     onClose={() => setAlertVisible(false)}
                 >
                     <AlertTitle>Success</AlertTitle>
-                    successfully saved changes
+                    {msg}
                 </Alert>}
                 {errorVisible && 
                 <Alert 
@@ -86,7 +91,7 @@ const BasicInfo = () => {
                     onClose={() => setErrorVisible(false)}
                 >
                     <AlertTitle>Error</AlertTitle>
-                    Something went wrong...Please try again.
+                    {msg}
                 </Alert>}
             </form>
         </div>
