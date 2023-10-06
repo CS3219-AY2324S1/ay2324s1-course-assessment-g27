@@ -152,6 +152,14 @@ function App() {
             />
             <Route path="/questions" element={<QuestionPage/>} />
             <Route path="/roompage/:roomid" element={<RoomPage />} />
+            <Route
+              path="/profile/:activePage"
+              element={<ProfilePage />}
+            />
+            <Route
+              path="/password"
+              element={<ChangePwdPage />}
+            />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
