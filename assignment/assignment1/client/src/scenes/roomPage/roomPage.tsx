@@ -51,9 +51,12 @@ const RoomPage = () => {
         <div className="questions-panel">
           <h2>{roomDetails?.question_title}</h2>
           <p>{roomDetails?.question_description}</p>
-          <h3>Example 1:</h3>
+          <h3>Examples:</h3>
           <div className='pre-background'>
-          <pre>{roomDetails?.question_examples?.map(i => i.toString().trimStart() + "\n")}</pre>
+          <pre>{roomDetails?.question_examples?.map((i, index) => "Example " + (index+1) + "\n" +
+                                                          "Inputs: " + i.inputText + "\n" +
+                                                          "Outputs: " + i.outputText + "\n" + 
+                                                          "Explanation: " + i.explanation + "\n \n") }</pre>
           </div>
         </div>
         <div className="code-editor">
