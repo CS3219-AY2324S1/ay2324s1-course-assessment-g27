@@ -151,7 +151,7 @@ function App() {
               element={isAuth ? <HomePage/> : <Navigate to="/" />}
             />
             <Route path="/questions" element={<QuestionPage/>} />
-            <Route path="/roompage" element={<RoomPage/>}/>
+            <Route path="/roompage/:roomid" element={<RoomPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

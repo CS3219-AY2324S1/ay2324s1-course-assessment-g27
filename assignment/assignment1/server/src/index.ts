@@ -11,12 +11,16 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
+import roomRoutes from "./routes/rooms";
+
 import { register } from "./controllers/auth";
 import { createQuestion, getAllQuestions } from "./controllers/questions";
 import { verifyToken } from "./middleware/auth";
 import User from "./models/User";
 import Question from "./models/Question";
 import { users, questions } from "./data/index";
+
+import Room from "./models/Room";
 
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
@@ -51,6 +55,8 @@ const upload = multer({ storage });
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/questions", questionRoutes);
+
+app.use("/rooms", roomRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;

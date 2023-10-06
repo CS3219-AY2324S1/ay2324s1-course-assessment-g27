@@ -3,13 +3,62 @@ import { Box, useMediaQuery, Typography } from "@mui/material";
 import Navbar from "../navBar";
 import "./homePage.css";
 import { useNavigate } from "react-router-dom";
-
-
-
+import { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
+import { State } from "../../state";
+import { Room } from "../../state/room";
+import { Question } from "../../state/question";
+import { getQuestionList } from '../../api/questionAPI/getQuestion';
+import { createRoom } from "../../api/roomAPI";
 
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
+
+    const token = useSelector((state: State) => state.token);
+    const[questionData, setQuestionData] = useState<Partial<Question>>();
+    const[roomData, setRoomData] = useState<Partial<Room>>();
+    let quesdata:Question;
+    let roomid:string;
+
+
+    async function getRandQuestion(diff:string ) {
+        
+          const questionList:Question[] = await getQuestionList(token);
+          const filteredQuestions = questionList.filter(question => question.difficulty === diff);
+          // setQuestionData(prevQuestionData => {
+          //   const updatedData = filteredQuestions[0];
+          //   return updatedData;
+          // });
+          quesdata=filteredQuestions[0];
+          
+    }
+
+    const createNewRoom = async () => {
+      // const newData = {
+        // question_title: questionData?.title,
+        // question_difficulty: questionData?.difficulty,
+        // question_description: questionData?.description,
+        // question_examples: questionData?.examples,
+        // question_constraints: questionData?.constraints,
+        // users: [""],
+      // };
+      const newData = {
+        question_title: quesdata.title,
+        question_difficulty: quesdata.difficulty,
+        question_description: quesdata.description,
+        question_examples: quesdata.examples,
+        question_constraints: quesdata.constraints,
+        users: [""],
+      };
+      const room = await createRoom(newData, token);
+      roomid=room._id;
+      // setRoomData(room);
+
+      // navigate("/roomPage", { state: { roomData } });
+
+    };
+
     return (
       <Box>
         <Navbar />
@@ -30,9 +79,13 @@ const HomePage = () => {
         </Typography>
         </div>
         <div>
-        <button className="button-easy" onClick={() => navigate("/roomPage")}>Easy </button>
-        <button className="button-medium" onClick={() => navigate("/roomPage")} >Medium </button>
-        <button className="button-hard" onClick={() => navigate("/roomPage")}>Hard</button>
+        {/* <button className="button-easy" onClick={() => {createNewRoom(); navigate("/" + roomData!._id);} } >Easy </button> */}
+        {/* <button className="button-easy" onClick={() => navigate("/roomPage")} >Easy </button> */}
+        <button className="button-easy" onClick={async () => {await getRandQuestion("easy"); await createNewRoom(); navigate(`/roomPage/${roomid}`); } } >Easy </button>
+        {/* <button className="button-easy" onClick={() => {getRandQuestion("easy"); createNewRoom(); navigate("/roomPage");} } >Easy </button> */}
+        {/* HELP THE NAVIGATE("ROOMPAGE") CAUSING CREATION OF ROOM TO HAVE 409 ERROR */}
+        <button className="button-medium" onClick={async () => {await getRandQuestion("medium"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }} >Medium </button>
+        <button className="button-hard" onClick={async () => {await getRandQuestion("hard"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }}>Hard</button>
         </div>
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}
         </Box>
