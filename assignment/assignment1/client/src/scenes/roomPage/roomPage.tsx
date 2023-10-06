@@ -8,11 +8,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { useEffect , useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ConfirmationPopup from './confirmationpopup';
-
-
-
-
+import ConfirmationPopup from './confirmationPopup';
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -23,9 +19,8 @@ const RoomPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
-    // Fetch the room details when the component mounts
     getRoom();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []); 
   const getRoom = async () => {
     try {
       const data = await getRoomDetails(roomid ,token);
@@ -34,7 +29,6 @@ const RoomPage = () => {
       console.error('Error fetching room details:', err);
     }
   };
-  // console.log(roomDetails);
 
   const deleteCurrentRoom = () => {
       deleteRoom(roomid, token);
@@ -55,19 +49,14 @@ const RoomPage = () => {
 
       <div className="leetcode-layout">
         <div className="questions-panel">
-          {/* Place your questions or problem statements here */}
-          {/* <h2>Question 1 </h2> */}
           <h2>{roomDetails?.question_title}</h2>
-          {/* <p>This is the problem statement for Question 1.</p> */}
           <p>{roomDetails?.question_description}</p>
           <h3>Example 1:</h3>
           <div className='pre-background'>
-          <pre>{roomDetails?.question_examples?.flatMap(i => i.toString() + "\n")}</pre>
-          {/* Add more questions as needed */}
+          <pre>{roomDetails?.question_examples?.map(i => i.toString().trimStart() + "\n")}</pre>
           </div>
         </div>
         <div className="code-editor">
-          {/* Code editor component goes here */}
           <textarea placeholder="Write your code here"></textarea>
         </div>
       </div>
