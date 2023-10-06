@@ -28,8 +28,8 @@ const MyQuestionWidget = () => {
 
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
-  const isAdmin = user.isadmin;
-  console.log(isAdmin);
+  const isAdmin = user.isAdmin;
+  console.log('qns: ' , isAdmin);
   const token = useSelector((state: State) => state.token);
   // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   // const mediumMain = theme.palette.neutral.mediumMain;
