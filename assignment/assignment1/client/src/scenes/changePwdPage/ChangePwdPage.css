@@ -1,0 +1,13 @@
+.changepwdpage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.changepwdpage .form {
+    width: 70%;
+    /* border: 1px solid rgb(207, 207, 207); */
+    border-radius: 10px;
+    min-height: 70vh;
+    /* justify-content: center; */
+}

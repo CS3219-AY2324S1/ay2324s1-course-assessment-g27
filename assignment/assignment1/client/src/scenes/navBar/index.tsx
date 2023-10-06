@@ -5,6 +5,7 @@ import {
   Button,
   InputBase,
   Typography,
+  InputLabel,
   Select,
   MenuItem,
   FormControl,
@@ -33,7 +34,13 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const username = user.username;
-  // const username = "dummy";
+  console.log(username);
+
+  const handleLogOut = () => {
+    navigate(`/`);
+    dispatch(setLogout());
+  }
+  //const handleClickUsername = (event: )
 
   return (
     <FlexBetween padding="1rem 6%">
@@ -81,7 +88,9 @@ const Navbar = () => {
             )}
           </IconButton>
           <FormControl variant="standard">
+            <InputLabel id="Options">Age</InputLabel>
             <Select
+              labelId="Options"
               value={username}
               sx={{
                 backgroundColor: neutralLight,
@@ -98,10 +107,10 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={username}>
+              <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                 <Typography>{username}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -172,10 +181,10 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={username}>
+                <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
                   <Typography>{username}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem onClick={handleLogOut}>
                   Log Out
                 </MenuItem>
               </Select>

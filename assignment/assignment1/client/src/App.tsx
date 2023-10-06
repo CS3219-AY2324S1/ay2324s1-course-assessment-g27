@@ -123,6 +123,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./scenes/loginPage/LoginPage";
 import QuestionPage from "./scenes/questionPage/QuestionPage";
+import ProfilePage from "./scenes/profilePage/ProfilePage";
+import ChangePwdPage from "./scenes/changePwdPage/ChangePwdPage";
 import HomePage from "./scenes/homePage/homePage";
 import RoomPage from "./scenes/roomPage/roomPage";
 import { useMemo } from "react";
@@ -131,8 +133,6 @@ import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
-import { Home } from "@mui/icons-material";
-
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);
@@ -150,8 +150,6 @@ function App() {
               path="/homePage"
               element={isAuth ? <HomePage/> : <Navigate to="/" />}
             />
-            <Route path="/questions" element={<QuestionPage/>} />
-            <Route path="/roompage/:roomid" element={<RoomPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

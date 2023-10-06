@@ -1,11 +1,16 @@
 class User {
+  id: Number;
   username: String;
   password: String;
-  //private isAdmin: Boolean;
+  isAdmin: Boolean;
+  questions: any[];
 
-  constructor(username: String, password: String) {
+  constructor(id: Number, username: String, password: String, isAdmin: Boolean) {
+    this.id = id;
     this.username = username;
     this.password = password;
+    this.isAdmin = isAdmin;
+    this.questions = []
   }
 }
 
@@ -25,10 +30,10 @@ class User {
 //       required: true,
 //       min: 5,
 //     },
-//     // isAdmin: {
-//     //   type: Boolean,
-//     //   default: false,
-//     // },
+    // isAdmin: {
+    //   type: Boolean,
+    //   default: false,
+    // },
 //     // picturePath: {
 //     //   type: String,
 //     //   default: "",

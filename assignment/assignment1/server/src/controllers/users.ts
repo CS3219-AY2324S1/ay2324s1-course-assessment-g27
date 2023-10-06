@@ -44,15 +44,29 @@ export const getAllUser = async (req: Request, res: Response) => {
   })
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUsername = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    const { username, password } = req.body;
+    const { username } = req.body;
     const oldUser = await pool.query(queries.findUserById, [id]);
     if (oldUser.rowCount == 0) {
         res.status(400).json("User does not exist")
     }
 
-    pool.query(queries.updateUser, [username, password, id], (error: Error, results: QueryResult) => {
+    pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
+        if (error) throw error;
+        res.status(200).json("updated successfully.");
+    })
+};
+
+export const updateAdminStatus = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const { username, password, isAdmin} = req.body;
+    const oldUser = await pool.query(queries.findUserById, [id]);
+    if (oldUser.rowCount == 0) {
+        res.status(400).json("User does not exist")
+    }
+
+    pool.query(queries.updateAdminStatus, [isAdmin, id], (error: Error, results: QueryResult) => {
         if (error) throw error;
         res.status(200).json("updated successfully.");
     })
@@ -63,7 +77,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   pool.query(queries.findUserById, [id], (error: Error, results: QueryResult) => {
       if (error) throw error;
       if (results.rowCount == 0) {
-          res.status(404).json("User does not exist")
+          res.status(400).json("User does not exist")
       } else {
           pool.query(queries.deleteUser, [id], (error: Error, results: QueryResult) => {
               if (error) throw error;

@@ -1,16 +1,8 @@
-import {
-  EditOutlined,
-  DeleteOutlined,
-} from "@mui/icons-material";
-import {
-  InputBase,
-  useTheme,
-  Button,
-  useMediaQuery,
-} from "@mui/material";
+import { EditOutlined, DeleteOutlined } from "@mui/icons-material";
+import { InputBase, useTheme, Button, useMediaQuery } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import './MyQuestionWidget.css';
+import "./MyQuestionWidget.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setQuestions } from "../../state";
@@ -28,11 +20,13 @@ import AddQuestionFormPopup from "./AddQuestionForm";
 const MyQuestionWidget = () => {
   const dispatch = useDispatch();
   const theme: Theme = useTheme();
-  const { _id } = useSelector((state: State) => state.user);
+  const user = useSelector((state: State) => state.user);
+  const isAdmin = user.isAdmin;
+  console.log('qns: ' , isAdmin);
   const token = useSelector((state: State) => state.token);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const mediumMain = theme.palette.neutral.mediumMain;
-  const medium = theme.palette.neutral.medium;
+  // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  // const mediumMain = theme.palette.neutral.mediumMain;
+  // const medium = theme.palette.neutral.medium;
 
   const[questionData, setQuestionData] = useState<Question[]>([]);
   const [openAddFormPopup, setOpenAddFormPopup] = useState(false);
@@ -69,13 +63,14 @@ const MyQuestionWidget = () => {
   }, []);
 
   //Delete the question
-  const deleteQuestion = async (id : any) => {
+  const deleteQuestion = async (id: string) => {
     try {
       await deleteQuestionByID(id, token);
-        const updatedQuestionData = questionData.filter(question => question._id !== id);
+      const updatedQuestionData = questionData.filter(
+        (question) => question._id !== id
+      );
       setQuestionData(updatedQuestionData);
-  
-    } catch (err:any) {
+    } catch (err: any) {
       console.error(`Error deleting question: ${err.message}`);
     }
   }
@@ -100,11 +95,18 @@ const MyQuestionWidget = () => {
   const editQuestion = async (updatedData: Partial<Question>) => {
     if (selectedQuestion!) {
       try {
-        const updatedQuestion = await editQuestionById(selectedQuestion._id, updatedData, token);
-        setQuestionData(questionData.map((question) =>
-          question._id === selectedQuestion._id ? updatedQuestion : question));
+        const updatedQuestion = await editQuestionById(
+          selectedQuestion._id,
+          updatedData,
+          token
+        );
+        setQuestionData(
+          questionData.map((question) =>
+            question._id === selectedQuestion._id ? updatedQuestion : question
+          )
+        );
         setQuestionData(await getQuestionList(token));
-      } catch (err:any) {
+      } catch (err: any) {
         console.error(`Error editing question: ${err.message}`);
       }
     }
@@ -183,5 +185,4 @@ const MyQuestionWidget = () => {
   );
 };
 
-
-export default  MyQuestionWidget;
+export default MyQuestionWidget;

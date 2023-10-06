@@ -5,11 +5,10 @@ import { verifyToken } from "../middleware/auth";
 const router = express.Router();
 
 /* READ */
-//router.get("/:id", verifyToken, userControl.getAllUser); //idk if need to use the :id
-router.get("/", userControl.getAllUser);
-router.get("/:id", userControl.findUserById);
-router.put("/:id", userControl.updateUser);
-router.delete("/:id", userControl.deleteUser);
+router.get("/", verifyToken, userControl.getAllUser);
+router.get("/:id", verifyToken, userControl.findUserById);
+router.put("/:id", verifyToken, userControl.updateUsername);
+router.delete("/:id", verifyToken, userControl.deleteUser);
 
 
 export default router;
