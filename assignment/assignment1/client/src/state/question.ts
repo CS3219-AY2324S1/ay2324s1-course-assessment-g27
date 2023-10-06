@@ -3,7 +3,13 @@ export interface Question {
   title: string,
   difficulty: string,
   description: string,
-  tags: string[],
-  examples: string[],
+  tags: string,
+  examples: Example[],
   constraints: string[],
+}
+
+export type Example = {
+  inputText: string,
+  outputText:string,
+  explanation:string,
 }
