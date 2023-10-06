@@ -1,0 +1,39 @@
+/* homePage.css */
+
+.button-easy {
+    background-color: #77dd77;
+    color: black;
+    padding: 12px 24px; /* Increase padding to make the button bigger */
+    font-size: 16px;   /* Increase font size */
+    width: 120px;
+    margin-right: 10px;
+    box-shadow: #77dd77;
+  }
+.button-easy:hover{
+    background-color: darkgreen;
+}
+  
+.button-medium {
+    background-color: #fbfb5a;
+    color: black;
+    padding: 12px 24px;
+    font-size: 16px;
+    width: 120px;
+    margin-right: 10px;
+}
+
+.button-medium:hover{
+    background-color: darkorange;
+}
+  
+.button-hard {
+    background-color:#FF6961;
+    color: black;
+    padding: 12px 24px;
+    font-size: 16px;
+    width: 120px;
+}
+
+.button-hard:hover {
+  background-color: red;
+}

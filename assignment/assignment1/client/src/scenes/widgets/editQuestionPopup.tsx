@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Button, Dialog, DialogTitle, DialogContent, TextField, useTheme} from "@mui/material";
 import { Question } from "../../state/question";
 import { Theme} from "@mui/system";
+import {DeleteOutlined} from "@mui/icons-material";
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import { ExampleFieldsUI, ConstraintsFieldsUI } from "./QuestionFields/QuestionFieldsFormUI";
 
 interface EditQuestionPopupProps {
   open: boolean;
@@ -12,17 +15,70 @@ interface EditQuestionPopupProps {
 
 const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, question, onSave }) => {
   const theme: Theme = useTheme();
-  const [updatedData, setUpdatedData] = useState<Partial<Question>>({
-    title: question.title,
-    difficulty: question.difficulty,
-    description: question.description,
-    tags: question.tags,
-    examples: question.examples,
-    constraints: question.constraints,
-  });
+  const [updatedData, setUpdatedData] = useState<Partial<Question>>({});
+  
+  useEffect(() => {
+      setUpdatedData({
+        title: question.title,
+        difficulty: question.difficulty,
+        description: question.description,
+        tags: question.tags,
+        examples: question.examples,
+        constraints: question.constraints
+      });
+    }, [question]
+  );
+
+  if(updatedData.constraints?.length === 0) {
+    setUpdatedData({...updatedData, constraints:[""]});
+  }
+
+  if(updatedData.examples?.length === 0) {
+    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: ""}]});
+  }
+
+  const handleExampleAddField=() => {
+    setUpdatedData((prevState) => ({
+      title: updatedData.title,
+      difficulty: updatedData.difficulty,
+      description:updatedData.description,
+      tags:updatedData.tags,
+      constraints:updatedData.constraints,
+      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
+    }));
+  }
+
+  const handleExampleRemoveField = (index:any) => {
+    const filteredFields = (updatedData.examples || []).filter((_,i)=> i != index);
+    setUpdatedData({ ...updatedData, examples: filteredFields});
+  }
+
+  const handleExampleUpdateField = (updatedFields:any) => {
+    setUpdatedData({ ...updatedData, examples: updatedFields});
+  }
+
+  const handleConstraintsAddField=() => {
+    setUpdatedData((prevState) => ({
+      title: updatedData.title,
+      difficulty: updatedData.difficulty,
+      description:updatedData.description,
+      tags:updatedData.tags,
+      examples:updatedData.examples,
+      constraints: [...(prevState.constraints || []), ""],
+    }));
+  }
+
+  const handleConstraintsRemoveField = (index:any) => {
+    const filteredFields = (updatedData.constraints || []).filter((_,i)=> i != index);
+    setUpdatedData({ ...updatedData, constraints: filteredFields});
+  }
+
+  const handleConstraintsUpdateField = (updatedFields:any) => {
+    setUpdatedData({ ...updatedData, constraints: updatedFields});
+  }
 
   const TextFieldCSS = {
-    width: "100%",
+    width: "80%",
     mb: 1, // mb= margin-bottom
   };
 
@@ -32,54 +88,62 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
   };
 
   const clearForm =() => {
+    setUpdatedData({ ...updatedData, 
+      title: question.title,
+      difficulty: question.difficulty,
+      description: question.description,
+      tags: question.tags,
+      examples: question.examples,
+      constraints: question.constraints});
     onClose();
-    setUpdatedData({ ...updatedData, title:"", description:"",difficulty:"",tags:[],examples:[],constraints:[]});
   }
 
   return (
-    <Dialog open={open} onClose={clearForm}>
+    <Dialog open={open} onClose={clearForm} fullWidth={true}>
       <DialogTitle color="primary" fontWeight="bold">Editing {question.title}</DialogTitle>
       <DialogContent>
         <div>
           <TextField sx={{...TextFieldCSS}}
             label="Title"
-            value={updatedData.title || ""}
+            value={updatedData.title}
             onChange={(e) => setUpdatedData({ ...updatedData, title: e.target.value })}
           />
         </div>
         <div>
           <TextField sx={{...TextFieldCSS}}
             label="Difficulty"
-            value={updatedData.difficulty || ""}
+            value={updatedData.difficulty}
             onChange={(e) => setUpdatedData({ ...updatedData, difficulty: e.target.value })}
           />
         </div>
         <div>
           <TextField sx={{...TextFieldCSS}}
             label="Description"
-            value={updatedData.description || ""}
+            value={updatedData.description}
             onChange={(e) => setUpdatedData({ ...updatedData, description: e.target.value })}
           />
         </div>
         <div>
           <TextField sx={{...TextFieldCSS}}
             label="Tags"
-            value={updatedData.tags?.join(", ") || ""}
-            onChange={(e) => setUpdatedData({ ...updatedData, tags: e.target.value.split(",") })}
+            value={updatedData.tags}
+            onChange={(e) => setUpdatedData({ ...updatedData, tags: e.target.value})}
           />
         </div>
         <div>
-          <TextField sx={{...TextFieldCSS}}
-            label="Examples"
-            value={updatedData.examples?.join(", ") || ""}
-            onChange={(e) => setUpdatedData({ ...updatedData, examples: e.target.value.split(",") })}
+          <ExampleFieldsUI
+            fields={updatedData.examples}
+            handleAddFields={handleExampleAddField}
+            handleUpdateFields={handleExampleUpdateField}
+            handleDeleteFields={handleExampleRemoveField}
           />
         </div>
         <div>
-          <TextField sx={{...TextFieldCSS}}
-            label="Constraints"
-            value={updatedData.constraints?.join(", ") || ""}
-            onChange={(e) => setUpdatedData({ ...updatedData, constraints: e.target.value.split(",") })}
+          <ConstraintsFieldsUI
+            fields={updatedData.constraints}
+            handleAddFields={handleConstraintsAddField}
+            handleDeleteFields={handleConstraintsRemoveField}
+            handleUpdateFields={handleConstraintsUpdateField}
           />
         </div>
         <Button 

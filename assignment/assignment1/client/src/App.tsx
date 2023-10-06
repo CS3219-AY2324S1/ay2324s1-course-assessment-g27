@@ -125,13 +125,14 @@ import LoginPage from "./scenes/loginPage/LoginPage";
 import QuestionPage from "./scenes/questionPage/QuestionPage";
 import ProfilePage from "./scenes/profilePage/ProfilePage";
 import ChangePwdPage from "./scenes/changePwdPage/ChangePwdPage";
+import HomePage from "./scenes/homePage/homePage";
+import RoomPage from "./scenes/roomPage/roomPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
-
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);
@@ -146,16 +147,8 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route
-              path="/questions"
-              element={isAuth ? <QuestionPage /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile/:activePage"
-              element={<ProfilePage />}
-            />
-            <Route
-              path="/password"
-              element={<ChangePwdPage />}
+              path="/homePage"
+              element={isAuth ? <HomePage/> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>

@@ -23,8 +23,7 @@ const questionSchema = new mongoose.Schema(
       default: []
     },
     tags: {
-      type: Array,
-      default: []
+      type: String,
     },
     // picturePath: String,
     // likes: {
