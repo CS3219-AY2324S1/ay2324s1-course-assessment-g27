@@ -1,17 +1,29 @@
 /* RoomPage.css */
 
+.deleteRoom-button {
+    background-color: #3498db;
+    color: #fff;
+    font-size: 30px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    position: relative;
+    left:45%;
+    cursor: pointer;
+    border: none;
+}
+
 .leetcode-layout {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    background-color: #f5f5f5; /* Set the background color as needed */
+    /* background-color: #f5f5f5;  */
   }
   
   .questions-panel {
-    flex-basis: 40%; /* Adjust the width of the questions panel as needed */
+    flex-basis: 44%; 
     padding: 20px;
-    background-color: #fff; /* Set the background color as needed */
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    /* background-color: #fff;  */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
   }
   
   .questions-panel h2 {
@@ -25,12 +37,12 @@
   }
   
   .code-editor {
-    flex-basis: 58%; /* Adjust the width of the code editor as needed */
+    flex-basis: 55%; 
     padding: 20px;
-    background-color: #fff; /* Set the background color as needed */
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    /* background-color: #fff;  */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
   }
-  
+
   .code-editor textarea {
     width: 100%;
     height: 100%;
@@ -53,6 +65,5 @@
 
 }
 .pre-background{
-    background-color:#FAFAFA;
-}
-  
+    background-color:#00000011;
+} 
