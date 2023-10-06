@@ -3,10 +3,8 @@ import { Box, useMediaQuery, Typography } from "@mui/material";
 import Navbar from "../navBar";
 import "./homePage.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { Room } from "../../state/room";
 import { Question } from "../../state/question";
 import { getQuestionList } from '../../api/questionAPI/getQuestion';
 import { createRoom } from "../../api/roomAPI";
@@ -14,10 +12,7 @@ import { createRoom } from "../../api/roomAPI";
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
-
     const token = useSelector((state: State) => state.token);
-    const[questionData, setQuestionData] = useState<Partial<Question>>();
-    const[roomData, setRoomData] = useState<Partial<Room>>();
     let quesdata:Question;
     let roomid:string;
 
@@ -26,23 +21,12 @@ const HomePage = () => {
         
           const questionList:Question[] = await getQuestionList(token);
           const filteredQuestions = questionList.filter(question => question.difficulty === diff);
-          // setQuestionData(prevQuestionData => {
-          //   const updatedData = filteredQuestions[0];
-          //   return updatedData;
-          // });
-          quesdata=filteredQuestions[0];
+
+          quesdata=filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
           
     }
 
     const createNewRoom = async () => {
-      // const newData = {
-        // question_title: questionData?.title,
-        // question_difficulty: questionData?.difficulty,
-        // question_description: questionData?.description,
-        // question_examples: questionData?.examples,
-        // question_constraints: questionData?.constraints,
-        // users: [""],
-      // };
       const newData = {
         question_title: quesdata.title,
         question_difficulty: quesdata.difficulty,
@@ -53,9 +37,6 @@ const HomePage = () => {
       };
       const room = await createRoom(newData, token);
       roomid=room._id;
-      // setRoomData(room);
-
-      // navigate("/roomPage", { state: { roomData } });
 
     };
 

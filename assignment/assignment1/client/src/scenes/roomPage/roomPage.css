@@ -12,6 +12,15 @@
     border: none;
 }
 
+.deleteRoom-button:hover {
+  background-color:#256c9b;
+  box-shadow: 5px 5px 0px #1a4d6f;
+}
+
+.deleteRoom-button:active {
+  background-color:#4eb8ff;
+}
+
 .leetcode-layout {
     display: flex;
     justify-content: space-between;

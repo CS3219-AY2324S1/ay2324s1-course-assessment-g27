@@ -14,10 +14,9 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({ open, onClose, on
     <Dialog open={open} onClose={onClose} className="confirmation-dialog">
       <DialogTitle fontSize= "45px" className='title'>&#9888;</DialogTitle>
       <DialogContent className='content'>
-        <div>Are you sure you want to close this room? 
-            (Room will be deleted) </div>
-        <Button onClick={onConfirm} style={{fontSize: "30px", marginRight:"10px"}}>Yes</Button>
-        <Button onClick={onClose} style={{fontSize: "30px", marginRight:"10px"}}>No</Button>
+        <div>Are you sure you want to close this room? <br></br>(Room will be deleted) </div>
+        <Button onClick={onConfirm} style={{fontSize: "30px", marginRight:"45px"}}>Yes</Button>
+        <Button onClick={onClose} style={{fontSize: "30px", marginLeft:"45px"}}>No</Button>
       </DialogContent>
     </Dialog>
   );
