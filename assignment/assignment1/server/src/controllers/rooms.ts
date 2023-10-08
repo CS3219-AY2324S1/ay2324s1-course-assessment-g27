@@ -36,15 +36,6 @@ export const getRoomDetails = async(req: Request, res: Response) => {
       res.status(500).json({ message: err.message });
     }
 }
-// export const getRoomDetails = async(req: Request, res: Response) => {
-//   try {
-//     const roomId = req.params.id;
-//     const roomDetails = await Room.find();
-//     res.json(roomDetails);
-//   } catch (err: any) {
-//       res.status(500).json({ message: err.message });
-//     }
-// }
 
 /* DELETE */
 export const deleteRoom = async(req: Request, res: Response) => {

@@ -59,20 +59,6 @@ const Navbar = () => {
         >
           PeerPrep
         </Typography>
-        {isNonMobileScreens && (
-          <FlexBetween
-            sx={{ backgroundColor: neutralLight }}
-            borderRadius="9px"
-            gap="3rem"
-            padding="0.1rem 1.5rem"
-          >
-            <InputBase placeholder="Search..." />
-            <IconButton>
-              <Search />
-            </IconButton>
-            
-          </FlexBetween>
-        )}
         <Button onClick={() => navigate("/homePage")}>HomePage</Button>
         <Button onClick={() => navigate("/questions")}>QuestionPage</Button>
       </FlexBetween>
