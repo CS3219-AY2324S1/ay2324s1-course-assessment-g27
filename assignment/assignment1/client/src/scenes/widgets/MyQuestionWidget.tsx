@@ -114,7 +114,7 @@ const MyQuestionWidget = () => {
 
   return (
     <WidgetWrapper sx={{width:"100%"}}>
-      <Button
+      {isAdmin && (<><Button 
         onClick={openAddQuestionPopupWindow}
         sx={{
           color: theme.palette.background.alt,
@@ -130,7 +130,7 @@ const MyQuestionWidget = () => {
           // setData(NoQuestionSelected);
         }}
         onSave={addQuestion}
-      />
+      /></>)}
       <div>
       <div className="questionTable">
         <table className="questionTableList">
@@ -148,14 +148,16 @@ const MyQuestionWidget = () => {
                   <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
                   <td>{i.difficulty}</td>
                   <td>{i.tags}</td>
-                  <td style={{padding:"0"}}> <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
+                  {isAdmin && <><td style={{padding:"0"}}> 
+                  <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
                     <EditOutlined /></Button>
                   </td>
                   <td>
                     <Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
                     <DeleteOutlined />
                     </Button>
-                  </td>
+                  </td></>}
+                  
                   <DisplayDescription
                     open={openDescriptionPopup}
                     onClose={() => {
