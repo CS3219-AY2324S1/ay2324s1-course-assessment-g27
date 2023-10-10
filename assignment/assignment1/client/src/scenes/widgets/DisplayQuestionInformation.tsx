@@ -1,6 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, Typography} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Question } from "../../state/question";
+import DOMPurify from 'dompurify';
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
@@ -46,10 +47,11 @@ const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClo
 const displayExamples = (question:Question) => {
   const currExamplesInfo:any[] = [];
   for(var index in question.examples) {
-    if(question.examples[index].inputText != "" && question.examples[index].outputText != "" 
-      && question.examples[index].explanation != "") {
-      currExamplesInfo.push(question.examples[index]);
+    if(question.examples[index].inputText == "" && question.examples[index].outputText == "" 
+      && question.examples[index].explanation == "") {
+      continue;
     }
+    currExamplesInfo.push(question.examples[index]);
   }
 
   if(currExamplesInfo.length == 0) {
@@ -88,7 +90,7 @@ const displayConstraints= (question:Question) => {
     currConstraintsInfo?.map((field, index) => (
       <div key={index}> 
         <ul>
-          <li>{field}</li>
+          <li dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(field),}}></li>
         </ul>
       </div>
     ))

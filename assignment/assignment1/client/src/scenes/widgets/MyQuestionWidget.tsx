@@ -51,6 +51,7 @@ const MyQuestionWidget = () => {
     const questions = await createQuestion(newData, token);
     setQuestionData(questions);
     dispatch(setQuestions({ questions }));
+    window.location.reload();
   };
 
   // Get the questions from DB
@@ -145,7 +146,11 @@ const MyQuestionWidget = () => {
             return(
               <tbody>
                 <tr>
-                  <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
+                  <td onClick={() => openDescriptionPopupWindow(i)}>
+                    <div className="tooltip">{i.title}
+                      <span className="tooltiptext">Click to see more information</span>
+                    </div>
+                  </td>
                   <td>{i.difficulty}</td>
                   <td>{i.tags}</td>
                   {isAdmin && <><td style={{padding:"0"}}> 

@@ -50,11 +50,11 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 
   const handleExampleRemoveField = (index:any) => {
     const filteredFields = (updatedData.examples || []).filter((_,i)=> i != index);
-    setUpdatedData({ ...updatedData, examples: filteredFields});
+    setUpdatedData({...updatedData, examples: filteredFields});
   }
 
   const handleExampleUpdateField = (updatedFields:any) => {
-    setUpdatedData({ ...updatedData, examples: updatedFields});
+    setUpdatedData({...updatedData, examples: updatedFields});
   }
 
   const handleConstraintsAddField=() => {
@@ -70,11 +70,11 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 
   const handleConstraintsRemoveField = (index:any) => {
     const filteredFields = (updatedData.constraints || []).filter((_,i)=> i != index);
-    setUpdatedData({ ...updatedData, constraints: filteredFields});
+    setUpdatedData({...updatedData, constraints: filteredFields});
   }
 
   const handleConstraintsUpdateField = (updatedFields:any) => {
-    setUpdatedData({ ...updatedData, constraints: updatedFields});
+    setUpdatedData({...updatedData, constraints: updatedFields});
   }
 
   const TextFieldCSS = {
