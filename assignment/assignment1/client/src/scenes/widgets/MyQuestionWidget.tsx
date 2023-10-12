@@ -50,8 +50,7 @@ const MyQuestionWidget = () => {
     // Get back the .json file
     const questions = await createQuestion(newData, token);
     setQuestionData(questions);
-    dispatch(setQuestions({ questions }));
-    window.location.reload();
+    // dispatch(setQuestions({ questions }));
   };
 
   // Get the questions from DB
