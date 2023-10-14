@@ -11,10 +11,10 @@ export const deleteUserById = async (token: any, id: Number) => {
     });
 
     if (response.ok) {
-      return await response.json(); 
-    } else {
-      throw new Error(`${response.statusText}`);
+      throw new Error(`${response.json()}`);
     }
+    
+    return await response.json(); 
   } catch (err:any) {
     throw new Error(`${err.message}`);
   }

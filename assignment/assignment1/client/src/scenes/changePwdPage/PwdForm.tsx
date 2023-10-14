@@ -11,7 +11,7 @@ const PwdForm = () => {
     const [oldPwd, setOldPwd] = useState("");
     const [newPwd, setNewPwd] = useState("");
     const [cfmPwd, setCfmPwd] = useState("");
-    const [msg, setMsg] = useState("password updated successfully");
+    const [msg, setMsg] = useState("Password updated successfully");
 
     const user = useSelector((state: State) => state.user);
     const token = useSelector((state: State) => state.token);
@@ -23,6 +23,9 @@ const PwdForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            if (newPwd == '' || cfmPwd == '') {
+                throw new Error("New passwords cannot be empty");
+            }
             if (newPwd != cfmPwd) {
                 throw new Error("New passwords do not match, please confirm your new password again");
             }
@@ -31,8 +34,8 @@ const PwdForm = () => {
             
             if (errorVisible) {
                 setErrorVisible(false);
-                setMsg("password updated successfully");
             }
+            setMsg("Password Updated Successfully");
             setAlertVisible(true);
             // navigate("/profile/info");
         } catch (error: any) {

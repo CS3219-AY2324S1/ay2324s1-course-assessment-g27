@@ -41,21 +41,33 @@ export const getAllUser = async (req: Request, res: Response) => {
   pool.query(queries.getAllUsers, (error: Error, results: QueryResult) => {
       if (error) throw error;
       res.status(200).json(results.rows);
+      return;
   })
 };
 
 export const updateUsername = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { username } = req.body;
-    const oldUser = await pool.query(queries.findUserById, [id]);
-    if (oldUser.rowCount == 0) {
-        res.status(400).json("User does not exist")
-    }
+    try {
+        const id = parseInt(req.params.id);
+        const { username } = req.body;
+        const oldUser = await pool.query(queries.findUserById, [id]);
+        if (oldUser.rowCount == 0) {
+            res.status(400).json("User does not exist");
+            return;
+        }
 
-    pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
-        if (error) throw error;
-        res.status(200).json("updated successfully.");
-    })
+        const newUser = await pool.query(queries.findOtherUsers, [username, id]);
+        if (newUser.rowCount > 0) {
+            res.status(409).json("Username already exists");
+            return;
+        }
+
+        pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
+            res.status(200).json("Updated successfully");
+            return;
+        })
+    } catch (err:any) {
+        throw err;
+    }
 };
 
 export const updateAdminStatus = async (req: Request, res: Response) => {
@@ -64,11 +76,13 @@ export const updateAdminStatus = async (req: Request, res: Response) => {
     const oldUser = await pool.query(queries.findUserById, [id]);
     if (oldUser.rowCount == 0) {
         res.status(400).json("User does not exist")
+        return;
     }
 
     pool.query(queries.updateAdminStatus, [isAdmin, id], (error: Error, results: QueryResult) => {
         if (error) throw error;
-        res.status(200).json("updated successfully.");
+        res.status(200).json("Updated successfully");
+        return;
     })
 };
 
@@ -81,7 +95,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       } else {
           pool.query(queries.deleteUser, [id], (error: Error, results: QueryResult) => {
               if (error) throw error;
-              res.status(200).json("deleted"); //might have some other errors here
+              res.status(200).json("Deleted");
           });
       }
   })

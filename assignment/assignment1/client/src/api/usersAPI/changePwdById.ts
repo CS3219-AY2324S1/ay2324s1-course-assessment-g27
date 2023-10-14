@@ -13,12 +13,10 @@ export const changePwdById = async (token: any, id: Number, password: string) =>
       }),
     });
 
-    if (response.ok) {
-      return await response.json(); 
-    } else {
-      const res = await response.json();
-      throw new Error(`${res}`);
+    if (!response.ok) {
+      throw new Error(`${await response.json()}`);
     }
+    return await response.json(); 
   } catch (err:any) {
     throw new Error(`${err.message}`);
   }
