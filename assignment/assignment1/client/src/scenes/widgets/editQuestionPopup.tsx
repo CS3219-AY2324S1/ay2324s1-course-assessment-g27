@@ -10,12 +10,14 @@ interface EditQuestionPopupProps {
   open: boolean;
   onClose: () => void;
   question: Question; 
-  onSave: (updatedData: Partial<Question>) => void;
+  onSave: (updatedData: Partial<Question>) => Promise<void>;
+  getErrorMsg: () => Promise<string>;
 }
 
-const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, question, onSave }) => {
+const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, question, onSave , getErrorMsg}) => {
   const theme: Theme = useTheme();
   const [updatedData, setUpdatedData] = useState<Partial<Question>>({});
+  const [error, setError] = useState("");
   
   useEffect(() => {
       setUpdatedData({
@@ -82,12 +84,18 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
     mb: 1, // mb= margin-bottom
   };
 
-  const handleSave = () => {
-    onSave(updatedData);
-    clearForm();
+  const handleSave = async () => {
+    await onSave(updatedData);
+    const msg = await getErrorMsg();
+    setError(msg);
+    if(msg == "") {
+      clearForm();
+    }
   };
 
   const clearForm =() => {
+    onClose();
+    setError("");
     setUpdatedData({ ...updatedData, 
       title: question.title,
       difficulty: question.difficulty,
@@ -95,7 +103,6 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
       tags: question.tags,
       examples: question.examples,
       constraints: question.constraints});
-    onClose();
   }
 
   return (
@@ -107,6 +114,8 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
             label="Title"
             value={updatedData.title}
             onChange={(e) => setUpdatedData({ ...updatedData, title: e.target.value })}
+            helperText={error}
+            error={error != ""}
           />
         </div>
         <div>
