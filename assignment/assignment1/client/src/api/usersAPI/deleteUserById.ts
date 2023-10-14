@@ -10,7 +10,7 @@ export const deleteUserById = async (token: any, id: Number) => {
       },
     });
 
-    if (response.ok) {
+    if (!response.ok) {
       throw new Error(`${response.json()}`);
     }
     

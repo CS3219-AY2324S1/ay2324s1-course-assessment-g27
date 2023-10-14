@@ -62,6 +62,7 @@ export const updateUsername = async (req: Request, res: Response) => {
         }
 
         pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
+            if (error) throw error;
             res.status(200).json("Updated successfully");
             return;
         })
@@ -88,17 +89,18 @@ export const updateAdminStatus = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  pool.query(queries.findUserById, [id], (error: Error, results: QueryResult) => {
-      if (error) throw error;
-      if (results.rowCount == 0) {
-          res.status(400).json("User does not exist")
-      } else {
-          pool.query(queries.deleteUser, [id], (error: Error, results: QueryResult) => {
-              if (error) throw error;
-              res.status(200).json("Deleted");
-          });
-      }
-  })
+  try {
+    const response = await pool.query(queries.findUserById, [id]);
+    if (response.rowCount == 0) {
+        res.status(400).json("User does not exist");
+        return;
+    }
+    const deletedRes = await pool.query(queries.deleteUser, [id]);
+    res.status(200).json("Deleted");
+    return;
+  } catch (err:any) {
+    throw err;
+  }
 };
 
 

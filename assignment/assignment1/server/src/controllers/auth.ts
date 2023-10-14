@@ -81,7 +81,7 @@ export const comparePwd = async (req: Request, res: Response) => {
   const result = oldUser.rows[0];
   const isMatch = await bcrypt.compare(password, result.password);
   if (!isMatch) {
-    res.status(400).json("Incorrect password");
+    res.status(400).json("Old password is incorrect");
     return
   }
   res.status(200).json("Passwords match");
