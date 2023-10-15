@@ -76,3 +76,30 @@
 .pre-background{
     background-color:#00000011;
 } 
+
+.toggle-chatbot-button {
+  background-color: #3498db;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px; /* Adjust the margin as needed */
+}
+
+.toggle-chatbot-button:hover {
+  background-color: #256c9b;
+  box-shadow: 5px 5px 0px #1a4d6f;
+}
+
+.toggle-chatbot-button:active {
+  background-color: #4eb8ff;
+}
+
+/* ... existing styles ... */
+
+/* Optional: add a class to hide the Chatbot initially */
+.chatbot-container.hidden {
+  display: none;
+}
