@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+const key = import.meta.env.VITE_API;
 
 const Chatbot: React.FC = () => {
   const [userInput, setUserInput] = useState<string>('');
@@ -22,7 +23,7 @@ const Chatbot: React.FC = () => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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',
+            'Authorization': 'Bearer ' + key,
           },
         }
       );
