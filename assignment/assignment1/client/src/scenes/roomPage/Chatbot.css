@@ -1,0 +1,26 @@
+/* styles.css */
+
+/* Global styles, you can add more styles as needed */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.user-message {
+  /* Styles for user messages */
+  color: #333;
+}
+
+.bot-message {
+  /* Styles for bot messages */
+  color: #0066cc;
+}
+
+/* Add this if you want to customize the code block container */
+.code-block-container {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+}

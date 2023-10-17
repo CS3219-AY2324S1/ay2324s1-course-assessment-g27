@@ -9,6 +9,7 @@ import { State } from "../../state";
 import { useEffect , useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
+import Chatbot from './Chatbot';
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -67,6 +68,12 @@ const RoomPage = () => {
         open={showConfirmation}
         onClose={handleCancelDelete}
         onConfirm={deleteCurrentRoom} />
+        <Box> <div className="leetcode-layout">
+          <Chatbot/>
+          </div>
+        
+        </Box>
+     
       </Box>
     );
   }
