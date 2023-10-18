@@ -6,8 +6,7 @@ export async function getUserById(token : any, id : Number) {
         headers: { 
             Authorization: `Bearer ${token}`, 
             "Content-Type": "application/json"
-        },
-        
+        },      
     });
     return response.json();
 }

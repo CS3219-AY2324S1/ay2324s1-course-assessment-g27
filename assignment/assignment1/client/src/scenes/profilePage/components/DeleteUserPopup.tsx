@@ -33,8 +33,7 @@ const DeleteUserPopup = ({ closePopup }) => {
         </button>
         <button className="confirm" onClick={handleDeleteUser}>
             Confirm
-        </button>
-        
+        </button>  
        </div>
       </div>
     );
