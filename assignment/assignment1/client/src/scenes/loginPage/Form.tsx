@@ -80,26 +80,18 @@ const Form = () => {
       // }
     }
     try {
-      const username = formData.get("username") == null ? '' : formData.get("username").toString();
-      const password = formData.get("password") == null ? '' : formData.get("username").toString();
-      if (username == '' || password == '') {
-        throw new Error("Fields cannot be blank");
-      }
-      console.log(username, password);
+      // const username = formData.get("username").toString() ?? '';
+      // const password = formData.get("password").toString() ?? '';
+
       // formData.append("picturePath", values.picture!.name);
-      const savedUser = await registerUser(username, password);
-      //const userRes = savedUser.json();
+      const savedUser = await registerUser(values.username, values.password);
       onSubmitProps.resetForm();
       if (errorVisible) {
         setErrorVisible(false);
       }
       setMsg("Registered Successfully");
       setAlertVisible(true);
-
-      // if (savedUser.ok) {
-      //   setPageType("login");
-      // }
-
+      
       setPageType("login");
     } catch (err:any) {
         setMsg(err.message);
