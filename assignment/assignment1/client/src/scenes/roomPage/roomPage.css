@@ -1,0 +1,78 @@
+/* RoomPage.css */
+
+.deleteRoom-button {
+    background-color: #3498db;
+    color: #fff;
+    font-size: 30px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    position: relative;
+    left:45%;
+    cursor: pointer;
+    border: none;
+}
+
+.deleteRoom-button:hover {
+  background-color:#256c9b;
+  box-shadow: 5px 5px 0px #1a4d6f;
+}
+
+.deleteRoom-button:active {
+  background-color:#4eb8ff;
+}
+
+.leetcode-layout {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    /* background-color: #f5f5f5;  */
+  }
+  
+  .questions-panel {
+    flex-basis: 44%; 
+    padding: 20px;
+    /* background-color: #fff;  */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .questions-panel h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .questions-panel p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .code-editor {
+    flex-basis: 55%; 
+    padding: 20px;
+    /* background-color: #fff;  */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+  }
+
+  .code-editor textarea {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  pre {
+    border-color: var(--border-tertiary);
+    border-left-width: 2px;
+    color: var(--text-secondary);
+    font-family: Menlo, sans-serif;
+    font-size: 0.875rem;
+    overflow: visible;
+    padding-left: 0.5rem;
+    white-space: pre-wrap;
+
+}
+.pre-background{
+    background-color:#00000011;
+} 
