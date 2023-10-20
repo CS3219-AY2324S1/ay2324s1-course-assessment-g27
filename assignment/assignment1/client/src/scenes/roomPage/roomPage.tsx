@@ -10,6 +10,7 @@ import { useEffect , useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
 import Chatbot from './Chatbot';
+import {socket} from "../../App";
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const RoomPage = () => {
 
   const deleteCurrentRoom = () => {
       deleteRoom(roomid, token);
+      socket.emit("leave_room", roomid);
       navigate("/homePage");
       setShowConfirmation(false);
   }

@@ -13,6 +13,18 @@ export async function createRoom(newData: Partial<Room>, token : any) {
     return response.json();
 }
 
+// export async function getRoomByDifficulty(difficulty: any, token: any) {
+//     const response = await fetch(`${API_URL}/rooms`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify(difficulty),
+//     });
+//     return response.json();
+// }
+
 export async function getRoomDetails(roomId: any, token: any) {
     const response = await fetch(`${API_URL}/rooms/${roomId}`, {
         method: "GET",
@@ -23,6 +35,15 @@ export async function getRoomDetails(roomId: any, token: any) {
     })
     return response.json();
 }
+// export async function getRoomByDifficulty(difficulty: any, token:any ) {
+//   const response = await fetch(`${API_URL}/rooms`, {
+//     method:"GET",
+//     headers: {
+//       Authorization: `Bearer ${token}`, 
+//       "Content-Type": "application/json"
+//     }
+//   })
+// }
 
 export const deleteRoom = async (roomId:any, token:any) => {
     try {
@@ -36,10 +57,10 @@ export const deleteRoom = async (roomId:any, token:any) => {
       if (response.ok) {
         return roomId; // Deletion successful
       } else {
-        const errorMessage = `Error deleting question: ${response.statusText}`;
+        const errorMessage = `Error deleting room: ${response.statusText}`;
         throw new Error(errorMessage);
       }
     } catch (err:any) {
-      throw new Error(`Error deleting question: ${err.message}`);
+      throw new Error(`Error deleting room: ${err.message}`);
     }
   };
