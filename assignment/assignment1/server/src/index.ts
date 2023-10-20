@@ -50,13 +50,34 @@ const io = new Server( server, {
   },
 });
 
+let roomids:string[] = [];
+
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} Connected`);
-  
-  socket.on("join_room", (roomid) => {
+  console.log(roomids);
+
+  socket.on("join_room", async () => {
+    if(roomids.length == 0) {
+      socket.emit("create_room");
+      console.log("socket emits create room");
+    } else {
+      socket.emit("joined_room", roomids[roomids.length-1]);
+      socket.join(roomids[roomids.length-1]);
+      console.log(`${socket.id} joined ${roomids[roomids.length-1]}`);
+    }
+  })
+
+  socket.on("room_created", async (roomid) => {
+    roomids.push(roomid);
     socket.join(roomid);
     console.log(`${socket.id} joined ${roomid}`);
-  });
+  })
+
+  socket.on("leave_room", async (roomid) => {
+    socket.leave(roomid);
+    roomids = roomids.filter(elem=>elem!==roomid);
+    console.log(`${socket.id} left ${roomid}`);
+  })
 
   socket.on("disconnect", () => {
     console.log(`User Disconnected`, socket.id);

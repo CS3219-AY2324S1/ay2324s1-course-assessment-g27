@@ -30,7 +30,7 @@ const Chatbot: React.FC = () => {
 
       const generatedText = response.data.choices[0]?.message?.content.trim();
       setChatHistory([...chatHistory, { role: 'user', content: userMessage }, { role: 'bot', content: generatedText }]);
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error during OpenAI API call: ${error.message}`);
       setChatHistory([...chatHistory, { role: 'user', content: userMessage }, { role: 'bot', content: "Sorry, I encountered an error." }]);
     } finally {
