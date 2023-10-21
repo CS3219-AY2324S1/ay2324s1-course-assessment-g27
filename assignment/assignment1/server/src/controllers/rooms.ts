@@ -26,6 +26,17 @@ export const createRoom = async (req: Request, res: Response) => {
   }
 }
 
+/* GET by difficulty */
+// export const getRoomByDifficulty = async(req: Request, res: Response) => {
+//   try {
+//     const difficulty = req.params.difficulty;
+//     const roomIds = await Room.find({question_difficulty:difficulty});
+//     res.json();
+//   } catch (err: any) {
+//     res.status(500).json({ message: err.message });
+//   }
+// }
+
 /* GET */
 export const getRoomDetails = async(req: Request, res: Response) => {
   try {
