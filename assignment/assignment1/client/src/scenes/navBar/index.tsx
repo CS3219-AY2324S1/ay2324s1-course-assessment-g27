@@ -34,7 +34,7 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const username = user.username;
-  console.log(username);
+  // console.log(username);
 
   const handleLogOut = () => {
     navigate(`/`);
