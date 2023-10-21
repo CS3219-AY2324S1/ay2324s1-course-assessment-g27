@@ -8,22 +8,38 @@ import { State } from "../../state";
 import { Question } from "../../state/question";
 import { getQuestionList } from '../../api/questionAPI/getQuestion';
 import { createRoom } from "../../api/roomAPI";
+import {socket} from "../../App";
 
 const HomePage = () => {
+
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
     const token = useSelector((state: State) => state.token);
     let quesdata:Question;
     let roomid:string;
 
+    socket.once("create_room", async () => {
+      console.log("CREATE ROOM");
+      await getRandQuestion("easy");
+      await createNewRoom();
+      navigate(`/roomPage/${roomid}`);
+      socket.emit("room_created", roomid);
+    });
+    
+    socket.once("joined_room", async (roomid) => {
+      navigate(`/roomPage/${roomid}`);
+    });
+
+    const joinRoom= () => {
+      socket.emit("join_room");
+      
+    }
 
     async function getRandQuestion(diff:string ) {
         
           const questionList:Question[] = await getQuestionList(token);
           const filteredQuestions = questionList.filter(question => question.difficulty.toLowerCase() === diff);
-
           quesdata=filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-          
     }
 
     const createNewRoom = async () => {
@@ -37,7 +53,6 @@ const HomePage = () => {
       };
       const room = await createRoom(newData, token);
       roomid=room._id;
-
     };
 
     return (
@@ -60,11 +75,7 @@ const HomePage = () => {
         </Typography>
         </div>
         <div>
-        {/* <button className="button-easy" onClick={() => {createNewRoom(); navigate("/" + roomData!._id);} } >Easy </button> */}
-        {/* <button className="button-easy" onClick={() => navigate("/roomPage")} >Easy </button> */}
-        <button className="button-easy" onClick={async () => {await getRandQuestion("easy"); await createNewRoom(); navigate(`/roomPage/${roomid}`); } } >Easy </button>
-        {/* <button className="button-easy" onClick={() => {getRandQuestion("easy"); createNewRoom(); navigate("/roomPage");} } >Easy </button> */}
-        {/* HELP THE NAVIGATE("ROOMPAGE") CAUSING CREATION OF ROOM TO HAVE 409 ERROR */}
+        <button className="button-easy" onClick={() => { joinRoom();  } } >Easy </button>
         <button className="button-medium" onClick={async () => {await getRandQuestion("medium"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }} >Medium </button>
         <button className="button-hard" onClick={async () => {await getRandQuestion("hard"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }}>Hard</button>
         </div>
