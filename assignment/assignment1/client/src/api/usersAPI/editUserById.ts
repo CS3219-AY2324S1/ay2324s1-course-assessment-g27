@@ -14,12 +14,12 @@ export const editUserById = async (token: any, id: Number, username: String) => 
       }),
     });
 
-    if (response.ok) {
-      return await response.json(); 
-    } else {
-      throw new Error(`Error editing user: ${response.statusText}`);
-    }
+    if (!response.ok) {
+      throw new Error(`${await response.json()}`); 
+    } 
+
+    return await response.json();
   } catch (err:any) {
-    throw new Error(`Error editing user: ${err.message}`);
+    throw new Error(`${err.message}`);
   }
 };
