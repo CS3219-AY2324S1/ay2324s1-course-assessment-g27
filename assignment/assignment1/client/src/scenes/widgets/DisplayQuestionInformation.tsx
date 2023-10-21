@@ -31,7 +31,7 @@ const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClo
       </DialogTitle>
       <DialogContent dividers>
         <Typography><b>Description:</b></Typography>
-        <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(question.description)}}></Typography>
+        <Typography gutterBottom>{question.description}</Typography>
       </DialogContent>
       <DialogContent>
         {displayExamples(question)}
@@ -48,7 +48,7 @@ const displayExamples = (question:Question) => {
   const currExamplesInfo:any[] = [];
   for(var index in question.examples) {
     if(question.examples[index].inputText == "" && question.examples[index].outputText == "" 
-      && question.examples[index].explanation == "" && question.examples[index].image == "") {
+      && question.examples[index].explanation == "") {
       continue;
     }
     currExamplesInfo.push(question.examples[index]);
@@ -65,10 +65,9 @@ const displayExamples = (question:Question) => {
         <div>
           <Typography><b>Example {index + 1}:</b></Typography>
           <DialogContent>
-            {field.image && <img src={field.image} width="auto" />}
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText)}}></Typography>
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Output: </b>" + field.outputText)}}></Typography>
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Explanation: </b>" + field.explanation)}}></Typography>
+            <Typography gutterBottom><b>Input: </b> {field.inputText}</Typography>
+            <Typography gutterBottom><b>Output: </b> {field.outputText}</Typography>
+            <Typography gutterBottom><b>Explanation: </b> {field.explanation}</Typography>
           </DialogContent>
         </div>
       }

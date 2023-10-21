@@ -11,8 +11,7 @@ const ExampleFields: React.FC<ExampleFileds> =({newData, setData}) => {
     const [fields, setFields] = useState([{
         inputText: "",
 	    outputText: "",
-	    explanation: "",
-        image:"",
+	    explanation: ""
     }]);
 
     const updateData = (fields : any) => {
@@ -20,7 +19,7 @@ const ExampleFields: React.FC<ExampleFileds> =({newData, setData}) => {
     }
 
     const handleAddField = () => {
-        setFields([...fields, {inputText: "", outputText: "", explanation: "", image:""}]);
+        setFields([...fields, {inputText: "", outputText: "", explanation: ""}]);
     };
 
     const handleUpdateField = (updatedFields:any) => {

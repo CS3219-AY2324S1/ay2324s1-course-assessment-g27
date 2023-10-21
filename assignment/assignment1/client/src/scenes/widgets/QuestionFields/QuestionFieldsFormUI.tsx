@@ -25,7 +25,6 @@ const ButtonIconCSS = {
 
 export const ExampleFieldsUI = ({fields, handleUpdateFields, handleAddFields, handleDeleteFields}:ExampleAndConstraintsFieldsUIProps) => {
     const maxInputNum = 3;
-
     return (
         <div>
             {fields.map((field:any, index:any) => (
@@ -64,17 +63,6 @@ export const ExampleFieldsUI = ({fields, handleUpdateFields, handleAddFields, ha
                                 handleUpdateFields(updatedFields);
                             }}
                         />
-                        <TextField
-                            sx={{...TextFieldCSS }}
-                            label="Example Image Link"
-                            placeholder="Enter Image Link"
-                            value={field.image}
-                            onChange={(e) => {
-                                const updatedFields = [...fields];
-                                updatedFields[index].image = e.target.value;
-                                handleUpdateFields(updatedFields);
-                            }}
-                        />
                         {fields.length > 1 && (
                             <Button sx={{...ButtonIconCSS}} onClick={() => handleDeleteFields(index)}>
                             <DeleteOutlined/>
@@ -93,7 +81,7 @@ export const ExampleFieldsUI = ({fields, handleUpdateFields, handleAddFields, ha
 }
 
 export const ConstraintsFieldsUI = ({fields, handleUpdateFields, handleAddFields, handleDeleteFields}:ExampleAndConstraintsFieldsUIProps) => {
-    const maxInputNum = 6;
+    const maxInputNum = 4;
     return (
         <div>
             {fields.map((field:any, index:any) => (

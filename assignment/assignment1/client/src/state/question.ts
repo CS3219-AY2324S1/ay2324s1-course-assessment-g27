@@ -12,5 +12,4 @@ export type Example = {
   inputText: string,
   outputText:string,
   explanation:string,
-  image:string,
 }

@@ -36,7 +36,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
   }
 
   if(updatedData.examples?.length === 0) {
-    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: "", image:""}]});
+    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: ""}]});
   }
 
   const handleExampleAddField=() => {
@@ -46,7 +46,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
       description:updatedData.description,
       tags:updatedData.tags,
       constraints:updatedData.constraints,
-      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: "", image:""}],
+      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
     }));
   }
 

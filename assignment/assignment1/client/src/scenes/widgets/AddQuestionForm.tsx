@@ -25,8 +25,7 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave,
       examples: [{
         inputText: "",
         outputText: "",
-        explanation: "",
-        image:""}],
+        explanation: ""}],
       constraints: [],
     });
 
