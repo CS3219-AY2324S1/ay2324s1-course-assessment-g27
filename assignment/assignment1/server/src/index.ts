@@ -22,6 +22,9 @@ import { users, questions } from "./data/index";
 
 import Room from "./models/Room";
 
+//for seeding the sql databases
+//import { seedDb } from "./dbSeed";
+
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -70,3 +73,5 @@ mongoose
     // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+//const db = seedDb();

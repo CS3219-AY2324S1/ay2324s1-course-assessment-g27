@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setUser } from "../../../state";
-import { getUserById } from "../../../api/usersAPI/getUserById";
-import { editUserById } from "../../../api/usersAPI/editUserById";
+import { getUserById } from "../../../api/usersAPI/Auth/getUserById";
+import { editUserById } from "../../../api/usersAPI/Auth/editUserById";
 import { Alert, AlertTitle } from "@mui/material";
 import "./BasicInfo.css";
 

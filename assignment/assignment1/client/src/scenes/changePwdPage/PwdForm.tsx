@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { changePwdById } from "../../api/usersAPI/changePwdById"
-import { comparePwd } from "../../api/usersAPI/comparePwd";
-import { Alert, AlertTitle, Box, TextField } from "@mui/material";
+import { changePwdById } from "../../api/usersAPI/Auth/changePwdById"
+import { comparePwd } from "../../api/usersAPI/Auth/comparePwd";
+import { Alert, AlertTitle } from "@mui/material";
 import "./PwdForm.css";
 import { useNavigate } from "react-router-dom";
 

@@ -3,6 +3,7 @@ import Navbar from '../navBar';
 import { Box } from '@mui/material';
 import './roomPage.css'
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
+import { saveAttemptedQns,saveCompletedQns } from "../../api/usersAPI/qnsHistAPI"
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -13,6 +14,7 @@ import ConfirmationPopup from './confirmationPopup';
 const RoomPage = () => {
   const navigate = useNavigate();
   const {roomid} = useParams();
+  const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
   const [roomDetails, setRoomDetails] = useState<Partial<Room>>();
 
@@ -25,12 +27,14 @@ const RoomPage = () => {
     try {
       const data = await getRoomDetails(roomid ,token);
       setRoomDetails(data);
+      saveAttemptedQns(data.question_id, userId, token); //save qns in attempted
     } catch (err) {
       console.error('Error fetching room details:', err);
     }
   };
 
   const deleteCurrentRoom = () => {
+      saveCompletedQns(roomDetails.question_id, userId, token); //save qns as completed
       deleteRoom(roomid, token);
       navigate("/homePage");
       setShowConfirmation(false);

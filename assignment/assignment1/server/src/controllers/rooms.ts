@@ -7,8 +7,9 @@ import Room from "../models/Room";
  */
 export const createRoom = async (req: Request, res: Response) => {
   try {  
-    const { question_title, question_difficulty, question_description, question_examples, question_constraints, users } = req.body;
+    const { question_id, question_title, question_difficulty, question_description, question_examples, question_constraints, users } = req.body;
     const newRoom = new Room({
+        question_id: question_id,
         question_title: question_title,
         question_difficulty: question_difficulty,
         question_description: question_description,

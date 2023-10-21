@@ -1,5 +1,5 @@
 import "./DeleteUserPopup.css";
-import { deleteUserById } from "../../../api/usersAPI/deleteUserById";
+import { deleteUserById } from "../../../api/usersAPI/Auth/deleteUserById";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setLogout } from "../../../state";
 import { useNavigate } from "react-router-dom";

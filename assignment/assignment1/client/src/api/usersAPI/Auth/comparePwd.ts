@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 export const comparePwd = async (token: any, id: Number, password: String) => {
   try {
