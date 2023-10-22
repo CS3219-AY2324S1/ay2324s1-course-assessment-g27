@@ -13,17 +13,39 @@ export async function createRoom(newData: Partial<Room>, token : any) {
     return response.json();
 }
 
-// export async function getRoomByDifficulty(difficulty: any, token: any) {
-//     const response = await fetch(`${API_URL}/rooms`, {
-//       method: "GET",
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "application/json"
-//       },
-//       body: JSON.stringify(difficulty),
-//     });
-//     return response.json();
-// }
+export async function getRoomByDifficulty(difficulty: any, token: any) {
+    const response = await fetch(`${API_URL}/rooms?difficulty=${difficulty}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      // body: JSON.stringify({difficulty: difficulty}),
+    });
+    return await response.json();
+}
+
+export async function updateRoom(roomId:any, username: any, token: any) {
+  try {
+    const response = await fetch(`${API_URL}/rooms/${roomId}?newUser=${username}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      // body: JSON.stringify(username),
+    });
+    
+
+    if (response.ok) {
+      return await response.json(); 
+    } else {
+      throw new Error(`Error updating room: ${response.statusText}`);
+    }
+  } catch (err:any) {
+    throw new Error(`Error updating room: ${err.message}`);
+  }
+}
 
 export async function getRoomDetails(roomId: any, token: any) {
     const response = await fetch(`${API_URL}/rooms/${roomId}`, {
@@ -35,15 +57,7 @@ export async function getRoomDetails(roomId: any, token: any) {
     })
     return response.json();
 }
-// export async function getRoomByDifficulty(difficulty: any, token:any ) {
-//   const response = await fetch(`${API_URL}/rooms`, {
-//     method:"GET",
-//     headers: {
-//       Authorization: `Bearer ${token}`, 
-//       "Content-Type": "application/json"
-//     }
-//   })
-// }
+
 
 export const deleteRoom = async (roomId:any, token:any) => {
     try {
