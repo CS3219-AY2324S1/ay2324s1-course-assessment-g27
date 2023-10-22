@@ -16,14 +16,12 @@ const HomePage = () => {
     let quesdata:Question;
     let roomid:string;
 
-
     async function getRandQuestion(diff:string ) {
         
           const questionList:Question[] = await getQuestionList(token);
           const filteredQuestions = questionList.filter(question => question.difficulty.toLowerCase() === diff);
           quesdata = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-          console.log(quesdata._id);
-          
+          // console.log("question  is: ", quesdata);
     }
 
     const createNewRoom = async () => {

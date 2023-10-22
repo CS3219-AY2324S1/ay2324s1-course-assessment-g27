@@ -4,10 +4,10 @@ export async function getAttemptList(id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/attempts`, {
             method: "GET",
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                "Content-Type": "application/json"
-            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
         });
         if (!response.ok) {
             throw new Error(`${await response.json()}`);
@@ -15,7 +15,7 @@ export async function getAttemptList(id: Number, token : any) {
 
         return await response.json(); 
     } catch (err:any) {
-        throw new Error(`${err.message}`);
+        throw err;
     }
 };
 
@@ -23,10 +23,10 @@ export async function getCompletedList(id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/completed`, {
             method: "GET",
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                "Content-Type": "application/json"
-            },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
         });
         if (!response.ok) {
             throw new Error(`${await response.json()}`);
@@ -34,19 +34,21 @@ export async function getCompletedList(id: Number, token : any) {
 
         return await response.json(); 
     } catch (err:any) {
-        throw new Error(`${err.message}`);
+        throw err;
     }
 };
 
-export async function saveAttemptedQns(qnsId: String, id: Number, token : any) {
+export async function saveAttemptedQns(qid: String, id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/attempts`, {
             method: "POST",
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(qnsId),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            body: JSON.stringify({
+                qid,
+            }),
         });
         if (!response.ok) {
             throw new Error(`${await response.json()}`);
@@ -54,19 +56,21 @@ export async function saveAttemptedQns(qnsId: String, id: Number, token : any) {
 
         return await response.json(); 
     } catch (err:any) {
-        throw new Error(`${err.message}`);
+        throw err;
     }
 };
 
-export async function saveCompletedQns(qnsId: String, id: Number, token : any) {
+export async function saveCompletedQns(qid: String, id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/completed`, {
             method: "POST",
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(qnsId),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            body: JSON.stringify({
+                qid,
+            }),
         });
         if (!response.ok) {
             throw new Error(`${await response.json()}`);
@@ -74,6 +78,6 @@ export async function saveCompletedQns(qnsId: String, id: Number, token : any) {
 
         return await response.json(); 
     } catch (err:any) {
-        throw new Error(`${err.message}`);
+        throw err;
     }
 };

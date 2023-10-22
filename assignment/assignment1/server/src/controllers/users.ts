@@ -109,7 +109,7 @@ export const addAttemptedQns = async (req: Request, res: Response) => {
     try {
         const { qid } = req.body; 
         const response = await pool.query(queries.addAttempt, [id, qid]);
-        console.log(`added attempt ${qid}`);
+        console.log(`added attempt`, qid);
         res.status(201).json(`added attempt ${qid}`);
         return;
     } catch (err:any) {
@@ -133,7 +133,7 @@ export const addCompletedQns = async (req: Request, res: Response) => {
 export const getAttemptList = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     try {
-        const results = await pool.query(queries.getAttempts);
+        const results = await pool.query(queries.getAttempts, [id]);
         res.status(200).json(results.rows);
         return;
     } catch (err:any) {
@@ -144,7 +144,7 @@ export const getAttemptList = async (req: Request, res: Response) => {
 export const getCompletedList = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     try {
-        const results = await pool.query(queries.getCompleted);
+        const results = await pool.query(queries.getCompleted, [id]);
         res.status(200).json(results.rows);
         return;
     } catch (err:any) {

@@ -133,6 +133,7 @@ import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
+import QnsHistPage from "./scenes/qnsHistPage/QnsHistPage";
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);
@@ -159,6 +160,10 @@ function App() {
             <Route
               path="/password"
               element={<ChangePwdPage />}
+            />
+            <Route
+              path="/history"
+              element={<QnsHistPage />}
             />
           </Routes>
         </ThemeProvider>
