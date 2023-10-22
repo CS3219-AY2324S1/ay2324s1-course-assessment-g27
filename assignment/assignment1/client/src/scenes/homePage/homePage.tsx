@@ -103,8 +103,8 @@ const HomePage = () => {
         </div>
         <div>
         <button className="button-easy" onClick={() => { joinRoom("Easy");  } } >Easy </button>
-        <button className="button-medium" onClick={async () => {await getRandQuestion("Medium"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }} >Medium </button>
-        <button className="button-hard" onClick={async () => {await getRandQuestion("Hard"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }}>Hard</button>
+        <button className="button-medium" onClick={async () => {joinRoom("Medium"); }} >Medium </button>
+        <button className="button-hard" onClick={async () => {joinRoom("Hard"); }}>Hard</button>
         </div>
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}
         </Box>
