@@ -37,12 +37,8 @@ app.use(bodyParser.json({ limit: "30mb", inflate: true}));
 app.use(bodyParser.urlencoded({ limit:"30mb", inflate: true}));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // TODO: Change from local to cloud storage for images
-// app.options('*', cors());
 
 const server = http.createServer(app);
-// app.get("/", (req, res) => {
-//   res.send("Hello world");
-// });
 
 const io = new Server( server, {
   cors: {
@@ -56,26 +52,17 @@ io.on("connection", (socket) => {
   console.log(`User ${socket.id} Connected`);
   console.log(roomids);
 
-  socket.on("join_room", async () => {
-    if(roomids.length == 0) {
-      socket.emit("create_room");
-      console.log("socket emits create room");
-    } else {
-      socket.emit("joined_room", roomids[roomids.length-1]);
-      socket.join(roomids[roomids.length-1]);
-      console.log(`${socket.id} joined ${roomids[roomids.length-1]}`);
-    }
-  })
-
-  socket.on("room_created", async (roomid) => {
-    roomids.push(roomid);
+  socket.on("join_room", async (roomid) => {
     socket.join(roomid);
     console.log(`${socket.id} joined ${roomid}`);
   })
 
+  socket.on("leaving_room", (roomid) => {
+    socket.to(roomid).emit("leave_room_request");
+  })
+
   socket.on("leave_room", async (roomid) => {
     socket.leave(roomid);
-    roomids = roomids.filter(elem=>elem!==roomid);
     console.log(`${socket.id} left ${roomid}`);
   })
 

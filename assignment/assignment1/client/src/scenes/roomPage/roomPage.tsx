@@ -11,12 +11,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
 import Chatbot from './Chatbot';
 import {socket} from "../../App";
+import { io } from 'socket.io-client';
 
 const RoomPage = () => {
   const navigate = useNavigate();
   const {roomid} = useParams();
   const token = useSelector((state: State) => state.token);
-  const [roomDetails, setRoomDetails] = useState<Partial<Room>>();
+  const [roomDetails, setRoomDetails] = useState<Room>();
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -32,11 +33,18 @@ const RoomPage = () => {
     }
   };
 
-  const deleteCurrentRoom = () => {
-      deleteRoom(roomid, token);
-      socket.emit("leave_room", roomid);
-      navigate("/homePage");
-      setShowConfirmation(false);
+  socket.on("leave_room_request", () => {
+    deleteCurrentRoom();
+  })
+  const deleteCurrentRoom = async () => {
+    await deleteRoom(roomDetails?._id, token);
+    socket.emit("leave_room", roomDetails?._id);
+    navigate("/homePage");
+    // setShowConfirmation(false);
+  }
+  const handleYesDelete = () => {
+    socket.emit("leaving_room", roomDetails?._id);
+    deleteCurrentRoom();
   }
   const handleDeleteRoom = () => {
     setShowConfirmation(true);
@@ -69,7 +77,7 @@ const RoomPage = () => {
       <ConfirmationPopup 
         open={showConfirmation}
         onClose={handleCancelDelete}
-        onConfirm={deleteCurrentRoom} />
+        onConfirm={handleYesDelete} />
         <Box> <div className="leetcode-layout">
           <Chatbot/>
           </div>
