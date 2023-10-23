@@ -6,14 +6,16 @@ import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { useEffect , useState} from 'react';
+import { useEffect , useRef, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
 import Chatbot from './Chatbot';
 import {socket} from "../../App";
-import { io } from 'socket.io-client';
+import Editor from './editor';
 
 const RoomPage = () => {
+  const codeRef = useRef(null);
+
   const navigate = useNavigate();
   const {roomid} = useParams();
   const token = useSelector((state: State) => state.token);
@@ -31,19 +33,20 @@ const RoomPage = () => {
     } catch (err) {
       console.error('Error fetching room details:', err);
     }
+    // socket.emit("sync_code",roomid, codeRef.current);
   };
 
   socket.on("leave_room_request", () => {
     deleteCurrentRoom();
   })
   const deleteCurrentRoom = async () => {
-    await deleteRoom(roomDetails?._id, token);
-    socket.emit("leave_room", roomDetails?._id);
+    await deleteRoom(roomid, token);
+    socket.emit("leave_room", roomid);
     navigate("/homePage");
     // setShowConfirmation(false);
   }
   const handleYesDelete = () => {
-    socket.emit("leaving_room", roomDetails?._id);
+    socket.emit("leaving_room", roomid);
     deleteCurrentRoom();
   }
   const handleDeleteRoom = () => {
@@ -70,9 +73,13 @@ const RoomPage = () => {
                                                           "Explanation: " + i.explanation + "\n \n") }</pre>
           </div>
         </div>
-        <div className="code-editor">
-          <textarea placeholder="Write your code here"></textarea>
+        {/* <div className="code-editor">
+          <textarea id="codeEditor" placeholder="Write your code here"></textarea>
+        </div> */}
+        <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
+          <Editor socket={socket} roomId={roomid}/>
         </div>
+        
       </div>
       <ConfirmationPopup 
         open={showConfirmation}
