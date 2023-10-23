@@ -10,12 +10,14 @@ interface EditQuestionPopupProps {
   open: boolean;
   onClose: () => void;
   question: Question; 
-  onSave: (updatedData: Partial<Question>) => void;
+  onSave: (updatedData: Partial<Question>) => Promise<void>;
+  getErrorMsg: () => Promise<string>;
 }
 
-const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, question, onSave }) => {
+const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, question, onSave , getErrorMsg}) => {
   const theme: Theme = useTheme();
   const [updatedData, setUpdatedData] = useState<Partial<Question>>({});
+  const [error, setError] = useState("");
   
   useEffect(() => {
       setUpdatedData({
@@ -34,7 +36,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
   }
 
   if(updatedData.examples?.length === 0) {
-    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: ""}]});
+    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: "", image:""}]});
   }
 
   const handleExampleAddField=() => {
@@ -44,17 +46,17 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
       description:updatedData.description,
       tags:updatedData.tags,
       constraints:updatedData.constraints,
-      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
+      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: "", image:""}],
     }));
   }
 
   const handleExampleRemoveField = (index:any) => {
     const filteredFields = (updatedData.examples || []).filter((_,i)=> i != index);
-    setUpdatedData({ ...updatedData, examples: filteredFields});
+    setUpdatedData({...updatedData, examples: filteredFields});
   }
 
   const handleExampleUpdateField = (updatedFields:any) => {
-    setUpdatedData({ ...updatedData, examples: updatedFields});
+    setUpdatedData({...updatedData, examples: updatedFields});
   }
 
   const handleConstraintsAddField=() => {
@@ -70,11 +72,11 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
 
   const handleConstraintsRemoveField = (index:any) => {
     const filteredFields = (updatedData.constraints || []).filter((_,i)=> i != index);
-    setUpdatedData({ ...updatedData, constraints: filteredFields});
+    setUpdatedData({...updatedData, constraints: filteredFields});
   }
 
   const handleConstraintsUpdateField = (updatedFields:any) => {
-    setUpdatedData({ ...updatedData, constraints: updatedFields});
+    setUpdatedData({...updatedData, constraints: updatedFields});
   }
 
   const TextFieldCSS = {
@@ -82,12 +84,18 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
     mb: 1, // mb= margin-bottom
   };
 
-  const handleSave = () => {
-    onSave(updatedData);
-    clearForm();
+  const handleSave = async () => {
+    await onSave(updatedData);
+    const msg = await getErrorMsg();
+    setError(msg);
+    if(msg == "") {
+      clearForm();
+    }
   };
 
   const clearForm =() => {
+    onClose();
+    setError("");
     setUpdatedData({ ...updatedData, 
       title: question.title,
       difficulty: question.difficulty,
@@ -95,7 +103,6 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
       tags: question.tags,
       examples: question.examples,
       constraints: question.constraints});
-    onClose();
   }
 
   return (
@@ -107,6 +114,8 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
             label="Title"
             value={updatedData.title}
             onChange={(e) => setUpdatedData({ ...updatedData, title: e.target.value })}
+            helperText={error}
+            error={error != ""}
           />
         </div>
         <div>

@@ -10,5 +10,5 @@ export async function createQuestion(newData: Partial<Question>, token : any) {
         },
         body: JSON.stringify(newData),
     });
-    return response.json();
+    return response;
 }

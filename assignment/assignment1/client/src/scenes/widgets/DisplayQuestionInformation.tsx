@@ -1,6 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, Typography} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Question } from "../../state/question";
+import DOMPurify from 'dompurify';
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
@@ -30,7 +31,7 @@ const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClo
       </DialogTitle>
       <DialogContent dividers>
         <Typography><b>Description:</b></Typography>
-        <Typography gutterBottom>{question.description}</Typography>
+        <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(question.description)}}></Typography>
       </DialogContent>
       <DialogContent>
         {displayExamples(question)}
@@ -46,10 +47,11 @@ const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClo
 const displayExamples = (question:Question) => {
   const currExamplesInfo:any[] = [];
   for(var index in question.examples) {
-    if(question.examples[index].inputText != "" && question.examples[index].outputText != "" 
-      && question.examples[index].explanation != "") {
-      currExamplesInfo.push(question.examples[index]);
+    if(question.examples[index].inputText == "" && question.examples[index].outputText == "" 
+      && question.examples[index].explanation == "" && question.examples[index].image == "") {
+      continue;
     }
+    currExamplesInfo.push(question.examples[index]);
   }
 
   if(currExamplesInfo.length == 0) {
@@ -63,9 +65,10 @@ const displayExamples = (question:Question) => {
         <div>
           <Typography><b>Example {index + 1}:</b></Typography>
           <DialogContent>
-            <Typography gutterBottom><b>Input: </b> {field.inputText}</Typography>
-            <Typography gutterBottom><b>Output: </b> {field.outputText}</Typography>
-            <Typography gutterBottom><b>Explanation: </b> {field.explanation}</Typography>
+            {field.image && <img src={field.image} width="auto" />}
+            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText)}}></Typography>
+            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Output: </b>" + field.outputText)}}></Typography>
+            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Explanation: </b>" + field.explanation)}}></Typography>
           </DialogContent>
         </div>
       }
@@ -88,7 +91,7 @@ const displayConstraints= (question:Question) => {
     currConstraintsInfo?.map((field, index) => (
       <div key={index}> 
         <ul>
-          <li>{field}</li>
+          <li dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(field),}}></li>
         </ul>
       </div>
     ))

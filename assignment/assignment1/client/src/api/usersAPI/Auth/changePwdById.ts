@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 export const changePwdById = async (token: any, id: Number, password: string) => {
   try {
@@ -13,12 +13,10 @@ export const changePwdById = async (token: any, id: Number, password: string) =>
       }),
     });
 
-    if (response.ok) {
-      return await response.json(); 
-    } else {
-      const res = await response.json();
-      throw new Error(`${res}`);
+    if (!response.ok) {
+      throw new Error(`${await response.json()}`);
     }
+    return await response.json(); 
   } catch (err:any) {
     throw new Error(`${err.message}`);
   }

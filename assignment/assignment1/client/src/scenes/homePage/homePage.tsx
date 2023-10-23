@@ -59,6 +59,7 @@ const HomePage = () => {
 
     const createNewRoom = async () => {
       const newData = {
+        question_id: quesdata._id,
         question_title: quesdata.title,
         question_difficulty: quesdata.difficulty,
         question_description: quesdata.description,

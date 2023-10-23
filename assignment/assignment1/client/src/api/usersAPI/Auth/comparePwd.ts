@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 export const comparePwd = async (token: any, id: Number, password: String) => {
   try {
@@ -13,12 +13,11 @@ export const comparePwd = async (token: any, id: Number, password: String) => {
         }),
       });
   
-      if (response.ok) {
-        return await response.json(); 
-      } else {
-        const res = await response.json();
-        throw new Error(`${res}`);
+      if (!response.ok) {
+        throw new Error(`${await response.json()}`);
       }
+
+      return await response.json(); 
     } catch (err:any) {
       throw new Error(`${err.message}`);
     }

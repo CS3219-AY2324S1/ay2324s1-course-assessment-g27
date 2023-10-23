@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setUser } from "../../../state";
-import { getUserById } from "../../../api/usersAPI/getUserById";
-import { editUserById } from "../../../api/usersAPI/editUserById";
+import { getUserById } from "../../../api/usersAPI/Auth/getUserById";
+import { editUserById } from "../../../api/usersAPI/Auth/editUserById";
 import { Alert, AlertTitle } from "@mui/material";
 import "./BasicInfo.css";
-import { set } from "mongoose";
 
 
 const BasicInfo = () => { 
@@ -16,7 +15,7 @@ const BasicInfo = () => {
     const [uname, setUname] = useState(user.username);
     const [alertVisible, setAlertVisible] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
-    const [msg, setMsg] = useState("username updated successfully");
+    const [msg, setMsg] = useState("");
 
     useEffect(() => {
         async function getUser() {
@@ -30,7 +29,7 @@ const BasicInfo = () => {
         event.preventDefault();
         try {
             if (uname.length == 0) {
-                throw new Error("Your username cannot be blank.");
+                throw new Error("Your username cannot be blank");
             }
             const response = await editUserById(token, id, uname);
             const updatedUser = await getUserById(token, id);
@@ -40,8 +39,8 @@ const BasicInfo = () => {
             
             if (errorVisible) {
                 setErrorVisible(false);
-                setMsg("username updated successfully");
             }
+            setMsg("Username updated successfully");
             setAlertVisible(true);
             dispatch(setUser({ user: { id, username, password, isAdmin } }));
         } catch (error: any) {
