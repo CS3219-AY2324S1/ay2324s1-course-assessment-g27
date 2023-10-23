@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     const result = await pool.query(queries.checkUserExists, [username]);
     if (result.rowCount > 0) {
         res.status(409).json("User already exists");
-        console.log("duplicate");
+        console.log("duplicate: ", username);
     } else {
         console.log(passwordHash);
         const result = pool.query(queries.insertNewUser, 
@@ -47,11 +47,11 @@ export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const results = await pool.query(queries.findUserByUname, [username]);
     if (results.rowCount == 0) {
-        return res.status(400).json({ msg: "User does not exist! "});
+        return res.status(400).json("User does not exist! ");
     }
     const result = results.rows[0];
     const isMatch = await bcrypt.compare(password, result.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. "});
+    if (!isMatch) return res.status(400).json("Invalid username or password. ");
 
     const token = jwt.sign({ id: result.id}, process.env.JWT_SECRET!);
 
@@ -81,7 +81,7 @@ export const comparePwd = async (req: Request, res: Response) => {
   const result = oldUser.rows[0];
   const isMatch = await bcrypt.compare(password, result.password);
   if (!isMatch) {
-    res.status(400).json("Passwords do not match");
+    res.status(400).json("Old password is incorrect");
     return
   }
   res.status(200).json("Passwords match");

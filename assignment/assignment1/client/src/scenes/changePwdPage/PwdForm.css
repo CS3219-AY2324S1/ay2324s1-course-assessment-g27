@@ -27,6 +27,7 @@
     flex-direction: column;
     width: 45%;
     margin: 20px;
+    padding-bottom: 20px;
 }
 
 .pwdform .form .form-group label{
@@ -35,7 +36,7 @@
 }
 .pwdform .form .form-group input{
     font-size: 1rem;
-    padding-bottom: 0px;
+    padding-bottom: 10px;
     border: none;
     line-height: 50%;
     color:rgb(78, 78, 78);;

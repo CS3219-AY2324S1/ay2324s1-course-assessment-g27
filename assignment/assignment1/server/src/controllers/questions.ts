@@ -5,6 +5,11 @@ import Question from "../models/Question";
 export const createQuestion = async (req: Request, res: Response) => {
   try {  
     const { title, difficulty, description, examples, constraints, tags, picturePath } = req.body;
+    const titleTaken = await Question.findOne({ title });
+    if (titleTaken) {
+      return res.status(400).json({ message: "Title is already in use! Please enter new title" });
+    }
+    
     const newQuestion = new Question({
       title: title,
       difficulty: difficulty,
@@ -70,6 +75,11 @@ export const updateQuestion = async (req: Request, res: Response) => {
   try {
     const questionId = req.params.id;
     const {title, difficulty, description, examples, constraints, tags} = req.body;
+    const oldData = await Question.findById(questionId);
+    const titleTaken = await Question.findOne({ title });
+    if (titleTaken && oldData?.title != title) {
+      return res.status(400).json({ message: "Title is already in use! Please enter new title" });
+    }
 
     const updatedQuestion = await Question.findByIdAndUpdate( questionId, {title, difficulty, description, examples, constraints, tags});
 

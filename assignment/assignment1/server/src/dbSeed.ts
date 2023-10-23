@@ -15,13 +15,13 @@ export const pool = new Pool({
 });
 
 const table = ''
-// "CREATE TABLE IF NOT EXISTS users (
+// CREATE TABLE IF NOT EXISTS users (
 //     id SERIAL,
 //     username VARCHAR(20) UNIQUE NOT NULL,
 //     password TEXT NOT NULL, 
 //     isAdmin BOOLEAN DEFAULT false, 
 //     picturePath TEXT DEFAULT '',
-//     PRIMARY KEY(id));";
+//     PRIMARY KEY(id));
 
 async function seedDb() {
     const conn = await pool.connect();

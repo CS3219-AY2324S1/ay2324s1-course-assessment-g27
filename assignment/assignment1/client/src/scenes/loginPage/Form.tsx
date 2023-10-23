@@ -17,6 +17,9 @@ import { setLogin } from "../../state/index";
 import { PORT } from "../../constants/constants";
 // import Dropzone from "react-dropzone";
 // import FlexBetween from "../../components/FlexBetween";
+import { registerUser } from "../../api/usersAPI/registerUser";
+import { loginUser } from "../../api/usersAPI/loginUser";
+import { Alert, AlertTitle } from "@mui/material";
 
 interface FormValues {
   username: string;
@@ -49,12 +52,15 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [msg, setMsg] = useState("");
   const theme: Theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
 
   const register = async (
     values: FormValues,
@@ -73,29 +79,27 @@ const Form = () => {
       //   }
       // }
     }
-    const username = formData.get("username");
-    const password = formData.get("password");
-    // formData.append("picturePath", values.picture!.name);
-    const savedUserRespone = await fetch(
-      `http://localhost:${PORT}/auth/register`,
-      {
-        method: "POST",
-        // body: formData,
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const savedUser = await savedUserRespone.json();
-    onSubmitProps.resetForm();
+    try {
+      // const username = formData.get("username").toString() ?? '';
+      // const password = formData.get("password").toString() ?? '';
 
-    if (savedUser) {
+      // formData.append("picturePath", values.picture!.name);
+      const savedUser = await registerUser(values.username, values.password);
+      onSubmitProps.resetForm();
+      if (errorVisible) {
+        setErrorVisible(false);
+      }
+      setMsg("Registered Successfully");
+      setAlertVisible(true);
+      
       setPageType("login");
-    }
+    } catch (err:any) {
+        setMsg(err.message);
+        if (alertVisible) {
+            setAlertVisible(false);
+        }
+        setErrorVisible(true);
+    }   
   };
 
   const login = async (
@@ -116,19 +120,10 @@ const Form = () => {
     }
     // }
     // formData.append("picturePath", values.picture!.name);
+    try {
+      const loggedIn = await loginUser(values.username, values.password);
 
-    const loggedInResponse = await fetch(
-      `http://localhost:${PORT}/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      }
-    );
-    const loggedIn = await loggedInResponse.json();
-
-    onSubmitProps.resetForm();
-    if (loggedIn) {
+      onSubmitProps.resetForm();
       dispatch(
         setLogin({
           user: loggedIn.userWithoutPassword,
@@ -136,7 +131,14 @@ const Form = () => {
         })
       );
       navigate("/homePage");
+    } catch (err:any) {
+      setMsg(err.message);
+        if (alertVisible) {
+            setAlertVisible(false);
+        }
+        setErrorVisible(true);
     }
+      
   };
 
   const handleFormSubmit = async (
@@ -249,6 +251,22 @@ const Form = () => {
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
+            {alertVisible && 
+                <Alert 
+                    severity="success"
+                    onClose={() => setAlertVisible(false)}
+                >
+                    <AlertTitle>Success</AlertTitle>
+                    {msg}
+                </Alert>}
+                {errorVisible && 
+                <Alert 
+                    severity="error"
+                    onClose={() => setErrorVisible(false)}
+                >
+                    <AlertTitle>Error</AlertTitle>
+                    {msg}
+                </Alert>}
             <Typography
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");

@@ -10,11 +10,13 @@ import ConstraintsFields from "./QuestionFields/ConstraintsFields";
 interface AddQuestionFormProps {
     open: boolean;
     onClose: () => void;
-    onSave: (newData: Partial<Question>) => void;
+    onSave: (newData: Partial<Question>) => Promise<void>;
+    getErrorMsg: () => Promise<string>;
 }
 
-const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}) => {
+const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave, getErrorMsg}) => {
     const theme: Theme = useTheme();
+    const [error, setError] = useState("");
     const [newData, setData] = useState<Partial<Question>>({
       title: "",
       difficulty: "",
@@ -32,13 +34,18 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}
         mb: 1, // mb= margin-bottom
     };
     
-    const handleSave = () => {
-        onSave(newData);
-        clearForm();
+    const handleSave = async () => {
+        await onSave(newData);
+        const msg = await getErrorMsg();
+        setError(msg);
+        if(msg == "") {
+            clearForm();
+        }
     };
 
-    const clearForm =() => {
+    const clearForm = () => {
         onClose();
+        setError("");
         setData({ ...newData, title:"", description:"",difficulty:"",tags:"",examples:[],constraints:[]});
       }
 
@@ -52,6 +59,8 @@ const AddQuestionForm: React.FC<AddQuestionFormProps> = ({open, onClose, onSave}
                     placeholder="Enter Title"
                     onChange={(e) => setData({ ...newData, title: e.target.value})}
                     value={newData.title}
+                    helperText={error}
+                    error={error != ""}
                 />
                 </div>
                 <div>

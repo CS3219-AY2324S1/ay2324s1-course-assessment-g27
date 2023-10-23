@@ -17,6 +17,7 @@ export const insertNewUser = "INSERT INTO users (username, password) VALUES ($1,
 export const getAllUsers = "SELECT * FROM users";
 export const findUserById = "SELECT * FROM users WHERE id = $1";
 export const findUserByUname = "SELECT * FROM users WHERE username = $1";
+export const findOtherUsers = "SELECT * FROM users WHERE username = $1 and id != $2";
 
 /**
  * Updating user info, assuming you know the id
