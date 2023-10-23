@@ -55,10 +55,10 @@ const RoomPage = () => {
         throw new Error("There is an error exiting, please try again later");
       } else {
         await deleteRoom(roomid, token);
-        socket.emit("leave_room", roomid);
         setShowConfirmation(false);
         setShowComplete(true);
-        navigate("/homePage");
+        socket.emit("leave_room", roomid);
+        // navigate("/homePage");
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
@@ -113,27 +113,21 @@ const RoomPage = () => {
         </div> */}
         <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
           <Editor socket={socket} roomId={roomid}/>
-        </div>
-        
+        </div> 
+        <Chatbot/>
+
       </div>
       <ConfirmationPopup 
         open={showConfirmation}
         onClose={handleCancelDelete}
-<<<<<<< HEAD
         onConfirm={handleYesDelete} />
-        <Box> <div className="leetcode-layout">
-          <Chatbot/>
-          </div>
         
-        </Box>
      
-=======
-        onConfirm={deleteCurrentRoom} />
+     
       <CompleteQnsPopup 
         open={showComplete}
         onClose={handleCancelComplete}
         onConfirm={confirmComplete} />
->>>>>>> milestone-2
       </Box>
     );
   }
