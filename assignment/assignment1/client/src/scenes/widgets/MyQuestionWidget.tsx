@@ -22,7 +22,6 @@ const MyQuestionWidget = () => {
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
   const isAdmin = user.isAdmin;
-  console.log('qns: ' , isAdmin);
   const token = useSelector((state: State) => state.token);
   // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   // const mediumMain = theme.palette.neutral.mediumMain;
@@ -45,13 +44,25 @@ const MyQuestionWidget = () => {
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);  
+  let errorMsg:string = "";
   
   const addQuestion = async (newData: Partial<Question>) => {
+    // Get back response status
+    const questionsRes = await createQuestion(newData, token);
     // Get back the .json file
-    const questions = await createQuestion(newData, token);
-    setQuestionData(questions);
-    dispatch(setQuestions({ questions }));
+    const json = await questionsRes.json();
+    if(!questionsRes.ok) {
+      errorMsg = json.message;
+    } else {
+      errorMsg="";
+      setQuestionData(json);
+      // dispatch(setQuestions({ questions }));
+    }
   };
+
+  const getErrorMessages = async () => {
+    return errorMsg;
+  }
 
   // Get the questions from DB
   useEffect(() => {
@@ -95,17 +106,24 @@ const MyQuestionWidget = () => {
   const editQuestion = async (updatedData: Partial<Question>) => {
     if (selectedQuestion!) {
       try {
-        const updatedQuestion = await editQuestionById(
+        const updatedQuestionRes = await editQuestionById(
           selectedQuestion._id,
           updatedData,
           token
         );
-        setQuestionData(
-          questionData.map((question) =>
-            question._id === selectedQuestion._id ? updatedQuestion : question
-          )
-        );
-        setQuestionData(await getQuestionList(token));
+        const updatedQuestion = await updatedQuestionRes.json();
+
+        if(!updatedQuestionRes.ok) {
+          errorMsg = updatedQuestion.message;
+        } else {
+          errorMsg = "";
+          setQuestionData(
+            questionData.map((question) =>
+              question._id === selectedQuestion._id ? updatedQuestion : question
+            )
+          );
+          setQuestionData(await getQuestionList(token));
+        }
       } catch (err: any) {
         console.error(`Error editing question: ${err.message}`);
       }
@@ -127,9 +145,10 @@ const MyQuestionWidget = () => {
         open={openAddFormPopup}
         onClose={() => {
           setOpenAddFormPopup(false);
-          // setData(NoQuestionSelected);
+          errorMsg="";
         }}
         onSave={addQuestion}
+        getErrorMsg={getErrorMessages}
       /></>)}
       <div>
       <div className="questionTable">
@@ -145,7 +164,11 @@ const MyQuestionWidget = () => {
             return(
               <tbody>
                 <tr>
-                  <td onClick={() => openDescriptionPopupWindow(i)}>{i.title}</td>
+                  <td onClick={() => openDescriptionPopupWindow(i)}>
+                    <div className="tooltip">{i.title}
+                      <span className="tooltiptext">Click to see more information</span>
+                    </div>
+                  </td>
                   <td>{i.difficulty}</td>
                   <td>{i.tags}</td>
                   {isAdmin && <><td style={{padding:"0"}}> 
@@ -178,9 +201,11 @@ const MyQuestionWidget = () => {
         onClose={() => {
           setOpenEditPopup(false);
           setSelectedQuestion(NoQuestionSelected);
+          errorMsg="";
         }}
         question={selectedQuestion!}
         onSave={editQuestion}
+        getErrorMsg={getErrorMessages}
       />
     </div>
     </WidgetWrapper>

@@ -41,21 +41,34 @@ export const getAllUser = async (req: Request, res: Response) => {
   pool.query(queries.getAllUsers, (error: Error, results: QueryResult) => {
       if (error) throw error;
       res.status(200).json(results.rows);
+      return;
   })
 };
 
 export const updateUsername = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { username } = req.body;
-    const oldUser = await pool.query(queries.findUserById, [id]);
-    if (oldUser.rowCount == 0) {
-        res.status(400).json("User does not exist")
-    }
+    try {
+        const id = parseInt(req.params.id);
+        const { username } = req.body;
+        const oldUser = await pool.query(queries.findUserById, [id]);
+        if (oldUser.rowCount == 0) {
+            res.status(400).json("User does not exist");
+            return;
+        }
 
-    pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
-        if (error) throw error;
-        res.status(200).json("updated successfully.");
-    })
+        const newUser = await pool.query(queries.findOtherUsers, [username, id]);
+        if (newUser.rowCount > 0) {
+            res.status(409).json("Username already exists");
+            return;
+        }
+
+        pool.query(queries.updateUsername, [username, id], (error: Error, results: QueryResult) => {
+            if (error) throw error;
+            res.status(200).json("Updated successfully");
+            return;
+        })
+    } catch (err:any) {
+        throw err;
+    }
 };
 
 export const updateAdminStatus = async (req: Request, res: Response) => {
@@ -64,27 +77,79 @@ export const updateAdminStatus = async (req: Request, res: Response) => {
     const oldUser = await pool.query(queries.findUserById, [id]);
     if (oldUser.rowCount == 0) {
         res.status(400).json("User does not exist")
+        return;
     }
 
     pool.query(queries.updateAdminStatus, [isAdmin, id], (error: Error, results: QueryResult) => {
         if (error) throw error;
-        res.status(200).json("updated successfully.");
+        res.status(200).json("Updated successfully");
+        return;
     })
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  pool.query(queries.findUserById, [id], (error: Error, results: QueryResult) => {
-      if (error) throw error;
-      if (results.rowCount == 0) {
-          res.status(400).json("User does not exist")
-      } else {
-          pool.query(queries.deleteUser, [id], (error: Error, results: QueryResult) => {
-              if (error) throw error;
-              res.status(200).json("deleted"); //might have some other errors here
-          });
-      }
-  })
+  try {
+    const response = await pool.query(queries.findUserById, [id]);
+    if (response.rowCount == 0) {
+        res.status(400).json("User does not exist");
+        return;
+    }
+    const deletedRes = await pool.query(queries.deleteUser, [id]);
+    res.status(200).json("Deleted");
+    return;
+  } catch (err:any) {
+    throw err;
+  }
+};
+
+//adds a question that user attempted as a quesiton ID into the sql DB
+export const addAttemptedQns = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+        const { qid } = req.body; 
+        const response = await pool.query(queries.addAttempt, [id, qid]);
+        console.log(`added attempt`, qid);
+        res.status(201).json(`added attempt ${qid}`);
+        return;
+    } catch (err:any) {
+        throw err;
+    }
+};
+
+export const addCompletedQns = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+        const { qid } = req.body; 
+        const response = await pool.query(queries.addCompleted, [id, qid]);
+        console.log(`added completed ${qid}`);
+        res.status(201).json(`added completed ${qid}`);
+        return;
+    } catch (err:any) {
+        throw err;
+    }
+};
+
+export const getAttemptList = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+        const results = await pool.query(queries.getAttempts, [id]);
+        res.status(200).json(results.rows);
+        return;
+    } catch (err:any) {
+        throw err;
+    }
+};
+
+export const getCompletedList = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+        const results = await pool.query(queries.getCompleted, [id]);
+        res.status(200).json(results.rows);
+        return;
+    } catch (err:any) {
+        throw err;
+    }
 };
 
 

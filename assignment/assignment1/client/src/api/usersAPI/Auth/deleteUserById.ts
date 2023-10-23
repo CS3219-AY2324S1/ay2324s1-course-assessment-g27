@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 export const deleteUserById = async (token: any, id: Number) => {
   try {
@@ -10,11 +10,11 @@ export const deleteUserById = async (token: any, id: Number) => {
       },
     });
 
-    if (response.ok) {
-      return await response.json(); 
-    } else {
-      throw new Error(`${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`${response.json()}`);
     }
+    
+    return await response.json(); 
   } catch (err:any) {
     throw new Error(`${err.message}`);
   }

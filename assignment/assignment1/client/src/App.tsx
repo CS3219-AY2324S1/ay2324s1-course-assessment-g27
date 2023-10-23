@@ -133,6 +133,7 @@ import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
+import QnsHistPage from "./scenes/qnsHistPage/QnsHistPage";
 import * as io from "socket.io-client";
 
 export const socket = io.connect("http://localhost:3001");
@@ -162,6 +163,10 @@ function App() {
             <Route
               path="/password"
               element={<ChangePwdPage />}
+            />
+            <Route
+              path="/history"
+              element={<QnsHistPage />}
             />
           </Routes>
         </ThemeProvider>

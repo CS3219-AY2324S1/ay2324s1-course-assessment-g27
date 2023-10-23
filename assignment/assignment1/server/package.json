@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "initdb": "nodemon --exec \"ts-node src/dbSeed.ts\"",
+    "initdb": "nodemon src/dbSeed.ts",
     "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
