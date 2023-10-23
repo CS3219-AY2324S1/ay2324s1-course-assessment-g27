@@ -21,6 +21,8 @@ import Question from "./models/Question";
 import { users, questions } from "./data/index";
 
 import Room from "./models/Room";
+import http from "http";
+import { Server } from "socket.io";
 
 //for seeding the sql databases
 //import { seedDb } from "./dbSeed";
@@ -38,6 +40,47 @@ app.use(bodyParser.json({ limit: "30mb", inflate: true}));
 app.use(bodyParser.urlencoded({ limit:"30mb", inflate: true}));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // TODO: Change from local to cloud storage for images
+
+const server = http.createServer(app);
+
+const io = new Server( server, {
+  cors: {
+    origin: "*"
+  },
+});
+
+let roomids:string[] = [];
+
+io.on("connection", (socket) => {
+  console.log(`User ${socket.id} Connected`);
+  console.log(roomids);
+
+  socket.on("join_room", async (roomid) => {
+    socket.join(roomid);
+    console.log(`${socket.id} joined ${roomid}`);
+  })
+
+  socket.on("leaving_room", (roomid) => {
+    socket.to(roomid).emit("leave_room_request");
+  })
+
+  socket.on("leave_room", async (roomid) => {
+    socket.leave(roomid);
+    console.log(`${socket.id} left ${roomid}`);
+  })
+  socket.on("code_change", ( {roomId, code} ) => {
+    socket.to(roomId).emit("code_change", code);
+  });
+
+
+  socket.on("disconnect", () => {
+    console.log(`User Disconnected`, socket.id);
+  })
+});
+
+server.listen(3001, () => {
+  console.log("SERVER RUNNING");
+});
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({
@@ -75,3 +118,4 @@ mongoose
   .catch((error) => console.log(`${error} did not connect`));
 
 //const db = seedDb();
+

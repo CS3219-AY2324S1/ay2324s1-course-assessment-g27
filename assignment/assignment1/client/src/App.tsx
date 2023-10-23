@@ -134,6 +134,9 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
 import QnsHistPage from "./scenes/qnsHistPage/QnsHistPage";
+import * as io from "socket.io-client";
+
+export const socket = io.connect("http://localhost:3001");
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);

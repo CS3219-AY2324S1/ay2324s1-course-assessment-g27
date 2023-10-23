@@ -7,17 +7,22 @@ import { saveAttemptedQns,saveCompletedQns } from "../../api/usersAPI/qnsHistAPI
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { useEffect , useState} from 'react';
+import { useEffect , useRef, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
+import Chatbot from './Chatbot';
+import {socket} from "../../App";
+import Editor from './editor';
 import CompleteQnsPopup from './completeQnsPopup';
 
 const RoomPage = () => {
+  const codeRef = useRef(null);
+
   const navigate = useNavigate();
   const {roomid} = useParams();
   const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
-  const [roomDetails, setRoomDetails] = useState<Partial<Room>>();
+  const [roomDetails, setRoomDetails] = useState<Room>();
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
@@ -36,14 +41,24 @@ const RoomPage = () => {
     }
   };
 
+  socket.on("leave_room_request", () => {
+    deleteCurrentRoom();
+  })
+  
+  const handleYesDelete = () => {
+    socket.emit("leaving_room", roomid);
+    deleteCurrentRoom();
+  }
   const deleteCurrentRoom = async () => {
     try {
       if (roomDetails === undefined) {
         throw new Error("There is an error exiting, please try again later");
       } else {
-        deleteRoom(roomid, token);
+        await deleteRoom(roomid, token);
         setShowConfirmation(false);
         setShowComplete(true);
+        socket.emit("leave_room", roomid);
+        // navigate("/homePage");
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
@@ -93,14 +108,22 @@ const RoomPage = () => {
                                                           "Explanation: " + i.explanation + "\n \n") }</pre>
           </div>
         </div>
-        <div className="code-editor">
-          <textarea placeholder="Write your code here"></textarea>
-        </div>
+        {/* <div className="code-editor">
+          <textarea id="codeEditor" placeholder="Write your code here"></textarea>
+        </div> */}
+        <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
+          <Editor socket={socket} roomId={roomid}/>
+        </div> 
+        <Chatbot/>
+
       </div>
       <ConfirmationPopup 
         open={showConfirmation}
         onClose={handleCancelDelete}
-        onConfirm={deleteCurrentRoom} />
+        onConfirm={handleYesDelete} />
+        
+     
+     
       <CompleteQnsPopup 
         open={showComplete}
         onClose={handleCancelComplete}
