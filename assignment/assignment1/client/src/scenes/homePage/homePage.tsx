@@ -7,23 +7,54 @@ import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { Question } from "../../state/question";
 import { getQuestionList } from '../../api/questionAPI/getQuestion';
-import { createRoom } from "../../api/roomAPI";
+import { createRoom, getRoomByDifficulty, updateRoom } from "../../api/roomAPI";
+import {socket} from "../../App";
 
 const HomePage = () => {
+
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
     const token = useSelector((state: State) => state.token);
     let quesdata:Question;
     let roomid:string;
+    const username = useSelector((state: State) => state.user.username);
 
+
+    const joinRoom= async (difficulty:string) => {
+      let rooms = await getRoomByDifficulty(difficulty, token);
+      let joined = false;
+      if (rooms.length != 0) {
+        for (const room of rooms) {
+          if(room.users.length < 2 && room.users.find((un:string) => un != username)) {
+            updateRoom(room._id, username, token);
+            socket.emit("join_room", room._id);
+            navigate(`/roomPage/${room._id}`);
+            joined = true;
+            break;
+          }
+        }
+        if(joined == false) {
+          console.log(rooms);
+          await getRandQuestion(difficulty);
+          await createNewRoom();
+          socket.emit("join_room", roomid);
+          navigate(`/roomPage/${roomid}`);
+        }
+               
+      } else {
+        console.log(rooms);
+        await getRandQuestion(difficulty);
+        await createNewRoom();
+        socket.emit("join_room", roomid);
+        navigate(`/roomPage/${roomid}`);
+      }
+    }
 
     async function getRandQuestion(diff:string ) {
         
           const questionList:Question[] = await getQuestionList(token);
-          const filteredQuestions = questionList.filter(question => question.difficulty.toLowerCase() === diff);
-
+          const filteredQuestions = questionList.filter(question => question.difficulty === diff);
           quesdata=filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-          
     }
 
     const createNewRoom = async () => {
@@ -33,11 +64,10 @@ const HomePage = () => {
         question_description: quesdata.description,
         question_examples: quesdata.examples,
         question_constraints: quesdata.constraints,
-        users: [""],
+        users: [username],
       };
       const room = await createRoom(newData, token);
       roomid=room._id;
-
     };
 
     return (
@@ -60,13 +90,9 @@ const HomePage = () => {
         </Typography>
         </div>
         <div>
-        {/* <button className="button-easy" onClick={() => {createNewRoom(); navigate("/" + roomData!._id);} } >Easy </button> */}
-        {/* <button className="button-easy" onClick={() => navigate("/roomPage")} >Easy </button> */}
-        <button className="button-easy" onClick={async () => {await getRandQuestion("easy"); await createNewRoom(); navigate(`/roomPage/${roomid}`); } } >Easy </button>
-        {/* <button className="button-easy" onClick={() => {getRandQuestion("easy"); createNewRoom(); navigate("/roomPage");} } >Easy </button> */}
-        {/* HELP THE NAVIGATE("ROOMPAGE") CAUSING CREATION OF ROOM TO HAVE 409 ERROR */}
-        <button className="button-medium" onClick={async () => {await getRandQuestion("medium"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }} >Medium </button>
-        <button className="button-hard" onClick={async () => {await getRandQuestion("hard"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }}>Hard</button>
+        <button className="button-easy" onClick={() => { joinRoom("Easy");  } } >Easy </button>
+        <button className="button-medium" onClick={async () => {joinRoom("Medium"); }} >Medium </button>
+        <button className="button-hard" onClick={async () => {joinRoom("Hard"); }}>Hard</button>
         </div>
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}
         </Box>

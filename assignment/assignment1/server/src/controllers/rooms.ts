@@ -26,6 +26,17 @@ export const createRoom = async (req: Request, res: Response) => {
   }
 }
 
+/* GET by difficulty */
+export const getRoomByDifficulty = async(req: Request, res: Response) => {
+  try {
+    const difficulty = req.query.difficulty;
+    const roomIds = await Room.find({question_difficulty: difficulty});
+    res.json(roomIds);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
 /* GET */
 export const getRoomDetails = async(req: Request, res: Response) => {
   try {
@@ -58,11 +69,13 @@ export const deleteRoom = async(req: Request, res: Response) => {
 export const updateRoom = async (req: Request, res: Response) => {
   try {
     const roomId = req.params.id;
-    const {users} = req.body;
+    const newUser = req.query.newUser;
 
-    const updatedRoom = await Room.findByIdAndUpdate( roomId, {users});
+    const existingRoom = await Room.findById(roomId);
+    existingRoom?.users.push(newUser);
+    const updatedRoom = existingRoom?.save();
 
-    if (!updatedRoom) {
+    if (!existingRoom) {
       return res.status(404).json({ message: 'Room is not found' });
     }
     res.json(updatedRoom);
