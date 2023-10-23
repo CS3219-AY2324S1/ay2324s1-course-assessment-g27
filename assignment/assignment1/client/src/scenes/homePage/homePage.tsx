@@ -19,20 +19,8 @@ const HomePage = () => {
     let roomid:string;
     const username = useSelector((state: State) => state.user.username);
 
-    // socket.once("create_room", async () => {
-    //   console.log("CREATE ROOM");
-    //   await getRandQuestion("easy");
-    //   await createNewRoom();
-    //   navigate(`/roomPage/${roomid}`);
-    //   socket.emit("room_created", roomid);
-    // });
-    
-    // socket.once("joined_room", async (roomid) => {
-    //   navigate(`/roomPage/${roomid}`);
-    // });
 
     const joinRoom= async (difficulty:string) => {
-      // socket.emit("join_room");
       let rooms = await getRoomByDifficulty(difficulty, token);
       let joined = false;
       if (rooms.length != 0) {

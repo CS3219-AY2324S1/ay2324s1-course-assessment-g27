@@ -33,7 +33,6 @@ const RoomPage = () => {
     } catch (err) {
       console.error('Error fetching room details:', err);
     }
-    // socket.emit("sync_code",roomid, codeRef.current);
   };
 
   socket.on("leave_room_request", () => {
