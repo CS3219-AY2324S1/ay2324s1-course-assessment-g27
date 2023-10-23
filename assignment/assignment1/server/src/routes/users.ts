@@ -10,5 +10,10 @@ router.get("/:id", verifyToken, userControl.findUserById);
 router.put("/:id", verifyToken, userControl.updateUsername);
 router.delete("/:id", verifyToken, userControl.deleteUser);
 
+router.get("/:id/attempts", verifyToken, userControl.getAttemptList);
+router.get("/:id/completed", verifyToken, userControl.getCompletedList);
+router.post("/:id/attempts", verifyToken, userControl.addAttemptedQns);
+router.post("/:id/completed", verifyToken, userControl.addCompletedQns);
+
 
 export default router;

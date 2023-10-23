@@ -1,12 +1,13 @@
 import express from "express";
-import { getAllQuestions, createQuestion, deleteQuestion, getUserQuestions, likeQuestion, updateQuestion } from "../controllers/questions";
+import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, likeQuestion, updateQuestion } from "../controllers/questions";
 import { verifyToken } from "../middleware/auth";
 
 const router = express.Router();
 
 /* READ */
 router.get("/", verifyToken, getAllQuestions);
-// router.get("/:userId/questions", verifyToken, getUserQuestions);
+
+router.get("/:id", verifyToken, getSingleQuestion);
 
 /* CREATE */
 router.post("/", verifyToken, createQuestion);
