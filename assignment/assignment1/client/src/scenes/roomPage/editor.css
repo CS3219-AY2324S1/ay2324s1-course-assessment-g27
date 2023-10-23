@@ -1,0 +1,11 @@
+.CodeMirror{
+    height: 850px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.CodeMirror pre.CodeMirror-placeholder {
+    color: #999;
+  }
+  

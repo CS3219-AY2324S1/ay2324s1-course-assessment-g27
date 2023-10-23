@@ -24,6 +24,9 @@ import Room from "./models/Room";
 import http from "http";
 import { Server } from "socket.io";
 
+//for seeding the sql databases
+//import { seedDb } from "./dbSeed";
+
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -65,6 +68,10 @@ io.on("connection", (socket) => {
     socket.leave(roomid);
     console.log(`${socket.id} left ${roomid}`);
   })
+  socket.on("code_change", ( {roomId, code} ) => {
+    socket.to(roomId).emit("code_change", code);
+  });
+
 
   socket.on("disconnect", () => {
     console.log(`User Disconnected`, socket.id);
@@ -109,4 +116,6 @@ mongoose
     // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+//const db = seedDb();
 

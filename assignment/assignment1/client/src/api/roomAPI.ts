@@ -20,7 +20,6 @@ export async function getRoomByDifficulty(difficulty: any, token: any) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json"
       },
-      // body: JSON.stringify({difficulty: difficulty}),
     });
     return await response.json();
 }
@@ -33,7 +32,6 @@ export async function updateRoom(roomId:any, username: any, token: any) {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // body: JSON.stringify(username),
     });
     
 

@@ -8,11 +8,6 @@ import BasicInfo from "./components/BasicInfo";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
-  //1. get username
-  //2. find username in db and return values
-  //3. ??
-  //4. Profit
-  
   const {activePage} = useParams();
   const currPage: String = activePage ? activePage : '';
 
