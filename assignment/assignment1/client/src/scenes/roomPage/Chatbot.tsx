@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Modal, Box, Fab, styled } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import PersonIcon from '@mui/icons-material/Person';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import "./Chatbot.css"
+
+
 const key = import.meta.env.VITE_API;
 
-const Chatbot: React.FC = () => {
+interface ChatbotProps {
+  open:boolean;
+  onClose: (event: object, reason: string) => void;
+}
+
+const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
   const [userInput, setUserInput] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  
 
   const generateResponse = async (userMessage: string) => {
     setIsTyping(true);
@@ -55,30 +68,85 @@ const Chatbot: React.FC = () => {
     // Initial message when the component mounts
     setChatHistory([{ role: 'bot', content: "Hi! How may I help you today?" }]);
   }, []);
+  
+  const CustomFab = styled(Fab)(() => ({
+      position:"absolute",
+      backgroundColor:"#5aa6f8",
+      color:"#000", 
+      top:"8px", 
+      right:"8px", 
+      borderRadius:"100%",
+
+  }));
 
   return (
-    <div>
-      <div>
-        {chatHistory.map((entry, index) => (
-          <div key={index} className={entry.role === 'user' ? 'user-message' : 'bot-message'}>
-            {entry.role === 'user' ? 'User: ' : 'Bot: '}
-            {entry.content}
+    <Modal
+      sx={{
+      width: 500,
+      height: 500,
+      }}
+      open={open}
+      onClose={(event, reason) => {
+        if (reason !== 'backdropClick') {
+          onClose(event, reason);
+        }
+      }}
+      aria-labelledby="chatbot-modal-title"
+      aria-describedby="chatbot-modal-description"
+      disablePortal ={true}
+      keepMounted
+      closeAfterTransition
+      disableAutoFocus={true}
+      disableEnforceFocus={true}
+      style={{top:"48%", left:"72%"}}
+      BackdropProps={{
+        style: {
+          pointerEvents: 'none',
+          backdropFilter: 'blur(0)', 
+          background:'none',
+          color:'none'
+        }
+      }}
+      
+    >
+        <Box className="chatbot-modal" 
+        sx={{
+        width: 500,
+        height: 500,
+        backgroundColor: '#95c5f8',
+        borderRadius:'15px'
+        }}>
+          <div className="chatbot-content" >
+            <div className="chat-history">
+              {chatHistory.map((entry, index) => (
+                <div key={index} className={entry.role === 'user' ? 'user-message' : 'bot-message'}>
+                  {entry.role === 'user' ? (<> <PersonIcon/>: </>) : 
+                    (<> <SmartToyIcon/>: </>)}
+                  {entry.content}
+                </div>
+              ))}
+              {isTyping && <div>Bot is typing...</div>}
+            </div>
+            <div className="chat-input"style={{position:"absolute", top:"88%"}}>
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleUserInput();
+                  }
+                }}
+              />
+              <button onClick={handleUserInput}>Send</button>
+            </div>
           </div>
-        ))}
-        {isTyping && <div>Bot is typing...</div>}
-      </div>
-      <input
-        type="text"
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') {
-            handleUserInput();
-          }
-        }}
-      />
-      <button onClick={handleUserInput}>Send</button>
-    </div>
+          <CustomFab className="close-button" size="small" 
+          onClick={(event) => onClose(event, 'buttonClick')}>
+          <CloseIcon/>
+          </CustomFab>
+        </Box>
+    </Modal>
   );
 };
 
