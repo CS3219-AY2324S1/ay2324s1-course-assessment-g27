@@ -95,3 +95,25 @@ button:hover{
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 } */
+
+img {
+	width: 50vw;
+	height: 100vh;
+	display: block;
+	object-fit: cover;
+	object-position: center;
+}
+
+.container {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.left {
+	width: 50vw;
+	height: 100%;
+}
+
