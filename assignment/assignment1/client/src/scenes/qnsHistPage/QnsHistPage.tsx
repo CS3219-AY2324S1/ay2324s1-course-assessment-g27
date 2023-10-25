@@ -61,29 +61,36 @@ const QnsHistPage = () => {
       const attemptedQuestionsData = await Promise.all(
         attemptedQns.map(async (attempted: any) => {
           const qnData = await getSingleQuestion(token, attempted.qid);
-          console.log("attempted ", attempted);
-          const date = convertDateTime(attempted.date, attempted.time);
-          return { ...qnData, date, isCompleted: false };
+          if (qnData) {
+            const date = convertDateTime(attempted.date, attempted.time);
+            return { ...qnData, date, isCompleted: false };
+          }
+          return null;
         })
       );
 
       const completedQuestionsData = await Promise.all(
         completedQns.map(async (completed: any) => {
           const qnData = await getSingleQuestion(token, completed.qid);
-          const date = convertDateTime(completed.date, completed.time);
-          return { ...qnData, date, isCompleted: true };
+          if (qnData) {
+            const date = convertDateTime(completed.date, completed.time);
+            return { ...qnData, date, isCompleted: true };
+          }
+          return null;
         })
       );
 
       const updatedQuestionHistory = [
-        ...attemptedQuestionsData,
-        ...completedQuestionsData,
+        ...attemptedQuestionsData.filter((item) => item !== null),
+        ...completedQuestionsData.filter((item) => item !== null),
       ];
+      updatedQuestionHistory.sort(
+        (i, j) => i.date.getTime() - j.date.getTime()
+      );
       setQuestionHistory(updatedQuestionHistory);
     }
 
     getQuestionHistory();
-    questionHistory.sort((i, j) => i.date.getTime() - j.date.getTime());
   }, []);
 
   //Toggle popup window for description of the question
@@ -92,35 +99,45 @@ const QnsHistPage = () => {
     setOpenDescriptionPopup(true);
   };
 
-  console.log("questionData ", questionHistory);
   const difficultyCounts = countDifficulty(questionHistory);
 
   return (
     <>
       <NavBar />
       <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 3fr",
-        }}
+        sx={
+          questionHistory.length > 1
+            ? {
+                display: "grid",
+                gridTemplateColumns: "1fr 3fr",
+              }
+            : {}
+        }
       >
-        <WidgetWrapper
-          sx={{
-            m: "1rem",
-          }}
-        >
-          <PieChart
-            series={[
-              {
-                data: [
-                  { id: 0, value: difficultyCounts["Easy"], label: "Easy" },
-                  { id: 1, value: difficultyCounts["Medium"], label: "Medium" },
-                  { id: 2, value: difficultyCounts["Hard"], label: "Hard" },
-                ],
-              },
-            ]}
-          />
-        </WidgetWrapper>
+        {questionHistory.length > 1 && (
+          <WidgetWrapper
+            sx={{
+              m: "1rem",
+            }}
+          >
+            <PieChart
+              series={[
+                {
+                  data: [
+                    { id: 0, value: difficultyCounts["Easy"], label: "Easy" },
+                    {
+                      id: 1,
+                      value: difficultyCounts["Medium"],
+                      label: "Medium",
+                    },
+                    { id: 2, value: difficultyCounts["Hard"], label: "Hard" },
+                  ],
+                },
+              ]}
+            />
+          </WidgetWrapper>
+        )}
+
         <Box
           sx={{
             m: "20px",
@@ -178,73 +195,6 @@ const QnsHistPage = () => {
       </Box>
     </>
   );
-
-  // interface resultProps {
-  //   id: Number;
-  //   date: String;
-  //   time: String;
-  //   question: Question;
-  // }
-  // const userId = useSelector((state: State) => state.user.id);
-  // const token = useSelector((state: State) => state.token);
-  // let attemptList: resultProps[] = [];
-  // let completedList: resultProps[] = [];
-  // const dates: string[] = [];
-  // const dummy = [1, 2, 3, 4];
-
-  // async function fetchQns(qid: String) {
-  //   return await getSingleQuestion(token, qid);
-  // }
-
-  // useEffect(() => {
-  //   async function getList() {
-  //     const attempts = await getAttemptList(userId, token);
-  //     const attemptedQns = await Promise.all(
-  //       attempts.map(async (item) => {
-  //         const question = await fetchQns(item.qid);
-  //         return {
-  //           id: item.id,
-  //           date: item.date,
-  //           time: item.time,
-  //           question: question,
-  //         };
-  //       })
-  //     );
-  //     attemptedQns.map((item) => dates.push(item.date));
-  //     console.log(dates);
-  //     const completed = await getCompletedList(userId, token);
-  //     const completedQns = await Promise.all(
-  //       completed.map(async (item) => {
-  //         const question = await fetchQns(item.qid);
-  //         return {
-  //           id: item.id,
-  //           date: item.date,
-  //           time: item.time,
-  //           question: question,
-  //         };
-  //       })
-  //     );
-  //     attemptList = attemptedQns;
-  //     completedList = completedQns;
-  //     console.log(attemptList[0].date);
-  //     console.log(completedList);
-  //   }
-  //   getList();
-  // }, []);
-
-  // return (
-  //   <>
-  //     <ul>
-  //       {dates.map((item, index) => (
-  //         <li key={index}>
-  //           {/* this part doesnt show up idk why */}
-  //           {/* question = {item.question.title}, date = {item.date}, time = {item.time}  */}
-  //           {item}
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </>
-  // );
 };
 
 export default QnsHistPage;
