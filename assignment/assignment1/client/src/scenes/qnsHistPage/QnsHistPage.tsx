@@ -10,7 +10,7 @@ import { Question, QuestionHistory } from "../../state/question";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import NavBar from "../navBar";
 import "../widgets/MyQuestionWidget.css";
-import DisplayDescription from "../widgets/DisplayQuestionInformation";
+import {DisplayDescription} from "../widgets/DisplayQuestionInformation";
 import { Box, useTheme } from "@mui/material";
 import { Theme } from "@mui/system";
 import { PieChart } from "@mui/x-charts/PieChart";

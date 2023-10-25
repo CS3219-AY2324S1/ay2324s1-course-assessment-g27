@@ -1,12 +1,21 @@
 import { Dialog, DialogTitle, DialogContent, Typography} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { Question } from "../../state/question";
+import { Room } from "../../state/room";
 import DOMPurify from 'dompurify';
+import { useState, useEffect} from "react";
+import { useSelector } from "react-redux";
+import { State } from "../../state";
+import { getQuestionById } from "../../api/questionAPI/getQuestion";
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
   onClose: () => void;
   question: Question;
+}
+
+interface DisplayDescriptionInRoomPopupProps  {
+  roomDetails: Room;
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -18,7 +27,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClose, question}) => {
+export const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClose, question}) => {
   return (
     <BootstrapDialog
         onClose={onClose}
@@ -44,6 +53,49 @@ const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClo
   );
 };
 
+export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupProps> = ({roomDetails}) => {
+  const NoQuestionSelected: Question = {
+    _id: "",
+    title: "",
+    difficulty: "",
+    description: "",
+    examples: [],
+    constraints: [],
+    tags: ""
+  };
+  const[questionData, setQuestionData] = useState<Question>(NoQuestionSelected);
+  const token = useSelector((state: State) => state.token);
+
+  useEffect(() => {
+    async function getQuestionData(id: string) {
+      try {
+        const question = await getQuestionById(id, token);
+        setQuestionData(question);
+      } catch (err: any) {
+        console.error(`Error fetching question in room: ${err.message}`);
+      }
+    }
+    console.log("Room ID detail: " + roomDetails.question_id);
+    getQuestionData(roomDetails.question_id);
+  }, []);
+
+
+  return (
+    <div className="questions-panel">
+      <h2>{questionData?.title}</h2>
+      <Typography><b>Description:</b></Typography>
+      <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
+      
+      <div className='pre-background'>
+        {displayExamples(questionData)}
+      </div>
+      <div className='pre-background'>
+        {displayConstraints(questionData)}
+      </div>
+    </div>
+  );
+}
+
 const displayExamples = (question:Question) => {
   const currExamplesInfo:any[] = [];
   for(var index in question.examples) {
@@ -65,7 +117,7 @@ const displayExamples = (question:Question) => {
         <div>
           <Typography><b>Example {index + 1}:</b></Typography>
           <DialogContent>
-            {field.image && <img src={field.image} width="auto" />}
+            {field.image && <img src={field.image} />}
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText)}}></Typography>
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Output: </b>" + field.outputText)}}></Typography>
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Explanation: </b>" + field.explanation)}}></Typography>
@@ -97,5 +149,3 @@ const displayConstraints= (question:Question) => {
     ))
   );
 };
-
-export default DisplayDescription;

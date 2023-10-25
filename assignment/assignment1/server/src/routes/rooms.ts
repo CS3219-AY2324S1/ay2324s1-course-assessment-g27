@@ -1,5 +1,5 @@
 import express from "express";
-import { createRoom, updateRoom, deleteRoom, getRoomDetails, getRoomByDifficulty} from "../controllers/rooms";
+import { createRoom, updateRoom, deleteRoom, getRoomDetails} from "../controllers/rooms";
 import { verifyToken } from "../middleware/auth";
 
 const router = express.Router();
@@ -15,9 +15,6 @@ router.put("/:id", verifyToken, updateRoom);
 
 /* GET */
 router.get("/:id", verifyToken, getRoomDetails);
-
-/* GET by diff */
-router.get("/", verifyToken, getRoomByDifficulty);
 
 
 export default router;

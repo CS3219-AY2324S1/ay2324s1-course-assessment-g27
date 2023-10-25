@@ -13,16 +13,6 @@ export async function createRoom(newData: Partial<Room>, token : any) {
     return response.json();
 }
 
-export async function getRoomByDifficulty(difficulty: any, token: any) {
-    const response = await fetch(`${API_URL}/rooms?difficulty=${difficulty}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-    });
-    return await response.json();
-}
 
 export async function updateRoom(roomId:any, username: any, token: any) {
   try {
