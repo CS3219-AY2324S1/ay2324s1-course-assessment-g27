@@ -5,71 +5,41 @@ import "./homePage.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { Question } from "../../state/question";
-import { getQuestionList } from '../../api/questionAPI/getQuestion';
-import { createRoom, getRoomByDifficulty, updateRoom } from "../../api/roomAPI";
 import {socket} from "../../App";
+import { useState } from "react";
+import CircularWithValueLabel from "./matchLoadingPage";
 
 const HomePage = () => {
 
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
-    const token = useSelector((state: State) => state.token);
-    let quesdata:Question;
-    let roomid:string;
     const username = useSelector((state: State) => state.user.username);
+    const token = useSelector((state: State) => state.token);
+    let timeOut:any;
+    
+    const [isMatching, setIsMatching] = useState<Boolean>(false);
 
-
-    const joinRoom= async (difficulty:string) => {
-      let rooms = await getRoomByDifficulty(difficulty, token);
-      let joined = false;
-      if (rooms.length != 0) {
-        for (const room of rooms) {
-          if(room.users.length < 2 && room.users.find((un:string) => un != username)) {
-            updateRoom(room._id, username, token);
-            socket.emit("join_room", room._id);
-            navigate(`/roomPage/${room._id}`);
-            joined = true;
-            break;
-          }
-        }
-        if(joined == false) {
-          console.log(rooms);
-          await getRandQuestion(difficulty);
-          await createNewRoom();
-          socket.emit("join_room", roomid);
-          navigate(`/roomPage/${roomid}`);
-        }
-               
-      } else {
-        console.log(rooms);
-        await getRandQuestion(difficulty);
-        await createNewRoom();
-        socket.emit("join_room", roomid);
-        navigate(`/roomPage/${roomid}`);
-      }
+    const createMatch = (difficulty:string) => {
+      socket.emit("find_match", {username:username, difficulty: difficulty, token:token});
+      setIsMatching(true);
+      timeOut = setTimeout(matchTimout, 33 * 1000);
     }
 
-    async function getRandQuestion(diff:string ) {
-        
-          const questionList:Question[] = await getQuestionList(token);
-          const filteredQuestions = questionList.filter(question => question.difficulty === diff);
-          quesdata=filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
+    socket.on("successMatch", async (roomId) => {
+      socket.emit("join_room", roomId);
+      clearTimeout(timeOut);
+      navigate(`/roomPage/${roomId}`);
+    })
+
+    const matchTimout = () => {
+      setIsMatching(false);
+      window.location.reload();
     }
 
-    const createNewRoom = async () => {
-      const newData = {
-        question_id: quesdata._id,
-        question_title: quesdata.title,
-        question_difficulty: quesdata.difficulty,
-        question_description: quesdata.description,
-        question_examples: quesdata.examples,
-        question_constraints: quesdata.constraints,
-        users: [username],
-      };
-      const room = await createRoom(newData, token);
-      roomid=room._id;
-    };
+    const onCancelButton = () => {
+      setIsMatching(false);
+      window.location.reload();
+    }
 
     return (
       <Box>
@@ -90,11 +60,13 @@ const HomePage = () => {
           Welcome to PeerPrep, please pick a difficulty level
         </Typography>
         </div>
-        <div>
-        <button className="button-easy" onClick={() => { joinRoom("Easy");  } } >Easy </button>
-        <button className="button-medium" onClick={async () => {joinRoom("Medium"); }} >Medium </button>
-        <button className="button-hard" onClick={async () => {joinRoom("Hard"); }}>Hard</button>
-        </div>
+        { isMatching ? <CircularWithValueLabel onCancel={onCancelButton}/> :
+          <div>
+          <button className="button-easy" onClick={() => { createMatch("Easy");  } } >Easy </button>
+          <button className="button-medium" onClick={async () => {createMatch("Medium"); }} >Medium </button>
+          <button className="button-hard" onClick={async () => {createMatch("Hard"); }}>Hard</button>
+          </div>
+        }
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}
         </Box>
       </Box>
