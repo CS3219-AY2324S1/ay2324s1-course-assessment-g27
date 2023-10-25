@@ -106,3 +106,14 @@
 .chatbot-container.hidden {
   display: none;
 }
+
+.chat-text {
+  position: absolute;
+  top: 98%; /* Adjust the vertical position as needed */
+  left: 89%; /* Adjust the horizontal position as needed */
+  background-color: #ffffff; /* White background */
+  border-radius: 5px;
+  font-size: 20px; /* Adjust the font size as needed */
+  color: #000000; /* Black text */
+  display: inline-block;
+}
