@@ -134,11 +134,7 @@ const QnsHistPage = () => {
                   ],
                 },
               ]}
-              options={{
-                legend: {
-                  show: false,
-                },
-              }}
+              slotProps={{ legend: { hidden: true } }}
             />
           </WidgetWrapper>
         )}
