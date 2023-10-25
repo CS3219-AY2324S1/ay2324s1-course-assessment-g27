@@ -134,6 +134,11 @@ const QnsHistPage = () => {
                   ],
                 },
               ]}
+              options={{
+                legend: {
+                  show: false,
+                },
+              }}
             />
           </WidgetWrapper>
         )}
