@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "initdb": "nodemon --exec \"ts-node src/dbSeed.ts\"",
+    "initdb": "nodemon src/dbSeed.ts",
     "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "amqplib": "^0.10.3",
+    "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -24,9 +26,12 @@
     "mongoose": "^7.5.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
-    "multer-gridfs-storage": "^5.0.2"
+    "multer-gridfs-storage": "^5.0.2",
+    "openai": "^4.12.1",
+    "socket.io": "^4.7.2"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.3",
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.4",
     "@types/cors": "^2.8.14",

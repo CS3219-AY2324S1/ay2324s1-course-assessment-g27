@@ -12,15 +12,14 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
 import roomRoutes from "./routes/rooms";
-
-import { register } from "./controllers/auth";
-import { createQuestion, getAllQuestions } from "./controllers/questions";
-import { verifyToken } from "./middleware/auth";
-import User from "./models/User";
-import Question from "./models/Question";
-import { users, questions } from "./data/index";
+import { initSocketMatch } from "./controllers/socketIo";
 
 import Room from "./models/Room";
+import http from "http";
+import { Server } from "socket.io";
+
+//for seeding the sql databases
+//import { seedDb } from "./dbSeed";
 
 /* CONFIGURATIONS */
 // const __filename = fileURLToPath(import.meta.url);
@@ -35,6 +34,21 @@ app.use(bodyParser.json({ limit: "30mb", inflate: true}));
 app.use(bodyParser.urlencoded({ limit:"30mb", inflate: true}));
 app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // TODO: Change from local to cloud storage for images
+
+const server = http.createServer(app);
+
+export const io = new Server( server, {
+  cors: {
+    origin: "*"
+  },
+});
+
+initSocketMatch();
+
+server.listen(3001, () => {
+  console.log("SERVER RUNNING");
+});
+
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({
@@ -70,3 +84,6 @@ mongoose
     // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+//const db = seedDb();
+

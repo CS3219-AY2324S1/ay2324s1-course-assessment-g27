@@ -5,40 +5,41 @@ import "./homePage.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { Question } from "../../state/question";
-import { getQuestionList } from '../../api/questionAPI/getQuestion';
-import { createRoom } from "../../api/roomAPI";
+import {socket} from "../../App";
+import { useState } from "react";
+import CircularWithValueLabel from "./matchLoadingPage";
 
 const HomePage = () => {
+
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const navigate = useNavigate();
+    const username = useSelector((state: State) => state.user.username);
     const token = useSelector((state: State) => state.token);
-    let quesdata:Question;
-    let roomid:string;
+    let timeOut:any;
+    
+    const [isMatching, setIsMatching] = useState<Boolean>(false);
 
-
-    async function getRandQuestion(diff:string ) {
-        
-          const questionList:Question[] = await getQuestionList(token);
-          const filteredQuestions = questionList.filter(question => question.difficulty.toLowerCase() === diff);
-
-          quesdata=filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-          
+    const createMatch = (difficulty:string) => {
+      socket.emit("find_match", {username:username, difficulty: difficulty, token:token});
+      setIsMatching(true);
+      timeOut = setTimeout(matchTimout, 33 * 1000);
     }
 
-    const createNewRoom = async () => {
-      const newData = {
-        question_title: quesdata.title,
-        question_difficulty: quesdata.difficulty,
-        question_description: quesdata.description,
-        question_examples: quesdata.examples,
-        question_constraints: quesdata.constraints,
-        users: [""],
-      };
-      const room = await createRoom(newData, token);
-      roomid=room._id;
+    socket.on("successMatch", async (roomId) => {
+      socket.emit("join_room", roomId);
+      clearTimeout(timeOut);
+      navigate(`/roomPage/${roomId}`);
+    })
 
-    };
+    const matchTimout = () => {
+      setIsMatching(false);
+      window.location.reload();
+    }
+
+    const onCancelButton = () => {
+      setIsMatching(false);
+      window.location.reload();
+    }
 
     return (
       <Box>
@@ -59,15 +60,13 @@ const HomePage = () => {
           Welcome to PeerPrep, please pick a difficulty level
         </Typography>
         </div>
-        <div>
-        {/* <button className="button-easy" onClick={() => {createNewRoom(); navigate("/" + roomData!._id);} } >Easy </button> */}
-        {/* <button className="button-easy" onClick={() => navigate("/roomPage")} >Easy </button> */}
-        <button className="button-easy" onClick={async () => {await getRandQuestion("easy"); await createNewRoom(); navigate(`/roomPage/${roomid}`); } } >Easy </button>
-        {/* <button className="button-easy" onClick={() => {getRandQuestion("easy"); createNewRoom(); navigate("/roomPage");} } >Easy </button> */}
-        {/* HELP THE NAVIGATE("ROOMPAGE") CAUSING CREATION OF ROOM TO HAVE 409 ERROR */}
-        <button className="button-medium" onClick={async () => {await getRandQuestion("medium"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }} >Medium </button>
-        <button className="button-hard" onClick={async () => {await getRandQuestion("hard"); await createNewRoom(); navigate(`/roomPage/${roomid}`); }}>Hard</button>
-        </div>
+        { isMatching ? <CircularWithValueLabel onCancel={onCancelButton}/> :
+          <div>
+          <button className="button-easy" onClick={() => { createMatch("Easy");  } } >Easy </button>
+          <button className="button-medium" onClick={async () => {createMatch("Medium"); }} >Medium </button>
+          <button className="button-hard" onClick={async () => {createMatch("Hard"); }}>Hard</button>
+          </div>
+        }
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}
         </Box>
       </Box>

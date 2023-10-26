@@ -15,6 +15,6 @@ router.put("/:id", verifyToken, updateRoom);
 
 /* GET */
 router.get("/:id", verifyToken, getRoomDetails);
-// router.get("/", verifyToken, getRoomDetails);
+
 
 export default router;

@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import { db } from "./sqlDb";
 
 /**
  * Connection to your psql database 
@@ -14,18 +15,12 @@ export const pool = new Pool({
     port: 5432,
 });
 
-const table = ''
-// CREATE TABLE IF NOT EXISTS users (
-//     id SERIAL,
-//     username VARCHAR(20) UNIQUE NOT NULL,
-//     password TEXT NOT NULL, 
-//     isAdmin BOOLEAN DEFAULT false, 
-//     picturePath TEXT DEFAULT '',
-//     PRIMARY KEY(id));
 
-async function seedDb() {
+export async function seedDb() {
     const conn = await pool.connect();
-    conn.query(table)
+    console.log("initialising");
+    conn.query(db);
+    console.log("users db initialised");
 }
 
 seedDb();

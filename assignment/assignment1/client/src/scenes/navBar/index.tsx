@@ -34,7 +34,6 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const username = user.username;
-  console.log(username);
 
   const handleLogOut = () => {
     navigate(`/`);
@@ -61,6 +60,7 @@ const Navbar = () => {
         </Typography>
         <Button onClick={() => navigate("/homePage")}>HomePage</Button>
         <Button onClick={() => navigate("/questions")}>QuestionPage</Button>
+        <Button onClick={() => navigate("/history")}>History</Button>
       </FlexBetween>
 
       {/* DESKTOP NAV */}

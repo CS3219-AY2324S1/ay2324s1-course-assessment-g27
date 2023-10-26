@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {Button, Dialog, DialogTitle, DialogContent, TextField, useTheme} from "@mui/material";
+import {Button, Dialog, DialogTitle, DialogContent,FormControl,InputLabel, MenuItem, Select, TextField, useTheme} from "@mui/material";
 import { Question } from "../../state/question";
 import { Theme} from "@mui/system";
-import {DeleteOutlined} from "@mui/icons-material";
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { ExampleFieldsUI, ConstraintsFieldsUI } from "./QuestionFields/QuestionFieldsFormUI";
 
 interface EditQuestionPopupProps {
@@ -36,7 +34,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
   }
 
   if(updatedData.examples?.length === 0) {
-    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: ""}]});
+    setUpdatedData({...updatedData, examples:[{inputText: "", outputText: "", explanation: "", image:""}]});
   }
 
   const handleExampleAddField=() => {
@@ -46,7 +44,7 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
       description:updatedData.description,
       tags:updatedData.tags,
       constraints:updatedData.constraints,
-      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: ""}],
+      examples: [...(prevState.examples || []), {inputText: "", outputText: "", explanation: "", image:""}],
     }));
   }
 
@@ -119,11 +117,21 @@ const EditQuestionPopup: React.FC<EditQuestionPopupProps> = ({ open, onClose, qu
           />
         </div>
         <div>
-          <TextField sx={{...TextFieldCSS}}
-            label="Difficulty"
-            value={updatedData.difficulty}
-            onChange={(e) => setUpdatedData({ ...updatedData, difficulty: e.target.value })}
-          />
+        <FormControl sx={{...TextFieldCSS}}>
+          <InputLabel>Difficulty</InputLabel>
+          <Select
+              value={updatedData.difficulty}
+              onChange={(e) => setUpdatedData({ ...updatedData, difficulty: e.target.value })}
+              inputProps={{
+              name: 'max-width',
+              id: 'max-width',
+              }}
+          >
+              <MenuItem value="Easy">Easy</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="Hard">Hard</MenuItem>
+          </Select>
+        </FormControl>
         </div>
         <div>
           <TextField sx={{...TextFieldCSS}}

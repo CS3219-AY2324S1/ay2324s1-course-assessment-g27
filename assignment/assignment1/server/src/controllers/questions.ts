@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Question from "../models/Question";
+import { ObjectId } from "mongodb";
 
 /* CREATE */
 export const createQuestion = async (req: Request, res: Response) => {
@@ -45,11 +46,13 @@ export const getAllQuestions = async (req: Request, res: Response) => {
 /**
  * TODO: Gets list of all the questions user has done.
  */
-export const getUserQuestions = async (req: Request, res: Response) => {
+export const getSingleQuestion = async (req: Request, res: Response) => {
   try {
-    // res.status(200).json(questions);
-  } catch (err) {
-    // res.status(404).json({ message: err.message });
+    const questionId = req.params.id;
+    const question = await Question.findOne({ _id: questionId });
+    res.status(200).json(question);
+  } catch (err:any) {
+    res.status(404).json({ message: err.message });
   }
 }
 

@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { API_URL } from "../../config";
 
 export async function getUserById(token : any, id : Number) {
     const response = await fetch(`${API_URL}/users/${id}`, {
