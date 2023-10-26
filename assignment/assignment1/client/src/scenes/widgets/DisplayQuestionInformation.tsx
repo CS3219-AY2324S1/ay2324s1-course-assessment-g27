@@ -81,7 +81,7 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
 
 
   return (
-    <div className="questions-panel">
+    <div className="questions-panel" style={{height:"77%"}}>
       <h2>{questionData?.title}</h2>
       <Typography><b>Description:</b></Typography>
       <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
