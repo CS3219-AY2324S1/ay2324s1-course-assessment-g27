@@ -32,6 +32,10 @@ export const initSocketMatch = async () => {
             socket.to(roomId).emit("code_change", code);
         });
 
+        socket.on("disconnecting", () => {
+            socket.to((Array.from(socket.rooms)[1])).emit("leave_room_request");
+        })
+
         socket.on("disconnect", () => {
             console.log(`User Disconnected`, socket.id);
         })

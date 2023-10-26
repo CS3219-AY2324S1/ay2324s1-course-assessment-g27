@@ -121,12 +121,12 @@ const RoomPage = () => {
     <Navbar/>
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
 
-      <div className="leetcode-layout">
+      <div className="leetcode-layout" style={{ width:"100%", height:"100vh", display: 'flex', flexWrap: 'wrap' }}>
         { (!roomDetails) ? <div><CircularProgress /></div> :
         <DisplayDescriptionInRoom 
           roomDetails = {roomDetails}/>
         }
-        <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
+        <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
           <Editor socket={socket} roomId={roomid}/>
         </div> 
       </div>
