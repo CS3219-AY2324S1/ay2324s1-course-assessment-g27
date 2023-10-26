@@ -7,14 +7,9 @@ import Room from "../models/Room";
  */
 export const createRoom = async (req: Request, res: Response) => {
   try {  
-    const { question_id, question_title, question_difficulty, question_description, question_examples, question_constraints, users } = req.body;
+    const { question_id, users } = req.body;
     const newRoom = new Room({
         question_id: question_id,
-        question_title: question_title,
-        question_difficulty: question_difficulty,
-        question_description: question_description,
-        question_examples: question_examples,
-        question_constraints: question_constraints,
         users: users,
     });
 
@@ -27,16 +22,16 @@ export const createRoom = async (req: Request, res: Response) => {
   }
 }
 
-/* GET by difficulty */
-export const getRoomByDifficulty = async(req: Request, res: Response) => {
-  try {
-    const difficulty = req.query.difficulty;
-    const roomIds = await Room.find({question_difficulty: difficulty});
-    res.json(roomIds);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
-  }
-}
+// /* GET by difficulty */
+// export const getRoomByDifficulty = async(req: Request, res: Response) => {
+//   try {
+//     const difficulty = req.query.difficulty;
+//     const roomIds = await Room.find({question_difficulty: difficulty});
+//     res.json(roomIds);
+//   } catch (err: any) {
+//     res.status(500).json({ message: err.message });
+//   }
+// }
 
 /* GET */
 export const getRoomDetails = async(req: Request, res: Response) => {

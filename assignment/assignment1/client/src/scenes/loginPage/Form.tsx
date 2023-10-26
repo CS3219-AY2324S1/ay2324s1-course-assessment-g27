@@ -14,7 +14,6 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index";
-import { PORT } from "../../constants/constants";
 // import Dropzone from "react-dropzone";
 // import FlexBetween from "../../components/FlexBetween";
 import { registerUser } from "../../api/usersAPI/registerUser";
@@ -24,13 +23,15 @@ import { Alert, AlertTitle } from "@mui/material";
 interface FormValues {
   username: string;
   password: string;
+  confirmPassword?: string;
   // picture?: File | null | undefined;
-  [key: string]: string;
+  [key: string]: string | undefined;
 }
 
 const registerSchema = yup.object().shape({
   username: yup.string().required("required"),
   password: yup.string().required("required"),
+  confirmPassword: yup.string().required("required"),
   // picture: yup.object().required("required"),
 });
 
@@ -42,6 +43,7 @@ const loginSchema = yup.object().shape({
 const initialValuesRegister = {
   username: "",
   password: "",
+  confirmPassword: "",
   // picture: File,
 };
 
@@ -84,22 +86,26 @@ const Form = () => {
       // const password = formData.get("password").toString() ?? '';
 
       // formData.append("picturePath", values.picture!.name);
-      const savedUser = await registerUser(values.username, values.password);
+      const savedUser = await registerUser(
+        values.username,
+        values.password,
+        values.confirmPassword!
+      );
       onSubmitProps.resetForm();
       if (errorVisible) {
         setErrorVisible(false);
       }
       setMsg("Registered Successfully");
       setAlertVisible(true);
-      
+
       setPageType("login");
-    } catch (err:any) {
-        setMsg(err.message);
-        if (alertVisible) {
-            setAlertVisible(false);
-        }
-        setErrorVisible(true);
-    }   
+    } catch (err: any) {
+      setMsg(err.message);
+      if (alertVisible) {
+        setAlertVisible(false);
+      }
+      setErrorVisible(true);
+    }
   };
 
   const login = async (
@@ -131,14 +137,13 @@ const Form = () => {
         })
       );
       navigate("/homePage");
-    } catch (err:any) {
+    } catch (err: any) {
       setMsg(err.message);
-        if (alertVisible) {
-            setAlertVisible(false);
-        }
-        setErrorVisible(true);
+      if (alertVisible) {
+        setAlertVisible(false);
+      }
+      setErrorVisible(true);
     }
-      
   };
 
   const handleFormSubmit = async (
@@ -166,55 +171,14 @@ const Form = () => {
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
-          <Box
-            display="grid"
-            gap="30px"
-            gridTemplateRows="repeat(2, minmax(0, 1fr))"
-            sx={
-              {
-                // "& > div": { gridColumn: isNonMobile ? undefined : "span 2" },
-              }
-            }
-          >
-            {/*isRegister && (
-              <>
-                <Box
-                  gridColumn="span 4"
-                  border={`1px solid ${theme.palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    accept={{ images: [".jpg", ".jpeg", ".png"] }}
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picture", acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${theme.palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!initialValuesRegister.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>
-                              {initialValuesRegister.picture.name}
-                            </Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
-              </>
-                        )*/}
+          <Box pt="35px" display="grid" gap="30px" width="90%">
+            <Typography
+              fontWeight={900}
+              variant="h3"
+              color={theme.palette.highlight.darkblue}
+            >
+              {isLogin ? "Sign in to PeerPrep" : "Register for an account"}
+            </Typography>
             <TextField
               label="Username"
               onBlur={handleBlur}
@@ -234,58 +198,90 @@ const Form = () => {
               error={Boolean(touched.password) && Boolean(errors.password)}
               helperText={touched.password && errors.password}
             />
+            {isRegister && (
+              <TextField
+                label="Confirm Password"
+                type="password"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.confirmPassword}
+                name="confirmPassword"
+                error={Boolean(touched.password) && Boolean(errors.password)}
+                helperText={touched.password && errors.password}
+              />
+            )}
           </Box>
 
           {/* BUTTONS */}
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
             <Button
-              fullWidth
               type="submit"
               sx={{
                 m: "2rem 0",
-                p: "1rem",
-                backgroundColor: theme.palette.primary.main,
+                p: "10px",
+                backgroundColor: theme.palette.highlight.purple,
                 color: theme.palette.background.alt,
-                "&:hover": { color: theme.palette.primary.main },
+                fontWeight: "900",
+                fontSize: "15px",
+                borderRadius: 24,
+                "&:hover": { color: theme.palette.highlight.purple },
+                width: "60%",
+                boxShadow: "0px 8px 8px rgba(0, 0, 0, 0.05)",
               }}
             >
-              {isLogin ? "LOGIN" : "REGISTER"}
+              {isLogin ? "Login" : "Register"}
             </Button>
-            {alertVisible && 
-                <Alert 
-                    severity="success"
-                    onClose={() => setAlertVisible(false)}
-                >
-                    <AlertTitle>Success</AlertTitle>
-                    {msg}
-                </Alert>}
-                {errorVisible && 
-                <Alert 
-                    severity="error"
-                    onClose={() => setErrorVisible(false)}
-                >
-                    <AlertTitle>Error</AlertTitle>
-                    {msg}
-                </Alert>}
+          </Box>
+          <Box>
+            {alertVisible && (
+              <Alert severity="success" onClose={() => setAlertVisible(false)}>
+                <AlertTitle>Success</AlertTitle>
+                {msg}
+              </Alert>
+            )}
+            {errorVisible && (
+              <Alert severity="error" onClose={() => setErrorVisible(false)}>
+                <AlertTitle>Error</AlertTitle>
+                {msg}
+              </Alert>
+            )}
+          </Box>
+          <>
+            <Typography
+              component="span"
+              margin="1rem 0"
+              color={theme.palette.primary.main}
+            >
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
+            </Typography>
             <Typography
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");
                 resetForm();
               }}
+              component="span"
               sx={{
+                m: "1rem 0",
                 textDecoration: "underline",
-                color: theme.palette.primary.main,
+                fontWeight: "800",
+                color: theme.palette.highlight.purple,
                 "&:hover": {
                   cursor: "pointer",
                   color: theme.palette.primary.light,
                 },
               }}
             >
-              {isLogin
-                ? "Don't have an account? Sign Up here."
-                : "Already have an account? Login here."}
+              {isLogin ? "Register an account" : "Log in"}
             </Typography>
-          </Box>
+          </>
         </form>
       )}
     </Formik>

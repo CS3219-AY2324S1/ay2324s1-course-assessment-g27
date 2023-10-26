@@ -1,6 +1,6 @@
 // RoomPage.tsx
 import Navbar from '../navBar';
-import { Box } from '@mui/material';
+import { Box, Fab } from '@mui/material';
 import './roomPage.css'
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
 import { saveAttemptedQns,saveCompletedQns } from "../../api/usersAPI/qnsHistAPI"
@@ -14,18 +14,36 @@ import Chatbot from './Chatbot';
 import {socket} from "../../App";
 import Editor from './editor';
 import CompleteQnsPopup from './completeQnsPopup';
+import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
+import CircularProgress from '@mui/material/CircularProgress';
+import AssistantIcon from '@mui/icons-material/Assistant';
 
 const RoomPage = () => {
-  const codeRef = useRef(null);
 
   const navigate = useNavigate();
   const {roomid} = useParams();
   const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
+  const EmptyRoom: Room = {
+    _id: "",
+    question_id:"",
+    users: []
+  };
   const [roomDetails, setRoomDetails] = useState<Room>();
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+
+  const [showChat, setShowChat] = useState(false);
+  const [showChatText, setShowChatText] = useState(false);
+
+  const handleMouseOver = () => {
+    setShowChatText(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowChatText(false);
+  };
 
   useEffect(() => {
     getRoom();
@@ -34,7 +52,7 @@ const RoomPage = () => {
   const getRoom = async () => {
     try {
       const data = await getRoomDetails(roomid ,token);
-      setRoomDetails(data);
+      setRoomDetails(await getRoomDetails(roomid ,token));
       const res = await saveAttemptedQns(data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
@@ -58,7 +76,6 @@ const RoomPage = () => {
         setShowConfirmation(false);
         setShowComplete(true);
         socket.emit("leave_room", roomid);
-        // navigate("/homePage");
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
@@ -91,43 +108,48 @@ const RoomPage = () => {
     setShowComplete(false);
     navigate("/homePage");
   };
+
+  const openChat = () => {
+    setShowChat(true);
+  }
+  const closeChat = () => {
+    setShowChat(false);
+  }
+
   return (
         <Box>
     <Navbar/>
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
 
       <div className="leetcode-layout">
-        <div className="questions-panel">
-          <h2>{roomDetails?.question_title}</h2>
-          <p>{roomDetails?.question_description}</p>
-          <h3>Examples:</h3>
-          <div className='pre-background'>
-          <pre>{roomDetails?.question_examples?.map((i, index) => "Example " + (index+1) + "\n" +
-                                                          "Inputs: " + i.inputText + "\n" +
-                                                          "Outputs: " + i.outputText + "\n" + 
-                                                          "Explanation: " + i.explanation + "\n \n") }</pre>
-          </div>
-        </div>
-        {/* <div className="code-editor">
-          <textarea id="codeEditor" placeholder="Write your code here"></textarea>
-        </div> */}
+        { (!roomDetails) ? <div><CircularProgress /></div> :
+        <DisplayDescriptionInRoom 
+          roomDetails = {roomDetails}/>
+        }
         <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
           <Editor socket={socket} roomId={roomid}/>
         </div> 
-        <Chatbot/>
-
       </div>
+      {showChatText && <div className="chat-text">Show Chatbot</div>}
+
+      <Chatbot
+        open={showChat}
+        onClose={closeChat}/>
       <ConfirmationPopup 
         open={showConfirmation}
         onClose={handleCancelDelete}
         onConfirm={handleYesDelete} />
-        
-     
      
       <CompleteQnsPopup 
         open={showComplete}
         onClose={handleCancelComplete}
         onConfirm={confirmComplete} />
+      <Fab id="ChatBotButton" size="large" 
+      style={{position:"absolute", left:"96%", top:"97%"}} onClick={() => openChat()}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}>
+        <AssistantIcon/>
+      </Fab>
       </Box>
     );
   }

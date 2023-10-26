@@ -12,13 +12,7 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
 import roomRoutes from "./routes/rooms";
-
-import { register } from "./controllers/auth";
-import { createQuestion, getAllQuestions } from "./controllers/questions";
-import { verifyToken } from "./middleware/auth";
-import User from "./models/User";
-import Question from "./models/Question";
-import { users, questions } from "./data/index";
+import { initSocketMatch } from "./controllers/socketIo";
 
 import Room from "./models/Room";
 import http from "http";
@@ -43,44 +37,18 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // TO
 
 const server = http.createServer(app);
 
-const io = new Server( server, {
+export const io = new Server( server, {
   cors: {
     origin: "*"
   },
 });
 
-let roomids:string[] = [];
-
-io.on("connection", (socket) => {
-  console.log(`User ${socket.id} Connected`);
-  console.log(roomids);
-
-  socket.on("join_room", async (roomid) => {
-    socket.join(roomid);
-    console.log(`${socket.id} joined ${roomid}`);
-  })
-
-  socket.on("leaving_room", (roomid) => {
-    socket.to(roomid).emit("leave_room_request");
-  })
-
-  socket.on("leave_room", async (roomid) => {
-    socket.leave(roomid);
-    console.log(`${socket.id} left ${roomid}`);
-  })
-  socket.on("code_change", ( {roomId, code} ) => {
-    socket.to(roomId).emit("code_change", code);
-  });
-
-
-  socket.on("disconnect", () => {
-    console.log(`User Disconnected`, socket.id);
-  })
-});
+initSocketMatch();
 
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
 });
+
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({

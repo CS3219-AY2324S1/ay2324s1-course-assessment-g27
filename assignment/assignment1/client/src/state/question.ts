@@ -8,6 +8,18 @@ export interface Question {
   constraints: string[],
 }
 
+export interface QuestionHistory {
+  _id: string,
+  title: string,
+  difficulty: string,
+  description: string,
+  tags: string,
+  examples: Example[],
+  constraints: string[],
+  date: Date, // date attempted/completed
+  isCompleted: boolean,
+}
+
 export type Example = {
   inputText: string,
   outputText:string,
