@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import { Modal, Box, Fab, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import {dracula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import "./Chatbot.css"
 
 
@@ -79,6 +81,21 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
 
   }));
 
+  const formatCodeBlocks = (content:any) => {
+    const codeBlockRegex = /```([\s\S]+?)```/g;
+    const splitted = content.split(codeBlockRegex);
+    return splitted.map((segment:any, index:any) => {
+      if(index % 2 == 0) {
+        return <div key={index}>{segment}</div>
+      } else {
+        return <SyntaxHighlighter key={index} language="javascript" style={dracula}>
+          {segment}
+        </SyntaxHighlighter>
+      }
+    })
+  }
+ 
+
   return (
     <Modal
       sx={{
@@ -114,7 +131,13 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
         width: 500,
         height: 500,
         backgroundColor: '#95c5f8',
-        borderRadius:'15px'
+        borderRadius:'15px',
+        position: 'fixed',
+        bottom: 0,
+        right: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
         }}>
           <div className="chatbot-content" >
             <div className="chat-history">
@@ -122,12 +145,12 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
                 <div key={index} className={entry.role === 'user' ? 'user-message' : 'bot-message'}>
                   {entry.role === 'user' ? (<> <PersonIcon/>: </>) : 
                     (<> <SmartToyIcon/>: </>)}
-                  {entry.content}
+                  {formatCodeBlocks(entry.content)}
                 </div>
               ))}
               {isTyping && <div>Bot is typing...</div>}
             </div>
-            <div className="chat-input"style={{position:"absolute", top:"88%"}}>
+            <div className="chat-input"style={{position:"-webkit-sticky", top:"88%"}}>
               <input
                 type="text"
                 value={userInput}
