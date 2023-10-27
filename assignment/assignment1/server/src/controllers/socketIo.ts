@@ -11,6 +11,10 @@ export const initSocketMatch = async () => {
         console.log(`User ${socket.id} Connected`);
         console.log(roomids);
 
+        socket.on('send_message', (roomid, message) => {
+            socket.to(roomid).emit('chat_message', message);
+        })
+
         socket.on("find_match", 
             (args: {username:string, difficulty:string, token:any}) => findMatch(rmqChannel, args, socket.id));
 

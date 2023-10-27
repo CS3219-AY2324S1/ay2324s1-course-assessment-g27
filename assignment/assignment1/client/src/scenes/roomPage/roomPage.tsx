@@ -17,6 +17,7 @@ import CompleteQnsPopup from './completeQnsPopup';
 import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
 import CircularProgress from '@mui/material/CircularProgress';
 import AssistantIcon from '@mui/icons-material/Assistant';
+import Chat from './Chat';
 
 const RoomPage = () => {
 
@@ -115,7 +116,10 @@ const RoomPage = () => {
   const closeChat = () => {
     setShowChat(false);
   }
-
+  if (!roomid) {
+    // Handle the case when roomid is undefined
+    return <div>No room id provided</div>;
+  }
   return (
         <Box>
     <Navbar/>
@@ -129,6 +133,8 @@ const RoomPage = () => {
         <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
           <Editor socket={socket} roomId={roomid}/>
         </div> 
+
+        <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>
       </div>
       {showChatText && <div className="chat-text">Show Chatbot</div>}
 
