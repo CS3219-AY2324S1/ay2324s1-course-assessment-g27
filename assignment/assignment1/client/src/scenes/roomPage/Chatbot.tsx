@@ -46,13 +46,12 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
       );
 
       const generatedText = response.data.choices[0]?.message?.content.trim();
-      setChatHistory([...chatHistory, { role: 'user', content: userMessage }, { role: 'bot', content: generatedText }]);
+      setChatHistory(prevChatHistory => [...prevChatHistory, { role: 'bot', content: generatedText }]);
     } catch (error:any) {
       console.error(`Error during OpenAI API call: ${error.message}`);
-      setChatHistory([...chatHistory, { role: 'user', content: userMessage }, { role: 'bot', content: "Sorry, I encountered an error." }]);
+      setChatHistory([...chatHistory, { role: 'bot', content: "Sorry, I encountered an error." }]);
     } finally {
       setIsTyping(false);
-      setUserInput('');
     }
   };
 
@@ -64,12 +63,12 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
       setUserInput('');
       return;
     }
-
+    setChatHistory([...chatHistory, { role: 'user', content: userMessage }]);
+    setUserInput('');
     await generateResponse(userMessage);
   };
 
   useEffect(() => {
-    // Initial message when the component mounts
     setChatHistory([{ role: 'bot', content: "Hi! How may I help you today?" }]);
   }, []);
   
