@@ -213,7 +213,7 @@ export const themeSettings = (mode: PaletteMode) => {
               red: colorTokens.red[5],
             },
             highlight: {
-              purple: "#4E3FD8",
+              purple: "#5b4ddb",
               darkblue: "#252D52",
               lightblue: "#BCD1FE"
             },

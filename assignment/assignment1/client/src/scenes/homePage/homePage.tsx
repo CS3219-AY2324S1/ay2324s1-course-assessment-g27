@@ -59,19 +59,18 @@ const HomePage = () => {
           alignItems="center" // Center align the items
           textAlign="center" // Center align text
         >
-        <div>
-        <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
-        sx= {{ backgroundImage: theme.palette.mode === "dark" ? 
-        `linear-gradient(45deg, ${primaryLight}, #fa57e2)`:
-        `linear-gradient(45deg, ${primaryDark}, #5d00fc)`,
-        backgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        mb: "1.5rem"}}>
-          Welcome to PeerPrep, Please pick a Difficulty Level
-        </Typography>
-        </div>
+        
         { isMatching ? <CircularWithValueLabel onCancel={onCancelButton}/> :
           <div>
+          <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
+          sx= {{ backgroundImage: theme.palette.mode === "dark" ? 
+          `linear-gradient(45deg, ${primaryLight}, #fa57e2)`:
+          `linear-gradient(45deg, ${primaryDark}, #5d00fc)`,
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          mb: "1.5rem"}}>
+            Welcome to PeerPrep, Please pick a Difficulty Level
+          </Typography>
           <button className="button-easy" onClick={() => { createMatch("Easy");  } } >Easy </button>
           <button className="button-medium" onClick={async () => {createMatch("Medium"); }} >Medium </button>
           <button className="button-hard" onClick={async () => {createMatch("Hard"); }}>Hard</button>

@@ -42,7 +42,7 @@ const CircularWithValueLabel: FC<MatchingLoadingProps> = ({onCancel}) => {
       </CountdownCircleTimer>
       </div>
       <p className="info">
-        Waiting to be match... 
+        Waiting to be matched
       </p>
       <Button
         onClick={onCancel}

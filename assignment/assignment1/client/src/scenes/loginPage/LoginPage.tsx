@@ -67,7 +67,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color="primary"
+              // color="primary"
               component="span"
             >
               Welcome to{" "}
@@ -83,7 +83,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color="primary"
+              // color="primary"
               component="span"
             >
               , <br /> a platform for{" "}
@@ -99,7 +99,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color="primary"
+              // color="primary"
               component="span"
             >
               !

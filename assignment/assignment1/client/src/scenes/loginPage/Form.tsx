@@ -175,7 +175,7 @@ const Form = () => {
             <Typography
               fontWeight={900}
               variant="h3"
-              color="primary"
+              // color="primary"
             >
               {isLogin ? "Sign in to PeerPrep" : "Register for an account"}
             </Typography>
@@ -256,7 +256,7 @@ const Form = () => {
             <Typography
               component="span"
               margin="1rem 0"
-              color={theme.palette.primary.main}
+              // color={theme.palette.primary.main}
             >
               {isLogin
                 ? "Don't have an account? "
