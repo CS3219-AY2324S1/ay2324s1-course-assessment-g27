@@ -116,8 +116,8 @@ const displayExamples = (question:Question) => {
       <div key={index}> {
         <div>
           <Typography><b>Example {index + 1}:</b></Typography>
-          <DialogContent>
-            {field.image && <img src={field.image} />}
+          <DialogContent style={{ maxWidth: "100%", maxHeight: "100%" }}>
+            {field.image && <img style={{ width: 'auto', height: 'auto' }} src={field.image} />}
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText)}}></Typography>
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Output: </b>" + field.outputText)}}></Typography>
             <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Explanation: </b>" + field.explanation)}}></Typography>

@@ -4,9 +4,9 @@ import WidgetWrapper from "../../components/WidgetWrapper";
 import "./MyQuestionWidget.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State, setQuestions } from "../../state";
+import { State } from "../../state";
 import { Question } from "../../state/question";
-import { Theme, style } from "@mui/system";
+import { Theme } from "@mui/system";
 import { createQuestion } from "../../api/questionAPI/createQuestion";
 import { getQuestionList } from "../../api/questionAPI/getQuestion";
 import { deleteQuestionByID } from "../../api/questionAPI/deleteQuestion";
@@ -14,6 +14,8 @@ import { editQuestionById } from "../../api/questionAPI/editQuestion";
 import {DisplayDescription} from "./DisplayQuestionInformation"
 import EditQuestionPopup from "./editQuestionPopup";
 import AddQuestionFormPopup from "./AddQuestionForm";
+import { DataGrid, GridColDef} from '@mui/x-data-grid';
+import Tooltip from '@mui/material/Tooltip';
 
 
 const MyQuestionWidget = () => {
@@ -129,6 +131,41 @@ const MyQuestionWidget = () => {
     }
   };
 
+  const columns: GridColDef[] = [
+    { field: 'title', headerName: 'Title', hideable:false, width: 250,
+        renderCell:(params) => {
+          return(
+            <Tooltip title="Click to see more information" placement="bottom">
+              <Button>{params.row.title}</Button>
+          </Tooltip>
+          );
+        } 
+    },
+    { field: 'difficulty', headerName: 'Difficulty', hideable:false, width: 120 },
+    { field: 'tags', headerName: 'Tags', hideable:false, width: 120 },
+    { field:'edit', headerName: '', sortable:false,hideable:false, disableColumnMenu:true, width:70, renderCell:(params) => {
+      return(
+        <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(params.row)}>
+          <EditOutlined />
+        </Button> 
+      );}
+    }, 
+    { field:'delete', headerName:'', sortable:false,hideable:false, disableColumnMenu:true, width:70, renderCell:(params) => {
+      return(
+        <Button style={{padding:"0"}} onClick={() => deleteQuestion(params.row._id)}>
+          <DeleteOutlined />
+        </Button>
+      );}
+    }
+  ];
+
+  const handleOnCellClick = (param:any) => {
+    if(param.field === "title") {
+      openDescriptionPopupWindow(param.row);
+    }
+  }
+  
+
   return (
     <WidgetWrapper sx={{width:"100%"}}>
       {isAdmin && (<><Button 
@@ -151,49 +188,33 @@ const MyQuestionWidget = () => {
       /></>)}
       <div>
       <div className="questionTable">
-        <table className="questionTableList">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Difficulty</th>
-              <th>Tags</th>
-            </tr>
-          </thead>
-          {questionData.map(i => {
-            return(
-              <tbody>
-                <tr>
-                  <td onClick={() => openDescriptionPopupWindow(i)}>
-                    <div className="tooltip">{i.title}
-                      <span className="tooltiptext">Click to see more information</span>
-                    </div>
-                  </td>
-                  <td>{i.difficulty}</td>
-                  <td>{i.tags}</td>
-                  {isAdmin && <><td style={{padding:"0"}}> 
-                  <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(i)}>
-                    <EditOutlined /></Button>
-                  </td>
-                  <td>
-                    <Button style={{padding:"0"}} onClick={() => deleteQuestion(i._id)}>
-                    <DeleteOutlined />
-                    </Button>
-                  </td></>}
-                  
-                  <DisplayDescription
-                    open={openDescriptionPopup}
-                    onClose={() => {
-                      setOpenDescriptionPopup(false);
-                      setSelectedQuestion(NoQuestionSelected);
-                    }}
-                    question={selectedQuestion!}/>
-                </tr>
-              </tbody>
-            );
-          })}
-        </table>
+        <DataGrid
+          rows={questionData}
+          columns={columns}
+          getRowId={(row: any) =>  row.title + row.difficulty + row.tags}
+          onCellClick={handleOnCellClick}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                  edit: isAdmin,
+                  delete: isAdmin,
+              },
+            },
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10, 20]}
+        />
       </div>
     </div>
+      <DisplayDescription
+          open={openDescriptionPopup}
+          onClose={() => {
+            setOpenDescriptionPopup(false);
+            setSelectedQuestion(NoQuestionSelected);
+          }}
+          question={selectedQuestion!}/>
     <div>
       <EditQuestionPopup
         open={openEditPopup}
