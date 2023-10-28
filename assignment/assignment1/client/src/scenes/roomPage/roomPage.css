@@ -117,3 +117,11 @@
   color: #000000; /* Black text */
   display: inline-block;
 }
+
+.chat-container {
+  flex-basis: 30%; /* Adjust the portion of the bottom part */
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
