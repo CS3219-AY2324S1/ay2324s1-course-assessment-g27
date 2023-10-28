@@ -1,6 +1,6 @@
 import express from "express";
 import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, likeQuestion, updateQuestion } from "../controllers/questions";
-import { verifyToken } from "../middleware/auth";
+import { verifyToken, verifyIsAdmin } from "../middleware/auth";
 
 const router = express.Router();
 
@@ -10,15 +10,12 @@ router.get("/", verifyToken, getAllQuestions);
 router.get("/:id", verifyToken, getSingleQuestion);
 
 /* CREATE */
-router.post("/", verifyToken, createQuestion);
+router.post("/", verifyToken, verifyIsAdmin, createQuestion);
 
 /* DELETE */
-router.delete("/:id", verifyToken, deleteQuestion);
+router.delete("/:id", verifyToken, verifyIsAdmin, deleteQuestion);
 
 /* UPDATE */
-router.put("/:id", verifyToken, updateQuestion);
-
-/* UPDATE */
-// router.patch("/:id/like", verifyToken, likeQuestion);
+router.put("/:id", verifyToken, verifyIsAdmin, updateQuestion);
 
 export default router;

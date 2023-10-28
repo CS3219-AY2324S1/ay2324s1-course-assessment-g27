@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.15",
     "@mui/system": "^5.14.10",
     "@mui/x-charts": "^6.0.0-alpha.16",
+    "@mui/x-data-grid": "^6.17.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
