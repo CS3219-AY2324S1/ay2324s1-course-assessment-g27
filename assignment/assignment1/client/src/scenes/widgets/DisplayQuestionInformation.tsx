@@ -7,6 +7,8 @@ import { useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { getQuestionById } from "../../api/questionAPI/getQuestion";
+import { useTheme } from "@mui/material/styles";
+import { Theme } from "@mui/system";
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
@@ -65,6 +67,8 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
   };
   const[questionData, setQuestionData] = useState<Question>(NoQuestionSelected);
   const token = useSelector((state: State) => state.token);
+  const theme: Theme = useTheme();
+
 
   useEffect(() => {
     async function getQuestionData(id: string) {
@@ -81,15 +85,18 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
 
 
   return (
-    <div className="questions-panel" style={{height:"77%"}}>
-      <h2>{questionData?.title}</h2>
-      <Typography><b>Description:</b></Typography>
-      <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
+    <div className="questions-panel" 
+    style={{height:"77%", 
+    boxShadow:"0px 0px 5px "+ theme.palette.primary.dark}}>
+      <h2 style={{color: theme.palette.primary.main}}>{questionData?.title}</h2>
+      <Typography style={{color: theme.palette.primary.main}}><b>Description:</b></Typography>
+      <Typography style={{color: theme.palette.primary.main}} gutterBottom dangerouslySetInnerHTML=
+      {{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
       
-      <div className='pre-background'>
+      <div className='pre-background' style={{color: theme.palette.primary.main, backgroundColor: theme.palette.primary.darker}}>
         {displayExamples(questionData)}
       </div>
-      <div className='pre-background'>
+      <div className='pre-background' style={{color: theme.palette.primary.main, backgroundColor: theme.palette.primary.darker}}>
         {displayConstraints(questionData)}
       </div>
     </div>

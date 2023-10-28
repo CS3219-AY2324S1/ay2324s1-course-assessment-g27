@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef} from 'react';
 import axios from 'axios';
-import { Modal, Box, Fab, styled } from '@mui/material';
+import { Modal, Box, Fab, styled, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {dracula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import "./Chatbot.css"
+import { Theme } from '@mui/system';
 
 
 const key = import.meta.env.VITE_API;
@@ -20,6 +21,7 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
   const [userInput, setUserInput] = useState<string>('');
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const theme:Theme = useTheme();
   
 
   const generateResponse = async (userMessage: string) => {
@@ -130,7 +132,7 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
         sx={{
         width: 500,
         height: 500,
-        backgroundColor: '#95c5f8',
+        backgroundColor: theme.palette.mode === "dark" ? "#205287" : '#95c5f8',
         borderRadius:'15px',
         position: 'fixed',
         bottom: 0,
@@ -140,17 +142,18 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
         justifyContent: 'flex-end',
         }}>
           <div className="chatbot-content" >
-            <div className="chat-history">
-              {chatHistory.map((entry, index) => (
-                <div key={index} className={entry.role === 'user' ? 'user-message' : 'bot-message'}>
-                  {entry.role === 'user' ? (<> <PersonIcon/>: </>) : 
-                    (<> <SmartToyIcon/>: </>)}
-                  {formatCodeBlocks(entry.content)}
-                </div>
-              ))}
-              {isTyping && <div>Bot is typing...</div>}
-            </div>
-            <div className="chat-input"style={{position:"-webkit-sticky", top:"88%"}}>
+          <div className="chat-history">
+            {chatHistory.map((entry, index) => (
+              <div key={index} className={entry.role === 'user' ? 
+              `user-message${theme.palette.mode === 'dark' ? 
+              'dark-mode' : ''}` : `bot-message${theme.palette.mode === 'dark' ? 'dark-mode' : ''}`}>
+                {entry.role === 'user' ? (<> <PersonIcon/>: </>) : (<> <SmartToyIcon/>: </>)}
+                {formatCodeBlocks(entry.content)}
+              </div>
+            ))}
+            {isTyping && <div>Bot is typing...</div>}
+          </div>
+            <div className="chat-input"style={{position:"relative", top:"2.8%"}}>
               <input
                 type="text"
                 value={userInput}
@@ -164,7 +167,7 @@ const Chatbot: React.FC<ChatbotProps> = ({open, onClose}) => {
               <button onClick={handleUserInput}>Send</button>
             </div>
           </div>
-          <CustomFab className="close-button" size="small" 
+          <CustomFab className="close-button" size="small"
           onClick={(event) => onClose(event, 'buttonClick')}>
           <CloseIcon/>
           </CustomFab>

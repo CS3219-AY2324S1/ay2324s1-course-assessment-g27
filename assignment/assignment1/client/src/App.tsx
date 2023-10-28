@@ -155,7 +155,7 @@ function App() {
               element={isAuth ? <HomePage/> : <Navigate to="/" />}
             />
             <Route path="/questions" element={<QuestionPage/>} />
-            <Route path="/roompage/:roomid" element={<RoomPage />} />
+            <Route path="/roompage/:roomid" element={isAuth ? <RoomPage /> : <Navigate to="/"/>} />
             <Route
               path="/profile/:activePage"
               element={<ProfilePage />}

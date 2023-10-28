@@ -9,16 +9,11 @@ import 'codemirror/addon/edit/closebrackets';
 import { Socket } from 'socket.io-client';
 import "./editor.css"
 
-// if (typeof window !== "undefined") {
-//   require("codemirror/mode/javascript/javascript");
-//   require('codemirror/mode/python/python.js');
-
-//   // ... other imports you might need.
-// }
 
 const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   const editorRef = useRef<CodeMirror.Editor | null>(null);
+
 
   useEffect(() => {
     async function init() {
@@ -31,6 +26,7 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
+          
         });
         
 
@@ -38,7 +34,6 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
           editorRef.current.on('change', (instance, changes) => {
             const { origin } = changes;
             const code = instance.getValue();
-            console.log(code);
             if (origin !== 'setValue') {
                 socket.emit("code_change", {
                     roomId,
@@ -48,12 +43,29 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
     
           });
           editorRef.current.getWrapperElement().style.borderRadius = '15px';
-          editorRef.current.getWrapperElement().style.height = '100%';
+          editorRef.current.getWrapperElement().style.height = '95%';
           editorRef.current.getWrapperElement().style.width = '100%';
+
+          if (editorRef.current.getValue() === "") {
+            editorRef.current.setValue('// TYPE CODE HERE');
+          }
+          
+          editorRef.current.on('blur', () => {
+            if (editorRef.current && editorRef.current.getValue() === '') {
+              editorRef.current.setValue('// TYPE CODE HERE');
+            }
+          });
+
+          editorRef.current.on('focus', () => {
+            if (editorRef.current && editorRef.current.getValue() === "// TYPE CODE HERE") {
+              editorRef.current.setValue('');
+            }
+          });
 
         }
       }
     }
+    
 
     init();
   }, []);
@@ -67,8 +79,6 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
   useEffect(() => {
     
       socket.on("code_change", (code) => {
-        console.log(`FROM SERVER ${code}`)
-        // setText(code);
         if (code !== null && editorRef.current) {
           editorRef.current.setValue(code);
           
@@ -82,10 +92,10 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
   }, [socket, roomId]);
 
   return(
-    <div className='editor' style={{height:"78%"}}>
+    <div className='editor' style={{height:"100%",overflow:"scroll"}}>
       <textarea  id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
       <div className='dropDownMenu'>
-        <select className="selection" value={selectedLanguage} onChange={(input) => setSelectedLanguage(input.target.value)} style={{background:"#5ee3f7", borderRadius:"10px"}}>
+        <select className="selection" value={selectedLanguage} onChange={(input) => setSelectedLanguage(input.target.value)} style={{background:"#5ee3f7", borderRadius:"10px", fontSize:"8px"}}>
           <option value="javascript" >Javascript</option>
           <option value="python">Python</option>
         </select>

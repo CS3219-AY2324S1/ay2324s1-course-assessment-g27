@@ -167,6 +167,14 @@ export const colorTokens = {
     8: "#364B41",
     9: "#1D2924",
   },
+  neonBlue: {
+    0: "#00FFFF",
+    1: "#2adbd4"
+  }, 
+  darkBlue: {
+    0:"#001e2f",
+    1:"#00101a"
+  }
 };
 
 // mui theme settings
@@ -177,21 +185,28 @@ export const themeSettings = (mode: PaletteMode) => {
       ...(mode === "dark"
         ? {
             // palette values for dark mode
+            // primary: {
+            //   dark: colorTokens.primary[200],
+            //   main: colorTokens.primary[500],
+            //   light: colorTokens.primary[800],
+            // },
             primary: {
+              darker: colorTokens.darkBlue[1],
               dark: colorTokens.primary[200],
-              main: colorTokens.primary[500],
-              light: colorTokens.primary[800],
+              main: colorTokens.neonBlue[1],
+              light: colorTokens.neonBlue[0],
             },
+            
             neutral: {
               dark: colorTokens.white[100],
               main: colorTokens.white[200],
               mediumMain: colorTokens.white[300],
               medium: colorTokens.white[400],
-              light: colorTokens.white[700],
+              light: colorTokens.neonBlue[1],
             },
             background: {
-              default: colorTokens.primary[500],
-              alt: colorTokens.primary[400],
+              default: colorTokens.darkBlue[0],
+              alt: colorTokens.darkBlue[0],
             },
             colors: {
               green: colorTokens.green[5],
@@ -206,6 +221,7 @@ export const themeSettings = (mode: PaletteMode) => {
         : {
             // palette values for light mode
             primary: {
+              darker: colorTokens.white[100],
               dark: colorTokens.primary[700],
               main: colorTokens.primary[500],
               light: colorTokens.primary[50],

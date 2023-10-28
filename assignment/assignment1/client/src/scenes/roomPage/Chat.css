@@ -1,6 +1,6 @@
 
 .chat-container {
-    max-height: 250px;
+    max-height: 500px;
     overflow-y: auto;
     border: 1px solid #bfbfbf;
     padding: 10px;
@@ -19,8 +19,9 @@
   
 
 .chat-message.received {
-    background-color: #f5f5f5;
+    background: linear-gradient(to right, #212cf8 0%,#2861fd 50%, #53b0f7 100%);
     border: 1px solid #ccc;
+    color:#fff;
     max-width: 30%;
     margin-right: auto; /* Push received messages to the left side */
     font-size: 16px;
@@ -28,7 +29,7 @@
 
 
 .chat-message.sent {
-    background-color: #00a6ff;
+    background: linear-gradient(to right, #7936f6 0%,#a018fb 50%, #c264f8 100%);
     color: #fff;
     align-self: flex-end; /* Align sent messages to the right */
     max-width: 30%;
