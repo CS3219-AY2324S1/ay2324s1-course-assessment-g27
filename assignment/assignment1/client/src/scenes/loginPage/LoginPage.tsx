@@ -44,6 +44,7 @@ import { Theme } from "@mui/system";
 import Form from "./Form";
 import TopBar from "../../components/TopBar";
 import loginPageImage from "../../assets/loginPage.png";
+import darkLoginPageImage from "../../assets/loginPageDark.png";
 import "./LoginPage.css";
 
 const LoginPage = () => {
@@ -66,7 +67,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color={theme.palette.highlight.darkblue}
+              // color="primary"
               component="span"
             >
               Welcome to{" "}
@@ -82,7 +83,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color={theme.palette.highlight.darkblue}
+              // color="primary"
               component="span"
             >
               , <br /> a platform for{" "}
@@ -98,7 +99,7 @@ const LoginPage = () => {
             <Typography
               fontWeight="900"
               variant="h2"
-              color="primary"
+              // color="primary"
               component="span"
             >
               !
@@ -107,8 +108,9 @@ const LoginPage = () => {
           <Form />
         </Box>
       </Box>
-      <Box className="right">
-        <img src={loginPageImage} />
+      <Box className="right" sx={{backgroundColor:"black"}}>
+        <img src={theme.palette.mode === "dark" ?
+        darkLoginPageImage : loginPageImage} />
       </Box>
     </Box>
   );

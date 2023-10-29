@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Socket } from 'socket.io-client';
 import './Chat.css';
-import { style } from '@mui/system';
 
 type ChatProps = {
   socket: Socket;

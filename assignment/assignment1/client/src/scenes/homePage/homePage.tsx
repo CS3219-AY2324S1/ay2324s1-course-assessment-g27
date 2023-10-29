@@ -8,6 +8,8 @@ import { State } from "../../state";
 import {socket} from "../../App";
 import { useState } from "react";
 import CircularWithValueLabel from "./matchLoadingPage";
+import { Theme } from "@mui/system";
+import { useTheme } from "@mui/material/styles";
 
 const HomePage = () => {
 
@@ -16,6 +18,9 @@ const HomePage = () => {
     const username = useSelector((state: State) => state.user.username);
     const token = useSelector((state: State) => state.token);
     let timeOut:any;
+    const theme: Theme = useTheme();
+    const primaryLight = theme.palette.primary.light;
+    const primaryDark = theme.palette.primary.dark;
     
     const [isMatching, setIsMatching] = useState<Boolean>(false);
 
@@ -54,14 +59,18 @@ const HomePage = () => {
           alignItems="center" // Center align the items
           textAlign="center" // Center align text
         >
-        <div>
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}
-        fontSize={"20px"}>
-          Welcome to PeerPrep, please pick a difficulty level
-        </Typography>
-        </div>
+        
         { isMatching ? <CircularWithValueLabel onCancel={onCancelButton}/> :
           <div>
+          <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
+          sx= {{ backgroundImage: theme.palette.mode === "dark" ? 
+          `linear-gradient(45deg, ${primaryLight}, #fa57e2)`:
+          `linear-gradient(45deg, ${primaryDark}, #5d00fc)`,
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          mb: "1.5rem"}}>
+            Welcome to PeerPrep, Please pick a Difficulty Level
+          </Typography>
           <button className="button-easy" onClick={() => { createMatch("Easy");  } } >Easy </button>
           <button className="button-medium" onClick={async () => {createMatch("Medium"); }} >Medium </button>
           <button className="button-hard" onClick={async () => {createMatch("Hard"); }}>Hard</button>

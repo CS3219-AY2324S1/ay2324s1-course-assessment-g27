@@ -57,6 +57,7 @@ const RoomPage = () => {
       const res = await saveAttemptedQns(data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
+      navigate("/homePage");
     }
   };
 
@@ -125,18 +126,18 @@ const RoomPage = () => {
     <Navbar/>
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
 
-      <div className="leetcode-layout" style={{ width:"100%", height:"100vh", display: 'flex', flexWrap: 'wrap' }}>
+      <div className="leetcode-layout" style={{ width:"100%", height:"90vh", display: 'flex', flexWrap: 'wrap' }}>
         { (!roomDetails) ? <div><CircularProgress /></div> :
         <DisplayDescriptionInRoom 
           roomDetails = {roomDetails}/>
         }
-        <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
+        <div id='codeEditor' style={{flex: '1', minHeight:"80%", maxHeight:"80%", minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
           <Editor socket={socket} roomId={roomid}/>
         </div> 
 
         <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>
       </div>
-      {showChatText && <div className="chat-text">Show Chatbot</div>}
+      {showChatText && <div className="chat-text" placeholder='CHAT'>Show Chatbot</div>}
 
       <Chatbot
         open={showChat}
@@ -151,7 +152,7 @@ const RoomPage = () => {
         onClose={handleCancelComplete}
         onConfirm={confirmComplete} />
       <Fab id="ChatBotButton" size="large" 
-      style={{position:"absolute", left:"96%", top:"97%"}} onClick={() => openChat()}
+      style={{position:"fixed", right:"10px", bottom:"8px"}} onClick={() => openChat()}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}>
         <AssistantIcon/>
