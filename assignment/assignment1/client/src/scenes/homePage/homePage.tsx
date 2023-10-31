@@ -1,5 +1,5 @@
 
-import { Box, useMediaQuery, Typography } from "@mui/material";
+import { Box, useMediaQuery, Typography, FormControl,FormControlLabel,FormLabel, Radio, RadioGroup } from "@mui/material";
 import Navbar from "../navBar";
 import "./homePage.css";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useState } from "react";
 import CircularWithValueLabel from "./matchLoadingPage";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
+import {LANGUAGE} from "../../constants/constants"
 
 const HomePage = () => {
 
@@ -23,9 +24,11 @@ const HomePage = () => {
     const primaryDark = theme.palette.primary.dark;
     
     const [isMatching, setIsMatching] = useState<Boolean>(false);
+    const [selectedDifficulty, setSelectedDifficulty] = useState<String>("Easy");
+    const [selectedLanguage, setSelectedLanguage] = useState<String>("javascript");
 
-    const createMatch = (difficulty:string) => {
-      socket.emit("find_match", {username:username, difficulty: difficulty, token:token});
+    const createMatch = () => {
+      socket.emit("find_match", {username:username, difficulty: selectedDifficulty, language:selectedLanguage, token:token});
       setIsMatching(true);
       timeOut = setTimeout(matchTimout, 33 * 1000);
     }
@@ -44,6 +47,14 @@ const HomePage = () => {
     const onCancelButton = () => {
       setIsMatching(false);
       window.location.reload();
+    }
+
+    const onChangeDifficulty = (event:any) => {
+      setSelectedDifficulty(event.target.value);
+    }
+
+    const onChangeLanguage = (event:any) => {
+      setSelectedLanguage(event.target.value);
     }
 
     return (
@@ -71,9 +82,53 @@ const HomePage = () => {
           mb: "1.5rem"}}>
             Welcome to PeerPrep, Please pick a Difficulty Level
           </Typography>
-          <button className="button-easy" onClick={() => { createMatch("Easy");  } } >Easy </button>
-          <button className="button-medium" onClick={async () => {createMatch("Medium"); }} >Medium </button>
-          <button className="button-hard" onClick={async () => {createMatch("Hard"); }}>Hard</button>
+            <div className="container">
+              <div className="radio-tile-group">
+                <div className="input-container">
+                  <input type="radio" name="difficulty-radio" value={"Easy"}  defaultChecked={selectedDifficulty === "Easy"}
+                    onChange={onChangeDifficulty}/>
+                  <div className="button-easy">
+                    <label>Easy</label>
+                  </div>
+                </div>
+
+                <div className="input-container">
+                  <input type="radio" name="difficulty-radio" value={"Medium"}  defaultChecked={selectedDifficulty === "Medium"}
+                    onChange={onChangeDifficulty}/>
+                  <div className="button-medium">
+                    <label>Medium</label>
+                  </div>
+                </div>
+
+                <div className="input-container">
+                  <input type="radio" name="difficulty-radio" value={"Hard"}  defaultChecked={selectedDifficulty === "Hard"}
+                    onChange={onChangeDifficulty}/>
+                  <div className="button-hard">
+                    <label>Hard</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="container">
+              <div className="radio-tile-group">
+              {(Object.keys(LANGUAGE) as (keyof typeof LANGUAGE)[]).map((key, index) => {
+                  return (
+                    <div className="input-container">
+                      <input type="radio" name="lang-radio" value={LANGUAGE[key]} checked={selectedLanguage === LANGUAGE[key]}
+                        onChange={onChangeLanguage}/>
+                      <div className="button-language">
+                        <label>{key}</label>
+                      </div>
+                    </div>
+                  )
+                })
+              }
+              </div>
+            </div>
+            <div>
+            <button className="button-easy" onClick={() => { createMatch();  } } >Lets Match </button>
+            </div>
           </div>
         }
           {isNonMobileScreens && <Box flexBasis="26%"></Box>}

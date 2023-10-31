@@ -25,11 +25,6 @@ const RoomPage = () => {
   const {roomid} = useParams();
   const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
-  const EmptyRoom: Room = {
-    _id: "",
-    question_id:"",
-    users: []
-  };
   const [roomDetails, setRoomDetails] = useState<Room>();
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -120,6 +115,8 @@ const RoomPage = () => {
   if (!roomid) {
     // Handle the case when roomid is undefined
     return <div>No room id provided</div>;
+  } else if(!roomDetails) {
+    return <div>Loading Room...</div>;
   }
   return (
         <Box>
@@ -131,8 +128,8 @@ const RoomPage = () => {
         <DisplayDescriptionInRoom 
           roomDetails = {roomDetails}/>
         }
-        <div id='codeEditor' style={{flex: '1', minHeight:"80%", maxHeight:"80%", minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
-          <Editor socket={socket} roomId={roomid}/>
+        <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
+          <Editor socket={socket} roomId={roomid} selectedLanguage={roomDetails.language}/>
         </div> 
 
         <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>

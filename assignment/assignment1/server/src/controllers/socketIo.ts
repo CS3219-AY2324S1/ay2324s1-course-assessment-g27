@@ -16,7 +16,7 @@ export const initSocketMatch = async () => {
         })
 
         socket.on("find_match", 
-            (args: {username:string, difficulty:string, token:any}) => findMatch(rmqChannel, args, socket.id));
+            (args: {username:string, difficulty:string, language:string, token:any}) => findMatch(rmqChannel, args, socket.id));
 
         socket.on("join_room", async (roomid) => {
             socket.join(roomid);
@@ -47,13 +47,14 @@ export const initSocketMatch = async () => {
 }
 
 /* Handle Matching queue */
-const findMatch = async (rmqChannel:Channel, args:{username: string, difficulty: string, token:any}, socketId:any) => {
-    try {
-        const data = { socketId: socketId, ...args};
-        sendMessage(rmqChannel, data);
-    } catch (err) {
-        console.log(err);
-    }
+const findMatch = async (rmqChannel:Channel, 
+    args:{username: string, difficulty: string, language:string, token:any}, socketId:any) => {
+        try {
+            const data = { socketId: socketId, ...args};
+            sendMessage(rmqChannel, data);
+        } catch (err) {
+            console.log(err);
+        }
 }
 
 export const getSocket = (socketId:any)  => {
