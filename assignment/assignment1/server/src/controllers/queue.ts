@@ -1,9 +1,7 @@
 import amqp, { Channel, ConsumeMessage } from "amqplib";
-import { MatchProcess } from "../models/MatchProcess"
-import {QuestionModel} from "../models/Question";
-import axios from 'axios';
-import { API_URL } from "../util/constant";
 import { getSocket } from "./socketIo";
+import { getQuestionList } from "../api/questionApi";
+import { createNewRoom } from "../api/roomApi";
 
 const QueuesList = ["Easy", "Medium", "Hard"];
 const WaitingQueue = new Map();;
@@ -36,57 +34,45 @@ export const sendMessage = (channel: Channel, data: any ) => {
 
 const processAndAckMessage = async (msg: ConsumeMessage, channel:Channel) => {
     const incomingUserMatch = JSON.parse(msg.content.toString());
-    const { difficulty, username, token, socketId } = incomingUserMatch;
+    const { difficulty, username, language, token, socketId } = incomingUserMatch;
     // If map does not have the key -> Create the map. Key is the difficulties level.
-    if (!WaitingQueue.has(difficulty)) {
-        WaitingQueue.set(difficulty, []);
+    const newKey = difficulty+"_"+language;
+    if (!WaitingQueue.has(newKey)) {
+        WaitingQueue.set(newKey, []);
     }
-    // Push the current cosumeMessage into the queue
-    WaitingQueue.get(difficulty).push(msg);
 
-    if(WaitingQueue.get(difficulty).length == 2) {
+    if(WaitingQueue.get(newKey).length == 1) {
         // When we get 2 Message in the queue, we start get the respective content and their sockets
-        const userOneMatch =  JSON.parse(WaitingQueue.get(difficulty)[0].content.toString());
-        const userTwoMatch =  JSON.parse(WaitingQueue.get(difficulty)[1].content.toString());
+        const userOneMatch =  JSON.parse(WaitingQueue.get(newKey)[0].content.toString());
         const userOneMatchSocket = getSocket(userOneMatch.socketId);
-        const userTwoMatchSocket = getSocket(userTwoMatch.socketId);
+        const userIncomingMatchSocket = getSocket(socketId);
     
-        if (!userOneMatch || !userOneMatchSocket || !userOneMatchSocket.connected || !userTwoMatch
-            || !userTwoMatchSocket || !userTwoMatchSocket.connected 
-            || userOneMatch.username == userTwoMatch.username) {
+        if (!userOneMatch || !userOneMatchSocket || !userOneMatchSocket.connected
+            || userOneMatch.username == username) {
                 // Ack the Message and reset the queue
-                WaitingQueue.get(difficulty).forEach((Message: ConsumeMessage) => {
+                WaitingQueue.get(newKey).forEach((Message: ConsumeMessage) => {
                     channel.ack(Message);
                 });
-                WaitingQueue.set(difficulty, []);
+                WaitingQueue.set(newKey, []);
+                WaitingQueue.get(newKey).push(msg);
         } else {
-            // Ack the Message and reset the queue
-            WaitingQueue.get(difficulty).forEach((Message: ConsumeMessage) => {
+            // Push in the msg into the queue
+            WaitingQueue.get(newKey).push(msg);
+            // Ack all the messages and reset the queue
+            WaitingQueue.get(newKey).forEach((Message: ConsumeMessage) => {
                 channel.ack(Message);
             });
-            WaitingQueue.set(difficulty, []);
+            WaitingQueue.set(newKey, []);
             // If none of the socket is null can emit success match after create new room and get the id
-            if(userOneMatchSocket && userTwoMatchSocket) {
+            if(userOneMatchSocket && userIncomingMatchSocket) {
                 const quesData = await getQuestionList(difficulty, token);
-                const roomid = await createNewRoom(userOneMatch.username, userTwoMatch.username, token, quesData);
+                const roomid = await createNewRoom(userOneMatch.username, username, token, language, quesData);
                 userOneMatchSocket.emit("successMatch", roomid);
-                userTwoMatchSocket.emit("successMatch", roomid);
+                userIncomingMatchSocket.emit("successMatch", roomid);
             }
         }
+    } else {
+        // Push the current cosumeMessage into the queue
+        WaitingQueue.get(newKey).push(msg);
     }
 }
-
-const getQuestionList = async (difficulty:string, token:any) => {
-    const response = await axios.get(`${API_URL}/questions`, { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json"} })
-    const filteredQuestions = response.data.filter((question: { difficulty: any; }) => question.difficulty === difficulty);
-    return filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-}
-
-const createNewRoom = async (username1:any, username2:any, token:any, quesdata:QuestionModel) => {
-    const newData = {
-      question_id: quesdata._id,
-      users: [username1, username2],
-    };
-    const response = await axios.post(`${API_URL}/rooms`, JSON.stringify(newData), {headers: { Authorization: `Bearer ${token}`,"Content-Type": "application/json"}})
-    return response.data._id;
-};
