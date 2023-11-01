@@ -19,25 +19,6 @@ export async function getAttemptList(id: Number, token : any) {
     }
 };
 
-export async function getCompletedList(id: Number, token : any) {
-    try {
-        const response = await fetch(`${API_URL}/users/${id}/completed`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-        });
-        if (!response.ok) {
-            throw new Error(`${await response.json()}`);
-        }
-
-        return await response.json(); 
-    } catch (err:any) {
-        throw err;
-    }
-};
-
 export async function saveAttemptedQns(attempt: String, qid: String, id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/attempts`, {
@@ -61,17 +42,17 @@ export async function saveAttemptedQns(attempt: String, qid: String, id: Number,
     }
 };
 
-export async function saveCompletedQns(attempt: String, qid: String, id: Number, token : any) {
+export async function completeQns(isCompleted: Boolean, qid: String, id: Number, token : any) {
     try {
-        const response = await fetch(`${API_URL}/users/${id}/completed`, {
-            method: "POST",
+        const response = await fetch(`${API_URL}/users/${id}/attempts`, {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
               },
             body: JSON.stringify({
                 qid,
-                attempt
+                isCompleted
             }),
         });
         if (!response.ok) {

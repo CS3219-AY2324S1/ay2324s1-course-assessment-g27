@@ -3,7 +3,7 @@ import Navbar from '../navBar';
 import { Box, Fab } from '@mui/material';
 import './roomPage.css'
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
-import { saveAttemptedQns,saveCompletedQns } from "../../api/usersAPI/qnsHistAPI"
+import { saveAttemptedQns, completeQns } from "../../api/usersAPI/qnsHistAPI"
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -54,7 +54,8 @@ const RoomPage = () => {
   const getRoom = async () => {
     try {
       const data = await getRoomDetails(roomid ,token);
-      setRoomDetails(await getRoomDetails(roomid ,token));
+      setRoomDetails(data);
+      const res = await completeQns(false, data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
       navigate("/homePage");
@@ -75,6 +76,7 @@ const RoomPage = () => {
         throw new Error("There is an error exiting, please try again later");
       } else {
         await deleteRoom(roomid, token);
+        const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
         setShowConfirmation(false);
         setShowComplete(true);
         socket.emit("leave_room", roomid);
@@ -89,7 +91,7 @@ const RoomPage = () => {
       if (roomDetails === undefined) {
         throw new Error("There is an error completing the question");
       } else {
-        const res = await saveCompletedQns(attempt, roomDetails.question_id, userId, token); //save qns as completed
+        const res = await completeQns(true, roomDetails.question_id, userId, token); //save qns as completed
         setShowComplete(false);
         navigate("/homePage");
       }
@@ -108,13 +110,7 @@ const RoomPage = () => {
 
   const handleCancelComplete = async () => {
     setShowComplete(false);
-    try {
-      const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
-    } catch (err:any) {
-      console.log(err.message);
-    } finally {
-      navigate("/homePage");
-    }
+    navigate("/homePage");
   };
 
   const openChat = () => {

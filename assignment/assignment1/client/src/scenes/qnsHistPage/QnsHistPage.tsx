@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  getAttemptList,
-  getCompletedList,
+  getAttemptList
 } from "../../api/usersAPI/qnsHistAPI";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -58,7 +57,7 @@ const QnsHistPage = () => {
   useEffect(() => {
     async function getQuestionHistory() {
       const attemptedQns = await getAttemptList(user.id, token);
-      const completedQns = await getCompletedList(user.id, token);
+      // const completedQns = await getCompletedList(user.id, token);
 
       const attemptedQuestionsData = await Promise.all(
         attemptedQns.map(async (attempted: any) => {
@@ -66,19 +65,9 @@ const QnsHistPage = () => {
           if (qnData) {
             const date = convertDateTime(attempted.date, attempted.time);
             const attempt = attempted.attempt;
-            return { ...qnData, date, attempt, isCompleted: false };
-          }
-          return null;
-        })
-      );
-
-      const completedQuestionsData = await Promise.all(
-        completedQns.map(async (completed: any) => {
-          const qnData = await getSingleQuestion(token, completed.qid);
-          if (qnData) {
-            const date = convertDateTime(completed.date, completed.time);
-            const attempt = completed.attempt;
-            return { ...qnData, date, attempt, isCompleted: true };
+            const isCompleted = attempted.iscompleted;
+            console.log(isCompleted);
+            return { ...qnData, date, attempt, isCompleted };
           }
           return null;
         })
@@ -86,7 +75,7 @@ const QnsHistPage = () => {
 
       const updatedQuestionHistory = [
         ...attemptedQuestionsData.filter((item) => item !== null),
-        ...completedQuestionsData.filter((item) => item !== null),
+        // ...completedQuestionsData.filter((item) => item !== null),
       ];
       updatedQuestionHistory.sort(
         (i, j) => i.date.getTime() - j.date.getTime()
