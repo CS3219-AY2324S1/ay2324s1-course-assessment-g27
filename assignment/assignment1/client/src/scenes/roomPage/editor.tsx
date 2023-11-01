@@ -4,15 +4,15 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/python/python.js';
+import 'codemirror/mode/clike/clike.js';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import { Socket } from 'socket.io-client';
 import "./editor.css"
+import Chip from '@mui/material/Chip';
 
-const Editor = ({ socket, roomId, saveAttempt }: { socket: Socket, roomId: any, saveAttempt: (attempt: string) => void}) => {
-  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
+const Editor = ({ socket, roomId, saveAttempt, selectedLanguage}: { socket: Socket, roomId: any, saveAttempt: (attempt: string) => void, selectedLanguage:any}) => {
   const editorRef = useRef<CodeMirror.Editor | null>(null);
-
 
   useEffect(() => {
     async function init() {
@@ -25,10 +25,8 @@ const Editor = ({ socket, roomId, saveAttempt }: { socket: Socket, roomId: any, 
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
-          
         });
         
-
         if (editorRef.current) {
           editorRef.current.on('change', (instance, changes) => {
             const { origin } = changes;
@@ -71,13 +69,6 @@ const Editor = ({ socket, roomId, saveAttempt }: { socket: Socket, roomId: any, 
   }, []);
 
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.setOption('mode', selectedLanguage);
-    }
-  }, [selectedLanguage]);
-
-  useEffect(() => {
-    
       socket.on("code_change", (code) => {
         if (code !== null && editorRef.current) {
           editorRef.current.setValue(code);
@@ -94,13 +85,15 @@ const Editor = ({ socket, roomId, saveAttempt }: { socket: Socket, roomId: any, 
 
   return(
     <div className='editor' style={{height:"100%",overflow:"scroll"}}>
-      <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
+<!--       <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
       <div className='dropDownMenu'>
         <select className="selection" value={selectedLanguage} onChange={(input) => setSelectedLanguage(input.target.value)} style={{background:"#5ee3f7", borderRadius:"10px", fontSize:"8px"}}>
           <option value="javascript" >Javascript</option>
           <option value="python">Python</option>
         </select>
-      </div>
+      </div> -->
+      <Chip label={selectedLanguage} color="primary" variant="outlined" />
+      <textarea  id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
     </div>
   );
 };

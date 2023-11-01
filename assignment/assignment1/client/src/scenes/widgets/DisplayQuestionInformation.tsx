@@ -133,12 +133,18 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
     getQuestionData(roomDetails.question_id);
   }, []);
 
+  const difficultiesColors:{[key: string]: string} = {
+    Easy: '#186F65',
+    Medium: '#FFC436',
+    Hard: '#D80032',
+  }
 
   return (
     <div className="questions-panel" 
     style={{height:"77%", 
     boxShadow:"0px 0px 5px "+ theme.palette.primary.dark}}>
-      <h2 style={{color: theme.palette.primary.main}}>{questionData?.title}</h2>
+      <h2 style={{color: theme.palette.primary.main}}>{questionData.title}</h2>
+      <Typography style={{color: difficultiesColors[questionData.difficulty]}}>{questionData.difficulty}</Typography>
       <Typography style={{color: theme.palette.primary.main}}><b>Description:</b></Typography>
       <Typography style={{color: theme.palette.primary.main}} gutterBottom dangerouslySetInnerHTML=
       {{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
