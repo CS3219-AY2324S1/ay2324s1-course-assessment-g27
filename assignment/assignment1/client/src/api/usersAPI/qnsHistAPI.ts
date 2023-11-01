@@ -38,7 +38,7 @@ export async function getCompletedList(id: Number, token : any) {
     }
 };
 
-export async function saveAttemptedQns(qid: String, id: Number, token : any) {
+export async function saveAttemptedQns(attempt: String, qid: String, id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/attempts`, {
             method: "POST",
@@ -48,6 +48,7 @@ export async function saveAttemptedQns(qid: String, id: Number, token : any) {
               },
             body: JSON.stringify({
                 qid,
+                attempt
             }),
         });
         if (!response.ok) {
@@ -60,7 +61,7 @@ export async function saveAttemptedQns(qid: String, id: Number, token : any) {
     }
 };
 
-export async function saveCompletedQns(qid: String, id: Number, token : any) {
+export async function saveCompletedQns(attempt: String, qid: String, id: Number, token : any) {
     try {
         const response = await fetch(`${API_URL}/users/${id}/completed`, {
             method: "POST",
@@ -70,6 +71,7 @@ export async function saveCompletedQns(qid: String, id: Number, token : any) {
               },
             body: JSON.stringify({
                 qid,
+                attempt
             }),
         });
         if (!response.ok) {

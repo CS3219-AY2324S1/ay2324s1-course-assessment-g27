@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS attempted_qns (
     id INT,
     qid TEXT NOT NULL,
     attempted_date TIMESTAMP NOT NULL,
+    attempt TEXT,
     FOREIGN KEY(id) REFERENCES users(id),
     PRIMARY KEY (id, qid)
 );
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS completed_qns (
     id INT,
     qid TEXT NOT NULL,
     completed_date TIMESTAMP NOT NULL,
+    attempt TEXT,
     FOREIGN KEY(id) REFERENCES users(id),
     PRIMARY KEY (id, qid)
 );

@@ -10,11 +10,12 @@ import { Question, QuestionHistory } from "../../state/question";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import NavBar from "../navBar";
 import "../widgets/MyQuestionWidget.css";
-import {DisplayDescription} from "../widgets/DisplayQuestionInformation";
-import { Box, useTheme } from "@mui/material";
+import {DisplayHistory, DisplayDescription} from "../widgets/DisplayQuestionInformation";
+import { Box, Button, useTheme } from "@mui/material";
 import { Theme } from "@mui/system";
 import { PieChart } from "@mui/x-charts/PieChart";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import Tooltip from '@mui/material/Tooltip';
 
 const convertDateTime = (date: string, time: string) => {
   const [day, month, year] = date.split("-").map(Number);
@@ -45,12 +46,13 @@ const QnsHistPage = () => {
     title: "",
     difficulty: "",
     description: "",
+    tags: "",
     examples: [],
     constraints: [],
-    tags: "",
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);
+  const [selectedAttempt, setSelectedAttempt] = useState<String>('');
 
   // Get the questions from DB
   useEffect(() => {
@@ -63,7 +65,8 @@ const QnsHistPage = () => {
           const qnData = await getSingleQuestion(token, attempted.qid);
           if (qnData) {
             const date = convertDateTime(attempted.date, attempted.time);
-            return { ...qnData, date, isCompleted: false };
+            const attempt = attempted.attempt;
+            return { ...qnData, date, attempt, isCompleted: false };
           }
           return null;
         })
@@ -74,7 +77,8 @@ const QnsHistPage = () => {
           const qnData = await getSingleQuestion(token, completed.qid);
           if (qnData) {
             const date = convertDateTime(completed.date, completed.time);
-            return { ...qnData, date, isCompleted: true };
+            const attempt = completed.attempt;
+            return { ...qnData, date, attempt, isCompleted: true };
           }
           return null;
         })
@@ -94,8 +98,10 @@ const QnsHistPage = () => {
   }, []);
 
   //Toggle popup window for description of the question
-  const openDescriptionPopupWindow = (question: QuestionHistory) => {
+  const openDescriptionPopupWindow = (question: Question, attempt: String) => {
     setSelectedQuestion(question);
+    setSelectedAttempt(attempt);
+    // console.log("attempt is ", selectedAttempt)
     setOpenDescriptionPopup(true);
   };
 
@@ -166,24 +172,28 @@ const QnsHistPage = () => {
                     <tbody>
                       <tr>
                         <td>{i.isCompleted && <CheckCircleOutlineIcon />}</td>
-                        <td onClick={() => openDescriptionPopupWindow(i)}>
-                          <div className="tooltip">
+                        <td onClick={() => openDescriptionPopupWindow(i, i.attempt)}>
+                          <Tooltip title="Click to see more information" placement="bottom">
+                            <Button>{i.title}</Button>
+                          </Tooltip>
+                          {/* <div className="tooltip">
                             {i.title}
                             <span className="tooltiptext">
                               Click to see more information
                             </span>
-                          </div>
+                          </div> */}
                         </td>
                         <td>{i.difficulty}</td>
                         <td>{i.tags}</td>
                         <td>{i.date.toLocaleDateString()}</td>
-                        <DisplayDescription
+                        <DisplayHistory
                           open={openDescriptionPopup}
                           onClose={() => {
                             setOpenDescriptionPopup(false);
                             setSelectedQuestion(NoQuestionSelected);
                           }}
                           question={selectedQuestion!}
+                          attempt={selectedAttempt}
                         />
                       </tr>
                     </tbody>

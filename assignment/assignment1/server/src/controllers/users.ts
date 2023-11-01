@@ -107,8 +107,8 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const addAttemptedQns = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     try {
-        const { qid } = req.body; 
-        const response = await pool.query(queries.addAttempt, [id, qid]);
+        const { qid, attempt } = req.body; 
+        const response = await pool.query(queries.addAttempt, [id, qid, attempt]);
         console.log(`added attempt`, qid);
         res.status(201).json(`added attempt ${qid}`);
         return;
@@ -120,8 +120,8 @@ export const addAttemptedQns = async (req: Request, res: Response) => {
 export const addCompletedQns = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     try {
-        const { qid } = req.body; 
-        const response = await pool.query(queries.addCompleted, [id, qid]);
+        const { qid, attempt } = req.body; 
+        const response = await pool.query(queries.addCompleted, [id, qid, attempt]);
         console.log(`added completed ${qid}`);
         res.status(201).json(`added completed ${qid}`);
         return;

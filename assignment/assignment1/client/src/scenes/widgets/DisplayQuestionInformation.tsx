@@ -1,19 +1,36 @@
 import { Dialog, DialogTitle, DialogContent, Typography} from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { Question } from "../../state/question";
+import { Question, QuestionHistory } from "../../state/question";
 import { Room } from "../../state/room";
 import DOMPurify from 'dompurify';
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { getQuestionById } from "../../api/questionAPI/getQuestion";
 import { useTheme } from "@mui/material/styles";
 import { Theme } from "@mui/system";
+import CodeMirror from 'codemirror';
+// import CodeMirror from "react-codemirror";
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/dracula.css';
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/python/python.js';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/edit/closebrackets';
+import { NoEncryption } from "@mui/icons-material";
+// import "./editor.css"
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
   onClose: () => void;
   question: Question;
+}
+
+interface DisplayHistoryPopupProps {
+  open: boolean;
+  onClose: () => void;
+  question: Question;
+  attempt: String;
 }
 
 interface DisplayDescriptionInRoomPopupProps  {
@@ -51,6 +68,39 @@ export const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open
       <Typography><b>Constraints:</b></Typography>
         {displayConstraints(question)}
       </DialogContent>
+    </BootstrapDialog>
+  );
+};
+
+export const DisplayHistory: React.FC<DisplayHistoryPopupProps> = ({open, onClose, question, attempt}) => {
+  const attempted = attempt != null || attempt != undefined;
+  return (
+    <BootstrapDialog
+        onClose={onClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+        scroll="body"
+        fullWidth
+    >
+      <DialogTitle id="customized-dialog-title" color="primary" fontWeight="bold" fontSize="clamp(1rem, 1rem, 2rem)">
+          {question.title}
+      </DialogTitle>
+      <DialogContent dividers>
+        <Typography><b>Description:</b></Typography>
+        <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(question.description)}}></Typography>
+      </DialogContent>
+      <DialogContent>
+        {displayExamples(question)}
+      </DialogContent>
+      <DialogContent>
+      <Typography><b>Constraints:</b></Typography>
+        {displayConstraints(question)}
+      </DialogContent>
+      {attempted &&
+      <DialogContent dividers>
+      <Typography><b>Past Attempt:</b></Typography>
+        {displayAttempt(attempt)}
+      </DialogContent>}
     </BootstrapDialog>
   );
 };
@@ -156,3 +206,32 @@ const displayConstraints= (question:Question) => {
     ))
   );
 };
+
+const displayAttempt = (attempt: String) => {
+  // const editorElement = document.getElementById('codeblock') as HTMLTextAreaElement;
+  const text = attempt.toString();
+  // const editor = CodeMirror.fromTextArea(editorElement, {
+  //   mode: 'javascript',
+  //   theme: 'dracula',
+  //   autoCloseTags: true,
+  //   autoCloseBrackets: true,
+  //   lineNumbers: true,
+  // })
+
+  // editor.setValue(attempt.toString());
+
+  return (
+    <div>
+      <textarea 
+        id="codeblock" 
+        readOnly={true} 
+        defaultValue={text}
+        rows={20}
+        cols={40}
+        style={{
+          resize: 'none',
+        }} ></textarea>
+      {/* {text} */}
+    </div>
+  );
+}

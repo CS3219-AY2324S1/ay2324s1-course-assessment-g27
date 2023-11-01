@@ -9,8 +9,7 @@ import 'codemirror/addon/edit/closebrackets';
 import { Socket } from 'socket.io-client';
 import "./editor.css"
 
-
-const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
+const Editor = ({ socket, roomId, saveAttempt }: { socket: Socket, roomId: any, saveAttempt: (attempt: string) => void}) => {
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   const editorRef = useRef<CodeMirror.Editor | null>(null);
 
@@ -39,6 +38,7 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
                     roomId,
                     code,
                 });
+                saveAttempt(code);
             }
     
           });
@@ -81,7 +81,8 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
       socket.on("code_change", (code) => {
         if (code !== null && editorRef.current) {
           editorRef.current.setValue(code);
-          
+          saveAttempt(code);
+
         }
       });
     
@@ -93,7 +94,7 @@ const Editor = ({ socket, roomId }: { socket: Socket, roomId: any}) => {
 
   return(
     <div className='editor' style={{height:"100%",overflow:"scroll"}}>
-      <textarea  id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
+      <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
       <div className='dropDownMenu'>
         <select className="selection" value={selectedLanguage} onChange={(input) => setSelectedLanguage(input.target.value)} style={{background:"#5ee3f7", borderRadius:"10px", fontSize:"8px"}}>
           <option value="javascript" >Javascript</option>

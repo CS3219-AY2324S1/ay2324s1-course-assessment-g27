@@ -38,6 +38,8 @@ const RoomPage = () => {
   const [showChat, setShowChat] = useState(false);
   const [showChatText, setShowChatText] = useState(false);
 
+  const [attempt, setAttempt] = useState<String>('');
+
   const handleMouseOver = () => {
     setShowChatText(true);
   };
@@ -45,6 +47,10 @@ const RoomPage = () => {
   const handleMouseLeave = () => {
     setShowChatText(false);
   };
+
+  const handleAttempt = (attempt: String) => {
+    setAttempt(attempt);
+  }
 
   useEffect(() => {
     getRoom();
@@ -54,7 +60,6 @@ const RoomPage = () => {
     try {
       const data = await getRoomDetails(roomid ,token);
       setRoomDetails(await getRoomDetails(roomid ,token));
-      const res = await saveAttemptedQns(data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
       navigate("/homePage");
@@ -89,7 +94,7 @@ const RoomPage = () => {
       if (roomDetails === undefined) {
         throw new Error("There is an error completing the question");
       } else {
-        const res = await saveCompletedQns(roomDetails.question_id, userId, token); //save qns as completed
+        const res = await saveCompletedQns(attempt, roomDetails.question_id, userId, token); //save qns as completed
         setShowComplete(false);
         navigate("/homePage");
       }
@@ -106,9 +111,15 @@ const RoomPage = () => {
     setShowConfirmation(false);
   };
 
-  const handleCancelComplete = () => {
+  const handleCancelComplete = async () => {
     setShowComplete(false);
-    navigate("/homePage");
+    try {
+      const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
+    } catch (err:any) {
+      console.log(err.message);
+    } finally {
+      navigate("/homePage");
+    }
   };
 
   const openChat = () => {
@@ -132,7 +143,7 @@ const RoomPage = () => {
           roomDetails = {roomDetails}/>
         }
         <div id='codeEditor' style={{flex: '1', minHeight:"80%", maxHeight:"80%", minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
-          <Editor socket={socket} roomId={roomid}/>
+          <Editor saveAttempt={handleAttempt} socket={socket} roomId={roomid}/>
         </div> 
 
         <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>
