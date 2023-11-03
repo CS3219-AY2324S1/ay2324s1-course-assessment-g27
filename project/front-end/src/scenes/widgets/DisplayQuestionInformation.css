@@ -1,0 +1,22 @@
+.questions-panel {
+    border-radius: 15px;
+    height:850px;
+    overflow: scroll;
+    flex-basis: 44%; 
+    padding: 20px;
+    /* background-color: #fff;  */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+  }
+  .questions-panel h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .questions-panel p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .pre-background{
+    background-color:#00000011;
+} 
