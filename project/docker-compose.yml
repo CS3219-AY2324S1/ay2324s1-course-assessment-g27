@@ -70,7 +70,7 @@ services:
     build:
       context: ./history-service
     ports:
-      - '8080:8080'
+      - '8500:8500'
     links:
       - postgres_db
     depends_on:
