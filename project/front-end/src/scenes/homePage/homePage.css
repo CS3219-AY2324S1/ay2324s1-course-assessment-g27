@@ -1,0 +1,108 @@
+/* homePage.css */
+
+.button-easy {
+    background-color: #77dd77;
+    color: black;
+    padding: 12px 24px; /* Increase padding to make the button bigger */
+    font-size: 16px;   /* Increase font size */
+    width: 120px;
+    box-shadow: #77dd77;
+    display: inline-block;
+}
+
+input:hover+.button-easy{
+    background-color: darkgreen;
+}
+
+input:checked+.button-easy {
+    background-color: darkgreen;
+    box-shadow: 0 0 12px var(--primary-color);
+    transform: scale(1.1);
+}
+  
+.button-medium {
+    background-color: #fbfb5a;
+    color: black;
+    padding: 12px 24px;
+    font-size: 16px;
+    width: 120px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+input:hover+.button-medium{
+    background-color: darkorange;
+}
+
+input:checked+.button-medium {
+    background-color: darkorange;
+    box-shadow: 0 0 9px black;
+    transform: scale(1.1);
+}
+  
+.button-hard {
+    background-color:#FF6961;
+    color: black;
+    padding: 12px 24px;
+    font-size: 16px;
+    width: 120px;
+    display: inline-block;
+}
+
+input:hover+.button-hard {
+  background-color: red;
+}
+
+input:checked+.button-hard {
+    background-color: red;
+    box-shadow: 0 0 9px black;
+    transform: scale(1.1);
+}
+
+.button-language {
+    background-color: #05e9f9;
+    color: black;
+    padding: 12px 24px; /* Increase padding to make the button bigger */
+    font-size: 16px;   /* Increase font size */
+    width: 120px;
+    display: inline-block;
+}
+
+input:hover+.button-language{
+    background-color: rgb(3, 134, 249);
+}
+
+input:checked+.button-language {
+    background-color: rgb(3, 134, 249);
+    box-shadow: 0 0 12px var(--primary-color);
+    transform: scale(1.1);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.radio-tile-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+  
+.input-container {
+    position: relative;
+    height: 7rem;
+    width: 7rem;
+    margin: 0.5rem;
+}
+
+.input-container input {
+    position: absolute;
+    height: 50%;
+    width: 120px;
+    margin: 0;
+    cursor: pointer;
+    opacity: 0;
+    display: inline-block;
+}
