@@ -36,11 +36,7 @@ const PORT = process.env.PORT || 8001;
 mongoose
   .connect(process.env.MONGO_URL!)
   .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-
-    /* ADD DATA ONE TIME */
-    // User.insertMany(users);
-    // Question.insertMany(questions);
+    app.listen(PORT, () => console.log(`matching-service db listening on ${PORT}`));
   })
-  .catch((error) => console.log(`${error} did not connect`));
+  .catch((error) => console.log(`${error} matching-service db did not connect`));
 

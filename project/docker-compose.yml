@@ -1,0 +1,95 @@
+version: '3.3'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+  
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - '8000:8000'
+    links:
+      - postgres_db
+    depends_on:
+      - postgres_db
+
+  matching-service:
+    build:
+      context: ./matching-service
+    ports:
+      - '8001:8001'
+    depends_on:
+      - mongo
+    env_file:
+      - .env.local
+    restart: on-failure
+
+  room-service:
+    build:
+      context: ./room-service
+    ports:
+      - '8888:8888'
+    depends_on:
+      - mongo
+    env_file:
+      - .env.local
+    restart: on-failure
+
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres_db', '-U', 'postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  question-service:
+    build:
+      context: ./question-service
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+    env_file:
+      - .env.local
+    restart: on-failure
+
+  history-service:
+    build:
+      context: ./history-service
+    ports:
+      - '8080:8080'
+    links:
+      - postgres_db
+    depends_on:
+      - postgres_db
+    environment:
+      - URI_QUESTION_SERVICE=http://question-service:8080
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    depends_on:
+      - user-service
+      - matching-service
+      - question-service
+      - history-service
+      - room-service

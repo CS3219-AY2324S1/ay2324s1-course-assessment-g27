@@ -22,14 +22,3 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const verifyIsAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    if(!(req as any).user.isAdmin) {
-        return res.status(401).send("You must be admin to perform the operation!");
-    }
-    next();
-  } catch (err: any) {
-    console.error("verifyIsAdmin has error");
-    res.status(500).json({ error: err.message });
-  }
-}

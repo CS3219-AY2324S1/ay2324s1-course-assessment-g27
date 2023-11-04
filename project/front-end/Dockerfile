@@ -5,5 +5,5 @@ RUN npm install
 # Uncomment the following line for production
 # RUN npm ci --omit-dev 
 COPY . .
-EXPOSE 5000
+EXPOSE 80
 CMD ["npx", "vite"]

@@ -23,16 +23,11 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets')));
 app.use("/questions", questionRoutes);
 
 /* MONGOOSE SETUP */
-const PORT = process.env.PORT || 7001;
+const PORT = process.env.PORT || 8080;
 mongoose
   .connect(process.env.MONGO_URL!)
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-
-    /* ADD DATA ONE TIME */
-    // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
-
-//const db = seedDb();
 
