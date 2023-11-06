@@ -11,8 +11,8 @@ import { useEffect , useRef, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ConfirmationPopup from './confirmationPopup';
 import Chatbot from './Chatbot';
-import {socket} from "../../App";
 import Editor from './editor';
+import {roomSocket} from "../../App";
 import CompleteQnsPopup from './completeQnsPopup';
 import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -41,6 +41,8 @@ const RoomPage = () => {
     setShowChatText(false);
   };
 
+  roomSocket.emit("join_room", roomid);
+
   useEffect(() => {
     getRoom();
   }, []); 
@@ -56,12 +58,12 @@ const RoomPage = () => {
     }
   };
 
-  socket.on("leave_room_request", () => {
+  roomSocket.on("leave_room_request", () => {
     deleteCurrentRoom();
   })
   
   const handleYesDelete = () => {
-    socket.emit("leaving_room", roomid);
+    roomSocket.emit("leaving_room", roomid);
     deleteCurrentRoom();
   }
   const deleteCurrentRoom = async () => {
@@ -72,7 +74,7 @@ const RoomPage = () => {
         await deleteRoom(roomid, token);
         setShowConfirmation(false);
         setShowComplete(true);
-        socket.emit("leave_room", roomid);
+        roomSocket.emit("leave_room", roomid);
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
@@ -129,10 +131,10 @@ const RoomPage = () => {
           roomDetails = {roomDetails}/>
         }
         <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
-          <Editor socket={socket} roomId={roomid} selectedLanguage={roomDetails.language}/>
+          <Editor socket={roomSocket} roomId={roomid} selectedLanguage={roomDetails.language}/>
         </div> 
 
-        <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>
+        <div className='chat-container'><Chat socket={roomSocket} roomid={roomid} /> </div>
       </div>
       {showChatText && <div className="chat-text" placeholder='CHAT'>Show Chatbot</div>}
 

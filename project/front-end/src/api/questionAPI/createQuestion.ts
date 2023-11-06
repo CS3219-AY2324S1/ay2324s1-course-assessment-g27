@@ -1,8 +1,8 @@
 import { Question } from "../../state/question";
-import { API_URL } from "../config";
+import { QUESTION_SERVICE_GET_QUESTION_URL } from "../../config";
 
 export async function createQuestion(newData: Partial<Question>, token : any) {
-    const response = await fetch(`${API_URL}/questions`, {
+    const response = await fetch(`${QUESTION_SERVICE_GET_QUESTION_URL}`, {
         method: "POST",
         headers: { 
             Authorization: `Bearer ${token}`, 

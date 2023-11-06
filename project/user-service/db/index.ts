@@ -77,7 +77,7 @@ EXECUTE FUNCTION complete_attempt();
 //change the fields as you need, but this should be the default
 export const pool = new Pool({
   user: "postgres",
-  host: "localhost",
+  host: "postgres_db",
   database: "postgres",
   password: "postgres",
   port: 5432,

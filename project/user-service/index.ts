@@ -26,6 +26,6 @@ app.listen(process.env.PORT, async () => {
   } catch {
       console.info("user-service db seeded in the past");
   }
-  console.info("user-service listening on port 8500");
+  console.info("user-service listening on port 8000");
 });
 

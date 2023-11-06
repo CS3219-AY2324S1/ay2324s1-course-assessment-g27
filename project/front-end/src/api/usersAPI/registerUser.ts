@@ -1,4 +1,4 @@
-import { API_URL } from "../config";
+import { USER_SERVICE_REGISTER_URL } from "../../config";
 
 export async function registerUser(username: String, password: String, confirmPassword: String) {
     try {
@@ -6,7 +6,7 @@ export async function registerUser(username: String, password: String, confirmPa
             throw new Error("Passwords do not match!");
         }
         
-        const response = await fetch(`${API_URL}/auth/register`, {
+        const response = await fetch(`${USER_SERVICE_REGISTER_URL}`, {
             method: 'POST',
             // body: formData,
             headers: {

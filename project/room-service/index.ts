@@ -21,6 +21,7 @@ app.use(cors());
 const server = http.createServer(app);
 
 export const io = new Server( server, {
+  path: '/socket.io',
   cors: {
     origin: "*"
   },
@@ -28,15 +29,11 @@ export const io = new Server( server, {
 
 initSocketMatch();
 
-server.listen(3001, () => {
-  console.log("SERVER RUNNING");
-});
-
 /* ROUTES */
 app.use("/rooms", roomRoutes);
 
 /* MONGOOSE SETUP */
-const PORT = process.env.PORT || 8889;
+const PORT = process.env.PORT || 8888;
 mongoose
   .connect(process.env.MONGO_URL!)
   .then(() => {
@@ -47,4 +44,8 @@ mongoose
     // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+  server.listen(PORT, () => {
+    console.log("SERVER RUNNING");
+  });
 

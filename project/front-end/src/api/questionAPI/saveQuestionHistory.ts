@@ -1,8 +1,8 @@
-import { API_URL } from "../config";
+import { HISTORY_SERVICE_URL } from "../../config";
 
 export async function saveQuestionHistory(qnsId: String, id: Number, token : any) {
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
+        const response = await fetch(`${HISTORY_SERVICE_URL}/users/${id}`, {
             method: "POST",
             headers: { 
                 Authorization: `Bearer ${token}`, 

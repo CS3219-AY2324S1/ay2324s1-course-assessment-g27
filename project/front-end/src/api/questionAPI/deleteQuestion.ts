@@ -1,8 +1,8 @@
-import { API_URL } from "../config";
+import { QUESTION_SERVICE_GET_QUESTION_URL } from "../../config";
 
 export const deleteQuestionByID = async (questionId:any, token:any) => {
     try {
-      const response = await fetch(`${API_URL}/questions/${questionId}`, {
+      const response = await fetch(`${QUESTION_SERVICE_GET_QUESTION_URL}/${questionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

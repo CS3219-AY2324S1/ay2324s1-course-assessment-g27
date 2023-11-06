@@ -12,9 +12,13 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
 import QnsHistPage from "./scenes/qnsHistPage/QnsHistPage";
+import { MATCHING_SERVICE_URL, ROOM_SERVICE_URL } from "./config";
 import * as io from "socket.io-client";
 
-export const socket = io.connect("http://localhost:3001");
+export const matchSocket = io.connect(`${MATCHING_SERVICE_URL}/socket.io`);
+// export const matchSocket = io.connect(`${MATCHING_SERVICE_URL}`);
+// export const roomSocket = io.connect(`${ROOM_SERVICE_URL}`);
+export const roomSocket = io.connect(`${ROOM_SERVICE_URL}/socket.io`);
 
 function App() {
   const mode: PaletteMode = useSelector((state: State) => state.mode);

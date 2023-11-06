@@ -7,7 +7,7 @@ const QueuesList = ["Easy", "Medium", "Hard"];
 const WaitingQueue = new Map();;
 
 export const initQueues = async () => {
-    const rmqConnection = await amqp.connect("amqp://127.0.0.1:5672");// rabbitMQ port:5672
+    const rmqConnection = await amqp.connect("amqp://rabbitmq:5672");// rabbitMQ port:5672
     const consumerChannel = await rmqConnection.createChannel();
     const producerChannel = await rmqConnection.createChannel();
 

@@ -2,7 +2,7 @@
   "name": "history-service",
   "version": "1.0.0",
   "description": "service for handling the history of the user's questions",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start": "ts-node ./index.ts",
     "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node ./index.ts\""

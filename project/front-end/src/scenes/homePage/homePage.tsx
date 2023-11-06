@@ -5,12 +5,15 @@ import "./homePage.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import {socket} from "../../App";
 import { useState } from "react";
+import {matchSocket} from "../../App";
 import CircularWithValueLabel from "./matchLoadingPage";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import {LANGUAGE} from "../../constants/constants"
+
+
+
 
 const HomePage = () => {
 
@@ -28,13 +31,12 @@ const HomePage = () => {
     const [selectedLanguage, setSelectedLanguage] = useState<String>("javascript");
 
     const createMatch = () => {
-      socket.emit("find_match", {username:username, difficulty: selectedDifficulty, language:selectedLanguage, token:token});
+      matchSocket.emit("find_match", {username:username, difficulty: selectedDifficulty, language:selectedLanguage, token:token});
       setIsMatching(true);
       timeOut = setTimeout(matchTimout, 33 * 1000);
     }
 
-    socket.on("successMatch", async (roomId) => {
-      socket.emit("join_room", roomId);
+    matchSocket.on("successMatch", async (roomId) => {
       clearTimeout(timeOut);
       navigate(`/roomPage/${roomId}`);
     })
