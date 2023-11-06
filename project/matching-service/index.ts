@@ -19,17 +19,13 @@ app.use(cors());
 const server = http.createServer(app);
 
 export const io = new Server( server, {
+  path: '/socket.io',
   cors: {
     origin: "*"
   },
 });
 
 initSocketMatch();
-
-server.listen(3001, () => {
-  console.log("SERVER RUNNING");
-});
-
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 8001;
@@ -40,3 +36,6 @@ mongoose
   })
   .catch((error) => console.log(`${error} matching-service db did not connect`));
 
+  server.listen(PORT, () => {
+    console.log("SERVER RUNNING");
+  });

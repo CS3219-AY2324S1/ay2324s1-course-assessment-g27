@@ -1,7 +1,7 @@
-import { API_URL } from "../config";
+import { QUESTION_SERVICE_GET_QUESTION_URL } from "../../config";
 
 export async function getQuestionList(token : any) {
-    const response = await fetch(`${API_URL}/questions`, {
+    const response = await fetch(`${QUESTION_SERVICE_GET_QUESTION_URL}`, {
         method: "GET",
         headers: { 
             Authorization: `Bearer ${token}`, 
@@ -13,7 +13,7 @@ export async function getQuestionList(token : any) {
 }
 
 export async function getQuestionById(questionId:any, token : any) {
-    const response = await fetch(`${API_URL}/questions/${questionId}`, {
+    const response = await fetch(`${QUESTION_SERVICE_GET_QUESTION_URL}/${questionId}`, {
         method: "GET",
         headers: { 
             Authorization: `Bearer ${token}`, 

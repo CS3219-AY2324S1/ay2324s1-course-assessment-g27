@@ -1,8 +1,8 @@
-import { API_URL } from "../../config";
+import { USER_SERVICE_URL } from "../../../config";
 
 export const deleteUserById = async (token: any, id: Number) => {
   try {
-    const response = await fetch(`${API_URL}/users/${id}`, {
+    const response = await fetch(`${USER_SERVICE_URL}/users/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

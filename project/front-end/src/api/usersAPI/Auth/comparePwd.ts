@@ -1,8 +1,8 @@
-import { API_URL } from "../../config";
+import { USER_SERVICE_URL } from "../../../config";
 
 export const comparePwd = async (token: any, id: Number, password: String) => {
   try {
-    const response = await fetch(`${API_URL}/auth/password/${id}`, {
+    const response = await fetch(`${USER_SERVICE_URL}/auth/password/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

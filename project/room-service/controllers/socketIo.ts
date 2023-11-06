@@ -1,12 +1,18 @@
 import { io } from "..";
 
-let roomids:string[] = [];
-
 export const initSocketMatch = async () => {
 
     io.on("connection", (socket) => {
         console.log(`User ${socket.id} Connected`);
-        console.log(roomids);
+
+        socket.on('send_message', (roomid, message) => {
+            socket.to(roomid).emit('chat_message', message);
+        })
+
+        socket.on("join_room", async (roomid) => {
+            socket.join(roomid);
+            console.log(`${socket.id} joined ${roomid}`);
+        })
 
         socket.on("leaving_room", (roomid) => {
             socket.to(roomid).emit("leave_room_request");

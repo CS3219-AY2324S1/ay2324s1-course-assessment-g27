@@ -1,8 +1,8 @@
 import { Room } from "../state/room";
-import { API_URL } from "./config";
+import { ROOM_SERVICE_URL } from "../config";
 
 export async function createRoom(newData: Partial<Room>, token : any) {
-    const response = await fetch(`${API_URL}/rooms`, {
+    const response = await fetch(`${ROOM_SERVICE_URL}/rooms`, {
         method: "POST",
         headers: { 
             Authorization: `Bearer ${token}`,
@@ -16,7 +16,7 @@ export async function createRoom(newData: Partial<Room>, token : any) {
 
 export async function updateRoom(roomId:any, username: any, token: any) {
   try {
-    const response = await fetch(`${API_URL}/rooms/${roomId}?newUser=${username}`, {
+    const response = await fetch(`${ROOM_SERVICE_URL}/rooms/${roomId}?newUser=${username}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -36,7 +36,7 @@ export async function updateRoom(roomId:any, username: any, token: any) {
 }
 
 export async function getRoomDetails(roomId: any, token: any) {
-    const response = await fetch(`${API_URL}/rooms/${roomId}`, {
+    const response = await fetch(`${ROOM_SERVICE_URL}/rooms/${roomId}`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${token}`, 
@@ -49,7 +49,7 @@ export async function getRoomDetails(roomId: any, token: any) {
 
 export const deleteRoom = async (roomId:any, token:any) => {
     try {
-      const response = await fetch(`${API_URL}/rooms/${roomId}`, {
+      const response = await fetch(`${ROOM_SERVICE_URL}/rooms/${roomId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
