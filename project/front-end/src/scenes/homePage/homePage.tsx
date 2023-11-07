@@ -1,5 +1,5 @@
 
-import { Box, useMediaQuery, Typography, FormControl,FormControlLabel,FormLabel, Radio, RadioGroup } from "@mui/material";
+import { Box, useMediaQuery, Typography} from "@mui/material";
 import Navbar from "../navBar";
 import "./homePage.css";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,6 @@ import CircularWithValueLabel from "./matchLoadingPage";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import {LANGUAGE} from "../../constants/constants"
-
-
-
 
 const HomePage = () => {
 
@@ -42,13 +39,13 @@ const HomePage = () => {
     })
 
     const matchTimout = () => {
-      setIsMatching(false);
       window.location.reload();
+      setIsMatching(false);
     }
 
     const onCancelButton = () => {
-      setIsMatching(false);
       window.location.reload();
+      setIsMatching(false);
     }
 
     const onChangeDifficulty = (event:any) => {

@@ -13,7 +13,13 @@ const CircularWithValueLabel: FC<MatchingLoadingProps> = ({onCancel}) => {
   const primaryMain = theme.palette.primary.main;
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {
-      return <div className="timer">Sorry unable to find match. Please try again!</div>;
+      return (
+        <div className="timer">
+          <div className="text">Sorry!</div>
+          <div className="text">Unable to find match.</div>
+          <div className="text">Please try again!</div>
+        </div>
+      );
     }
 
     return (
@@ -26,11 +32,10 @@ const CircularWithValueLabel: FC<MatchingLoadingProps> = ({onCancel}) => {
   };
 
   return (
-    <div className="timer-wrapper" >
-      <div style={{borderRadius:"100%", 
+    <div className="timer-wrapper" > 
+      <div style={{borderRadius:"100%", display:"inline-block",
       boxShadow: "0 0 25px " + primaryLight + ", 0 0 0 0.2px" + primaryLight}}>
       <CountdownCircleTimer
-      
         trailColor={primaryMain}
         isPlaying
         duration={30}
@@ -42,7 +47,7 @@ const CircularWithValueLabel: FC<MatchingLoadingProps> = ({onCancel}) => {
       </CountdownCircleTimer>
       </div>
       <p className="info">
-        Waiting to be matched
+        Waiting to be matched...
       </p>
       <Button
         onClick={onCancel}
