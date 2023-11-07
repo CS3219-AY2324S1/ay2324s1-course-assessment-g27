@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from "../util/constant";
+import { ROOM_API_URL } from "../util/constant";
 import {QuestionModel} from "../models/Question";
 
 export const createNewRoom = async (username1:any, username2:any, token:any, language:string, quesdata:QuestionModel) => {
@@ -8,6 +8,6 @@ export const createNewRoom = async (username1:any, username2:any, token:any, lan
       language:language,
       users: [username1, username2],
     };
-    const response = await axios.post(`${API_URL}/rooms`, JSON.stringify(newData), {headers: { Authorization: `Bearer ${token}`,"Content-Type": "application/json"}})
+    const response = await axios.post(`${ROOM_API_URL}/rooms`, JSON.stringify(newData), {headers: { Authorization: `Bearer ${token}`,"Content-Type": "application/json"}})
     return response.data._id;
 };

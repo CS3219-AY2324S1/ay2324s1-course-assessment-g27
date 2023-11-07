@@ -6,8 +6,6 @@ services:
     image: mongo
     ports:
       - '27017:27017'
-    # networks:
-    #   - app-network
 
   rabbitmq:
     image: rabbitmq:management
@@ -20,8 +18,6 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    # networks:
-    #   - app-network
 
   user-service:
     container_name: "user-service"
@@ -46,16 +42,19 @@ services:
       context: ./matching-service
     ports:
       - '8001:8001'
+      - '3001:3001'
     depends_on:
       - rabbitmq
       - mongo
+      - question-service
+      - room-service
     links: 
       - rabbitmq
+      - mongo
     env_file:
       - ./matching-service/.env
     restart: on-failure
-    # networks:
-    #   - app-network
+
 
   room-service:
     container_name: "room-service"
@@ -63,13 +62,15 @@ services:
       context: ./room-service
     ports:
       - '8888:8888'
+      - '3002:3002'
     depends_on:
+      - mongo
+    links:
       - mongo
     env_file:
       - ./room-service/.env
     restart: on-failure
-    # networks:
-    #   - app-network
+
 
   postgres_db:
     image: postgres:latest
@@ -97,11 +98,11 @@ services:
       - '8080:8080'
     depends_on:
       - mongo
+    links:
+      - mongo
     env_file:
       - ./question-service/.env
     restart: on-failure
-    # networks:
-    #   - app-network
 
   history-service:
     container_name: "history-service"
@@ -141,9 +142,3 @@ services:
       - ROOM_SERVICE_URL="http://room-service:8888"
       - QUESTION_SERVICE_URL="http://question-service:8080"
       - HISTORY_SERVICE_URL="http://history-service:8500"
-    # networks:
-    #   - app-network
-
-# networks:
-#     app-network:
-#       driver: bridge
