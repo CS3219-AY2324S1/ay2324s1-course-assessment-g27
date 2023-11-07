@@ -20,7 +20,6 @@ import AssistantIcon from '@mui/icons-material/Assistant';
 import Chat from './Chat';
 
 const RoomPage = () => {
-
   const navigate = useNavigate();
   const {roomid} = useParams();
   const userId = useSelector((state: State) => state.user.id);
