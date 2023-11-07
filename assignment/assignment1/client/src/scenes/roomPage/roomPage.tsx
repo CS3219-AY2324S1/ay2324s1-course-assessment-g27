@@ -17,6 +17,7 @@ import CompleteQnsPopup from './completeQnsPopup';
 import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
 import CircularProgress from '@mui/material/CircularProgress';
 import AssistantIcon from '@mui/icons-material/Assistant';
+import Chat from './Chat';
 
 const RoomPage = () => {
 
@@ -24,11 +25,6 @@ const RoomPage = () => {
   const {roomid} = useParams();
   const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
-  const EmptyRoom: Room = {
-    _id: "",
-    question_id:"",
-    users: []
-  };
   const [roomDetails, setRoomDetails] = useState<Room>();
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -56,6 +52,7 @@ const RoomPage = () => {
       const res = await saveAttemptedQns(data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
+      navigate("/homePage");
     }
   };
 
@@ -115,22 +112,29 @@ const RoomPage = () => {
   const closeChat = () => {
     setShowChat(false);
   }
-
+  if (!roomid) {
+    // Handle the case when roomid is undefined
+    return <div>No room id provided</div>;
+  } else if(!roomDetails) {
+    return <div>Loading Room...</div>;
+  }
   return (
         <Box>
     <Navbar/>
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
 
-      <div className="leetcode-layout">
+      <div className="leetcode-layout" style={{ width:"100%", height:"90vh", display: 'flex', flexWrap: 'wrap' }}>
         { (!roomDetails) ? <div><CircularProgress /></div> :
         <DisplayDescriptionInRoom 
           roomDetails = {roomDetails}/>
         }
-        <div id='codeEditor' style={{width:"1000px", height:"800px", padding:"10px", paddingTop:"0"}}>
-          <Editor socket={socket} roomId={roomid}/>
+        <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
+          <Editor socket={socket} roomId={roomid} selectedLanguage={roomDetails.language}/>
         </div> 
+
+        <div className='chat-container'><Chat socket={socket} roomid={roomid} /> </div>
       </div>
-      {showChatText && <div className="chat-text">Show Chatbot</div>}
+      {showChatText && <div className="chat-text" placeholder='CHAT'>Show Chatbot</div>}
 
       <Chatbot
         open={showChat}
@@ -145,7 +149,7 @@ const RoomPage = () => {
         onClose={handleCancelComplete}
         onConfirm={confirmComplete} />
       <Fab id="ChatBotButton" size="large" 
-      style={{position:"absolute", left:"96%", top:"97%"}} onClick={() => openChat()}
+      style={{position:"fixed", right:"10px", bottom:"8px"}} onClick={() => openChat()}
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}>
         <AssistantIcon/>

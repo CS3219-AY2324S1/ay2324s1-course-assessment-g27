@@ -1,0 +1,70 @@
+.userprofile {
+    display: flex;
+    flex-direction: column;
+}
+
+.userinfo {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10vh;
+    gap: 20px;
+}
+
+.userprofile .userinfo .leftbar {
+    width: 15%;
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 10px;
+    min-height: 50vh;
+}
+
+.userprofile .userinfo .mainbar {
+    width: 50%;
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 10px;
+    min-height: 70vh;
+}
+
+.stylenone {
+    text-decoration: none;
+    color: inherit;
+}
+
+.mainheader {
+    background: rgb(83, 208, 245);
+    color: var(--col1);
+    font-size: 1.3rem;
+    font-weight: 300;
+    padding: 5px 30px;
+    margin-top: 0px;
+    border-radius: 10px;
+}
+
+.mainbutton {
+    background: rgb(83, 208, 245);
+    border: 1px solid var(--col1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin: 1rem;
+    cursor: pointer;
+    color: var(--col1);
+    width: 200px;
+    font-weight: bold;
+    position: absolute;
+    bottom: 20%;
+}
+
+.mainbutton:hover {
+    background: rgb(131, 212, 237);
+    border: 1px solid var(--col1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin: 1rem;
+    cursor: pointer;
+    color: white;
+    transform: scale(1.05);
+    transition: all 0.1s ease-in-out;
+}
+

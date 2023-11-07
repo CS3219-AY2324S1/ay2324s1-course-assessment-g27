@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(password, result.password);
     if (!isMatch) return res.status(400).json("Invalid username or password. ");
 
-    const token = jwt.sign({ id: result.id}, process.env.JWT_SECRET!);
+    const token = jwt.sign({ id: result.id, isAdmin: result.isadmin}, process.env.JWT_SECRET!);
 
     const id = result.id;
     const uname = result.username;
