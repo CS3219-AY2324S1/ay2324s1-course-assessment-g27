@@ -57,6 +57,15 @@ const HomePage = () => {
       setSelectedLanguage(event.target.value);
     }
 
+    const DisplayTextCSS = {
+      backgroundImage: theme.palette.mode === "dark" ? 
+        `linear-gradient(45deg, ${primaryLight}, #fa57e2)`:
+        `linear-gradient(45deg, ${primaryDark}, #5d00fc)`,
+      backgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      mb: "1.5rem"
+    };
+
     return (
       <Box>
         <Navbar />
@@ -74,60 +83,51 @@ const HomePage = () => {
         { isMatching ? <CircularWithValueLabel onCancel={onCancelButton}/> :
           <div>
           <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
-          sx= {{ backgroundImage: theme.palette.mode === "dark" ? 
-          `linear-gradient(45deg, ${primaryLight}, #fa57e2)`:
-          `linear-gradient(45deg, ${primaryDark}, #5d00fc)`,
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          mb: "1.5rem"}}>
-            Welcome to PeerPrep, Please pick a Difficulty Level
+            sx= {{...DisplayTextCSS}}>
+            Welcome to PeerPrep, start matching with your peers and prepping for interviews now!
           </Typography>
-            <div className="container">
-              <div className="radio-tile-group">
-                <div className="input-container">
-                  <input type="radio" name="difficulty-radio" value={"Easy"}  defaultChecked={selectedDifficulty === "Easy"}
-                    onChange={onChangeDifficulty}/>
-                  <div className="button-easy">
-                    <label>Easy</label>
-                  </div>
-                </div>
-
-                <div className="input-container">
-                  <input type="radio" name="difficulty-radio" value={"Medium"}  defaultChecked={selectedDifficulty === "Medium"}
-                    onChange={onChangeDifficulty}/>
-                  <div className="button-medium">
-                    <label>Medium</label>
-                  </div>
-                </div>
-
-                <div className="input-container">
-                  <input type="radio" name="difficulty-radio" value={"Hard"}  defaultChecked={selectedDifficulty === "Hard"}
-                    onChange={onChangeDifficulty}/>
-                  <div className="button-hard">
-                    <label>Hard</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="container">
-              <div className="radio-tile-group">
-              {(Object.keys(LANGUAGE) as (keyof typeof LANGUAGE)[]).map((key, index) => {
-                  return (
-                    <div className="input-container">
-                      <input type="radio" name="lang-radio" value={LANGUAGE[key]} checked={selectedLanguage === LANGUAGE[key]}
-                        onChange={onChangeLanguage}/>
-                      <div className="button-language">
-                        <label>{key}</label>
-                      </div>
-                    </div>
-                  )
-                })
-              }
-              </div>
+          <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
+            sx= {{...DisplayTextCSS}}>
+            1. Select your question difficulties
+          </Typography>
+          <div className="container">
+            <div>
+              <input type="radio" id="buttonEasy" name="difficulty-radio" value={"Easy"} defaultChecked={selectedDifficulty === "Easy"}
+                onChange={onChangeDifficulty}/>
+              <label htmlFor="buttonEasy">Easy</label>
             </div>
             <div>
-            <button className="button-easy" onClick={() => { createMatch();  } } >Lets Match </button>
+              <input type="radio" id="buttonMedium" name="difficulty-radio"  value={"Medium"} defaultChecked={selectedDifficulty === "Medium"}
+                onChange={onChangeDifficulty}/>
+              <label htmlFor="buttonMedium">Medium</label>
+            </div>
+            <div>
+              <input type="radio" id="buttonHard" name="difficulty-radio" value={"Hard"} defaultChecked={selectedDifficulty === "Hard"}
+                onChange={onChangeDifficulty}/>
+              <label htmlFor="buttonHard">Hard</label>
+            </div>
+          </div>
+          <Typography fontWeight="bold" variant="h5" fontSize={"25px"} fontFamily={'Trebuchet MS'}
+            sx= {{...DisplayTextCSS}}>
+            2. Select your preferred programming language
+          </Typography>
+          <div className="container">
+            {(Object.keys(LANGUAGE) as (keyof typeof LANGUAGE)[]).map((key, index) => {
+                return (
+                  <div>
+                    <input type="radio" id={key} name="lang-radio" value={LANGUAGE[key]} checked={selectedLanguage === LANGUAGE[key]}
+                      onChange={onChangeLanguage}/>
+                    <label htmlFor={key}>{key}</label>
+                  </div>
+                )
+              })
+            }
+          </div>
+            <div> 
+              {theme.palette.mode === "dark" 
+                ? <button className="matchDarkButton" onClick={() => { createMatch();  } }>Lets Match!</button> 
+                : <button className="matchLightButton" onClick={() => { createMatch();  } }>Lets Match!</button>
+              }
             </div>
           </div>
         }
