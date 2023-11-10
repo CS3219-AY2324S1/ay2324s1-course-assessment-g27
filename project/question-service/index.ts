@@ -20,6 +20,9 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); 
 
 /* ROUTES */
+app.get('/', (req, res) => {
+  res.send('Hello from question-service!');
+});
 app.use("/questions", questionRoutes);
 
 /* MONGOOSE SETUP */
