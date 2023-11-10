@@ -155,11 +155,11 @@ const QnsHistPage = () => {
     },
     {
       field: "completed",
-      headerName: "",
+      headerName: "Completed?",
       sortable: false,
       hideable: false,
       disableColumnMenu: true,
-      width: 70,
+      width: 100,
       renderCell: (params) => {
         return params.row.isCompleted ? (
           <CheckCircleOutlineIcon />
@@ -199,8 +199,8 @@ const QnsHistPage = () => {
             fontFamily={"Trebuchet MS"}
             sx={{ ...DisplayTextCSS }}
           >
-            Track your learning progress by matching with a peer{"\n"}and
-            attempting a question today!
+            Track your learning progress by matching with a peer and attempting
+            a question today!
           </Typography>
         </Box>
       </>
@@ -231,13 +231,24 @@ const QnsHistPage = () => {
               series={[
                 {
                   data: [
-                    { id: 0, value: difficultyCounts["Easy"], label: "Easy" },
+                    {
+                      id: 0,
+                      value: difficultyCounts["Easy"],
+                      label: "Easy",
+                      color: "#20df80",
+                    },
                     {
                       id: 1,
                       value: difficultyCounts["Medium"],
                       label: "Medium",
+                      color: "#f7b604fb",
                     },
-                    { id: 2, value: difficultyCounts["Hard"], label: "Hard" },
+                    {
+                      id: 2,
+                      value: difficultyCounts["Hard"],
+                      label: "Hard",
+                      color: "#f61602",
+                    },
                   ],
                 },
               ]}
