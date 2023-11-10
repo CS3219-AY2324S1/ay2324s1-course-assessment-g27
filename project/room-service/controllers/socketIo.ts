@@ -33,10 +33,9 @@ export const initSocketMatch = async () => {
             socket.to(roomId).emit("code_change", code);
         });
 
-        socket.on("roommate_navigate",() => {
-            if (Array.from(socket.rooms)[1]) {
-                socket.to((Array.from(socket.rooms)[1])).emit("leave_room_request");
-            }
+        socket.on("roommate_navigate", () => {
+            console.log((Array.from(socket.rooms)[1]));
+            socket.to((Array.from(socket.rooms)[1])).emit("leave_room_request");
         });
 
         socket.on("disconnecting", () => {
