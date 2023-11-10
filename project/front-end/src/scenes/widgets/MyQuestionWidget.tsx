@@ -136,7 +136,7 @@ const MyQuestionWidget = () => {
         renderCell:(params) => {
           return(
             <Tooltip title="Click to see more information" placement="bottom">
-              <Button>{params.row.title}</Button>
+              <Button sx={{textTransform: 'none'}}>{params.row.title}</Button>
           </Tooltip>
           );
         } 
