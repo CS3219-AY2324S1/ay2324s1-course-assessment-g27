@@ -18,6 +18,7 @@ import { setMode, setLogout, State } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { Theme } from "@mui/system";
+import {roomSocket} from "../../App";
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -36,6 +37,7 @@ const Navbar = () => {
   const username = user.username;
 
   const handleLogOut = () => {
+    roomSocket.emit("roommate_navigate");
     navigate(`/`);
     dispatch(setLogout());
   }
@@ -48,7 +50,7 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           // color="primary"
-          onClick={() => navigate("/homePage")}
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/homePage")}}
           sx={{
             "&:hover": {
               color: primaryLight,
@@ -63,13 +65,13 @@ const Navbar = () => {
         </Typography>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/homePage")}>HomePage</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/homePage");}}>HomePage</Button>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/questions")}>QuestionPage</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/questions");}}>QuestionPage</Button>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/history")}>History</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/history");}}>History</Button>
       </FlexBetween>
 
       {/* DESKTOP NAV */}
@@ -105,7 +107,7 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
+              <MenuItem value={username} onClick={() => {roomSocket.emit("roommate_navigate"); navigate(`/profile/info`);}}>
               <Typography>{username}</Typography>
               </MenuItem>
               <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
@@ -179,7 +181,7 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={username} onClick={() => navigate(`/profile/info`)}>
+                <MenuItem value={username} onClick={() => {roomSocket.emit("roommate_navigate"); navigate(`/profile/info`);}}>
                   <Typography>{username}</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleLogOut}>
