@@ -9,9 +9,15 @@ export const initSocketMatch = async () => {
             socket.to(roomid).emit('chat_message', message);
         })
 
+        //`${roomid}`
         socket.on("join_room", async (roomid) => {
-            socket.join(roomid);
-            console.log(`${socket.id} joined ${roomid}`);
+            if (io.sockets.adapter.rooms.get(roomid) && io.sockets.adapter.rooms.get(roomid)!.size > 1) {
+                socket.emit("user_exceed");
+                console.log("USER EXCEEDED");
+            } else {
+                await socket.join(roomid);
+                console.log(`${socket.id} joined ${roomid}`);
+            }
         })
 
         socket.on("leaving_room", (roomid) => {
@@ -25,6 +31,12 @@ export const initSocketMatch = async () => {
 
         socket.on("code_change", ( {roomId, code} ) => {
             socket.to(roomId).emit("code_change", code);
+        });
+
+        socket.on("roommate_navigate",() => {
+            if (Array.from(socket.rooms)[1]) {
+                socket.to((Array.from(socket.rooms)[1])).emit("leave_room_request");
+            }
         });
 
         socket.on("disconnecting", () => {
