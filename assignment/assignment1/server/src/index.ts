@@ -11,10 +11,10 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
-import roomRoutes from "./routes/rooms";
-import { initSocketMatch } from "./controllers/socketIo";
+// import roomRoutes from "./routes/rooms";
+// import { initSocketMatch } from "./controllers/socketIo";
 
-import Room from "./models/Room";
+// import Room from "./models/Room";
 import http from "http";
 import { Server } from "socket.io";
 
@@ -43,7 +43,7 @@ export const io = new Server( server, {
   },
 });
 
-initSocketMatch();
+// initSocketMatch();
 
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
@@ -70,7 +70,7 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/questions", questionRoutes);
 
-app.use("/rooms", roomRoutes);
+// app.use("/rooms", roomRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
