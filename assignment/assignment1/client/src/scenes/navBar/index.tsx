@@ -61,15 +61,11 @@ const Navbar = () => {
         >
           PeerPrep
         </Typography>
-        <Button 
-          sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/homePage")}>HomePage</Button>
+  
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
           onClick={() => navigate("/questions")}>QuestionPage</Button>
-        <Button 
-          sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/history")}>History</Button>
+        
       </FlexBetween>
 
       {/* DESKTOP NAV */}
