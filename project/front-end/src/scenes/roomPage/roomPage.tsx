@@ -40,9 +40,12 @@ const RoomPage = () => {
     setShowChatText(false);
   };
 
-  roomSocket.emit("join_room", roomid);
 
   useEffect(() => {
+    roomSocket.emit("join_room", roomid);
+    roomSocket.on("user_exceed", () => {
+      navigate("/homePage");
+    })
     getRoom();
   }, []); 
   
@@ -77,7 +80,7 @@ const RoomPage = () => {
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
-    }  
+    }
   }
 
   const confirmComplete = async () => {
