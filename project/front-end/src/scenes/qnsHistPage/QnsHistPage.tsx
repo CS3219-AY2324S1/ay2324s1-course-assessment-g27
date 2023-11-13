@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   getAttemptList,
-  getCompletedList,
 } from "../../api/usersAPI/qnsHistAPI";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -11,7 +10,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import NavBar from "../navBar";
 import "../widgets/MyQuestionWidget.css";
-import { DisplayDescription } from "../widgets/DisplayQuestionInformation";
+import { DisplayDescription, DisplayAttempt } from "../widgets/DisplayQuestionInformation";
 import {
   Box,
   Button,
@@ -59,9 +58,10 @@ const QnsHistPage = () => {
   const token = useSelector((state: State) => state.token);
   const [questionHistory, setQuestionHistory] = useState<QuestionHistory[]>([]);
   const [openDescriptionPopup, setOpenDescriptionPopup] = useState(false);
+  const [openAttemptPopup, setOpenAttemptPopup] = useState(false);
 
   //for empty selected question state
-  const NoQuestionSelected: Question = {
+  const NoQuestionSelected: QuestionHistory = {
     _id: "",
     title: "",
     difficulty: "",
@@ -69,33 +69,27 @@ const QnsHistPage = () => {
     examples: [],
     constraints: [],
     tags: "",
+    date: new Date(),
+    attempt: "",
+    isCompleted: false
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);
+  const [selectedAttempt, setSelectedAttempt] = useState<String>('');
 
   // Get the questions from DB
   useEffect(() => {
     async function getQuestionHistory() {
       const attemptedQns = await getAttemptList(user.id, token);
-      const completedQns = await getCompletedList(user.id, token);
 
       const attemptedQuestionsData = await Promise.all(
         attemptedQns.map(async (attempted: any) => {
           const qnData = await getSingleQuestion(token, attempted.qid);
           if (qnData) {
             const date = convertDateTime(attempted.date, attempted.time);
-            return { ...qnData, date, isCompleted: false };
-          }
-          return null;
-        })
-      );
-
-      const completedQuestionsData = await Promise.all(
-        completedQns.map(async (completed: any) => {
-          const qnData = await getSingleQuestion(token, completed.qid);
-          if (qnData) {
-            const date = convertDateTime(completed.date, completed.time);
-            return { ...qnData, date, isCompleted: true };
+            const attempt = attempted.attempt;
+            const isCompleted = attempted.iscompleted;
+            return { ...qnData, date, attempt, isCompleted };
           }
           return null;
         })
@@ -103,7 +97,6 @@ const QnsHistPage = () => {
 
       const updatedQuestionHistory = [
         ...attemptedQuestionsData.filter((item) => item !== null),
-        ...completedQuestionsData.filter((item) => item !== null),
       ];
       updatedQuestionHistory.sort(
         (i, j) => i.date.getTime() - j.date.getTime()
@@ -117,6 +110,11 @@ const QnsHistPage = () => {
   const openDescriptionPopupWindow = (question: QuestionHistory) => {
     setSelectedQuestion(question);
     setOpenDescriptionPopup(true);
+  };
+
+  const openAttemptPopupWindow = (question: QuestionHistory) => {
+    setSelectedQuestion(question);
+    setOpenAttemptPopup(true);
   };
 
   const columns: GridColDef[] = [
@@ -142,15 +140,30 @@ const QnsHistPage = () => {
     { field: "tags", headerName: "Tags", hideable: false, width: 120 },
     {
       field: "date",
-      headerName: "Attempted Date",
+      headerName: "Past Attempts",
       hideable: false,
       width: 200,
-      valueFormatter: (params) => {
-        return new Date(params.value).toLocaleDateString("en-GB", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
+      // valueFormatter: (params) => {
+      //   return new Date(params.value).toLocaleDateString("en-GB", {
+      //     year: "numeric",
+      //     month: "long",
+      //     day: "numeric",
+      //   });
+      // },
+      renderCell: (params) => {
+        return (
+          <Tooltip title="Click to see your attempt" placement="bottom">
+            <Button sx={{ textTransform: "none" }}>
+              {
+                new Date(params.value).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }
+            </Button>
+          </Tooltip>
+        );
       },
     },
     {
@@ -173,6 +186,8 @@ const QnsHistPage = () => {
   const handleOnCellClick = (param: any) => {
     if (param.field === "title") {
       openDescriptionPopupWindow(param.row);
+    } else if (param.field === "date") {
+      openAttemptPopupWindow(param.row);
     }
   };
 
@@ -282,6 +297,14 @@ const QnsHistPage = () => {
               setSelectedQuestion(NoQuestionSelected);
             }}
             question={selectedQuestion!}
+          />
+          <DisplayAttempt
+            open={openAttemptPopup}
+            onClose={() => {
+              setOpenAttemptPopup(false);
+              setSelectedQuestion(NoQuestionSelected);
+            }}
+            attempt={selectedQuestion!.attempt}
           />
         </WidgetWrapper>
       </Box>

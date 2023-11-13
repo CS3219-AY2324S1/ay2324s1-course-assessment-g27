@@ -1,5 +1,11 @@
 import { Pool } from "pg";
 
+const POSTGRES_PASSWORD= `cs3219-g27`;
+const POSTGRES_DB= `postgres`;
+const POSTGRES_USER= `postgres`;
+const POSTGRES_HOST= `34.142.136.87`;
+const POSTGRES_PORT= 5432;
+
 export const db = 
 `DROP TABLE IF EXISTS users, user_info, attempted_qns, completed_qns CASCADE;
 CREATE TABLE users (
@@ -19,55 +25,10 @@ CREATE TABLE IF NOT EXISTS attempted_qns (
     id INT,
     qid TEXT NOT NULL,
     attempted_date TIMESTAMP NOT NULL,
-    FOREIGN KEY(id) REFERENCES users(id),
-    PRIMARY KEY (id, qid)
-);
-CREATE TABLE IF NOT EXISTS completed_qns (
-    id INT,
-    qid TEXT NOT NULL,
-    completed_date TIMESTAMP NOT NULL,
-    FOREIGN KEY(id) REFERENCES users(id),
-    PRIMARY KEY (id, qid)
-);
-
-CREATE OR REPLACE FUNCTION incomplete_completed()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF EXISTS (SELECT 1 FROM completed_qns WHERE id = NEW.id and qid = NEW.qid) AND
-     EXISTS (SELECT 1 FROM completed_qns) THEN
-    DELETE FROM completed_qns
-    WHERE id = NEW.id and qid = NEW.qid;
-    RETURN NULL;
-  ELSE
-    RETURN NULL;
-  END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER incomplete_completed_trigger
-AFTER INSERT ON attempted_qns
-FOR EACH ROW
-EXECUTE FUNCTION incomplete_completed();
-
-CREATE OR REPLACE FUNCTION complete_attempt()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF EXISTS (SELECT 1 FROM attempted_qns WHERE id = NEW.id and qid = NEW.qid) AND
-     EXISTS (SELECT 1 FROM attempted_qns) THEN
-    DELETE FROM attempted_qns
-    WHERE id = NEW.id and qid = NEW.qid;
-    RETURN NULL;
-  ELSE
-    RETURN NULL;
-  END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER complete_attempt_trigger
-AFTER INSERT ON completed_qns
-FOR EACH ROW
-EXECUTE FUNCTION complete_attempt();
-`;
+    attempt TEXT,
+    isCompleted BOOLEAN DEFAULT false,
+    FOREIGN KEY(id) REFERENCES users(id)
+);`
 
 /**
  * Connection to your psql database 
@@ -86,8 +47,7 @@ export const pool = new Pool({
 
 export async function seedDb() {
   const conn = await pool.connect();
-  console.log("initialising history-service db");
+  console.log("initialising");
   conn.query(db);
-  console.log("history-service db initialised");
+  console.log("users db initialised");
 }
-
