@@ -1,21 +1,20 @@
 import express from "express";
-import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, likeQuestion, updateQuestion } from "../controllers/questions";
-import { verifyToken, verifyIsAdmin } from "../middleware/auth";
+import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, updateQuestion } from "../controllers/questions";
 
 const router = express.Router();
 
 /* READ */
-router.get("/", verifyToken, getAllQuestions);
+router.get("/", getAllQuestions);
 
-router.get("/:id", verifyToken, getSingleQuestion);
+router.get("/:id", getSingleQuestion);
 
 /* CREATE */
-router.post("/", verifyToken, verifyIsAdmin, createQuestion);
+router.post("/", createQuestion);
 
 /* DELETE */
-router.delete("/:id", verifyToken, verifyIsAdmin, deleteQuestion);
+router.delete("/:id", deleteQuestion);
 
 /* UPDATE */
-router.put("/:id", verifyToken, verifyIsAdmin, updateQuestion);
+router.put("/:id", updateQuestion);
 
 export default router;
