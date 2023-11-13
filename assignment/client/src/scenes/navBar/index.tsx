@@ -48,7 +48,7 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="clamp(1rem, 2rem, 2.25rem)"
           // color="primary"
-          onClick={() => navigate("/homePage")}
+          onClick={() => navigate("/questions")}
           sx={{
             "&:hover": {
               color: primaryLight,
@@ -61,15 +61,6 @@ const Navbar = () => {
         >
           PeerPrep
         </Typography>
-        <Button 
-          sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/homePage")}>HomePage</Button>
-        <Button 
-          sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/questions")}>QuestionPage</Button>
-        <Button 
-          sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => navigate("/history")}>History</Button>
       </FlexBetween>
 
       {/* DESKTOP NAV */}
