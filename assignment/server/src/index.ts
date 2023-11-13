@@ -11,12 +11,8 @@ import path from "path";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
-import roomRoutes from "./routes/rooms";
-import { initSocketMatch } from "./controllers/socketIo";
 
-import Room from "./models/Room";
 import http from "http";
-import { Server } from "socket.io";
 
 //for seeding the sql databases
 //import { seedDb } from "./dbSeed";
@@ -37,13 +33,6 @@ app.use("/assets", express.static(path.join(__dirname, 'public/assets'))); // TO
 
 const server = http.createServer(app);
 
-export const io = new Server( server, {
-  cors: {
-    origin: "*"
-  },
-});
-
-initSocketMatch();
 
 server.listen(3001, () => {
   console.log("SERVER RUNNING");
@@ -70,7 +59,6 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/questions", questionRoutes);
 
-app.use("/rooms", roomRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
