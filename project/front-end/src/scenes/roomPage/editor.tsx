@@ -11,7 +11,7 @@ import { Socket } from 'socket.io-client';
 import "./editor.css"
 import Chip from '@mui/material/Chip';
 
-const Editor = ({ socket, roomId, selectedLanguage}: { socket: Socket, roomId: any, selectedLanguage:any}) => {
+const Editor = ({ socket, roomId, saveAttempt, selectedLanguage}: { socket: Socket, roomId: any, saveAttempt: (attempt: string) => void, selectedLanguage:any}) => {
   const editorRef = useRef<CodeMirror.Editor | null>(null);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const Editor = ({ socket, roomId, selectedLanguage}: { socket: Socket, roomId: a
                 roomId,
                 code,
               });
+              saveAttempt(code);
             }
     
           });
@@ -71,7 +72,7 @@ const Editor = ({ socket, roomId, selectedLanguage}: { socket: Socket, roomId: a
       socket.on("code_change", (code) => {
         if (code !== null && editorRef.current) {
           editorRef.current.setValue(code);
-          
+          saveAttempt(code);
         }
       });
     

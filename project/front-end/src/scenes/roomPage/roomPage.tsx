@@ -3,7 +3,7 @@ import Navbar from '../navBar';
 import { Box, Fab } from '@mui/material';
 import './roomPage.css'
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
-import { saveAttemptedQns,saveCompletedQns } from "../../api/usersAPI/qnsHistAPI"
+import { saveAttemptedQns, completeQns } from "../../api/usersAPI/qnsHistAPI"
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -31,6 +31,7 @@ const RoomPage = () => {
 
   const [showChat, setShowChat] = useState(false);
   const [showChatText, setShowChatText] = useState(false);
+  const [attempt, setAttempt] = useState<String>('');
 
   const handleMouseOver = () => {
     setShowChatText(true);
@@ -39,6 +40,11 @@ const RoomPage = () => {
   const handleMouseLeave = () => {
     setShowChatText(false);
   };
+
+  const handleAttempt = (attempt: String) => {
+    setAttempt(attempt);
+    console.log("handle attempt: ", attempt);
+  }
 
 
   useEffect(() => {
@@ -52,8 +58,8 @@ const RoomPage = () => {
   const getRoom = async () => {
     try {
       const data = await getRoomDetails(roomid ,token);
-      setRoomDetails(await getRoomDetails(roomid ,token));
-      const res = await saveAttemptedQns(data.question_id, userId, token);
+      setRoomDetails(data);
+      const res = await completeQns(false, data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
       navigate("/homePage");
@@ -74,9 +80,11 @@ const RoomPage = () => {
         throw new Error("There is an error exiting, please try again later");
       } else {
         await deleteRoom(roomid, token);
+        console.log("delete room attempt: ", attempt);
         setShowConfirmation(false);
         setShowComplete(true);
         roomSocket.emit("leave_room", roomid);
+        // const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
       }
     } catch (err:any) {
       console.error('Error fetching room details:', err);
@@ -88,12 +96,14 @@ const RoomPage = () => {
       if (roomDetails === undefined) {
         throw new Error("There is an error completing the question");
       } else {
-        const res = await saveCompletedQns(roomDetails.question_id, userId, token); //save qns as completed
-        setShowComplete(false);
+        const saveAttempt = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
+        const complete = await completeQns(true, roomDetails.question_id, userId, token); //save qns as completed
         navigate("/homePage");
       }
     } catch (err:any) {
       console.error('Error confirming complete', err);
+    } finally {
+      navigate("/homePage");
     }
   }
 
@@ -105,9 +115,20 @@ const RoomPage = () => {
     setShowConfirmation(false);
   };
 
-  const handleCancelComplete = () => {
+  const handleCancelComplete = async () => {
     setShowComplete(false);
-    navigate("/homePage");
+    try {
+      if (roomDetails === undefined) {
+        throw new Error("There is an error completing the question");
+      } else {
+        const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
+        navigate("/homePage");
+      }
+    } catch (err:any) {
+      console.error('Error saving attempt', err);
+    } finally {
+      navigate("/homePage");
+    }
   };
 
   const openChat = () => {
@@ -133,7 +154,7 @@ const RoomPage = () => {
           roomDetails = {roomDetails}/>
         }
         <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
-          <Editor socket={roomSocket} roomId={roomid} selectedLanguage={roomDetails.language}/>
+          <Editor socket={roomSocket} roomId={roomid} saveAttempt={handleAttempt} selectedLanguage={roomDetails.language}/>
         </div> 
 
         <div className='chat-container'><Chat socket={roomSocket} roomid={roomid} /> </div>

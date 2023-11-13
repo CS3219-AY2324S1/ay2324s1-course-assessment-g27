@@ -9,6 +9,7 @@ import { State } from "../../state";
 import { getQuestionById } from "../../api/questionAPI/getQuestion";
 import { useTheme } from "@mui/material/styles";
 import { Theme } from "@mui/system";
+import AttemptPopup from "../qnsHistPage/AttemptPopup";
 
 interface DisplayDescriptionPopupProps {
   open: boolean;
@@ -18,6 +19,12 @@ interface DisplayDescriptionPopupProps {
 
 interface DisplayDescriptionInRoomPopupProps  {
   roomDetails: Room;
+}
+
+interface DisplayAttemptPopupProps {
+  open: boolean;
+  onClose: () => void;
+  attempt: String;
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -160,5 +167,24 @@ const displayConstraints= (question:Question) => {
         </ul>
       </div>
     ))
+  );
+};
+
+export const DisplayAttempt: React.FC<DisplayAttemptPopupProps> = ({open, onClose, attempt}) => {
+  return (
+    <BootstrapDialog
+        onClose={onClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+        scroll="body"
+        fullWidth
+    >
+      <DialogTitle id="customized-dialog-title" color="primary" fontWeight="bold" fontSize="clamp(1rem, 1rem, 2rem)">
+          Your Attempt
+      </DialogTitle>
+      <DialogContent>
+        <AttemptPopup attempt={attempt}></AttemptPopup>
+      </DialogContent>
+    </BootstrapDialog>
   );
 };
