@@ -136,7 +136,7 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
-      navigate("/homePage");
+      navigate("/questions");
     } catch (err: any) {
       setMsg(err.message);
       if (alertVisible) {

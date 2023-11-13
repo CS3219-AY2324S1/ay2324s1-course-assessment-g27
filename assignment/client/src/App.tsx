@@ -125,15 +125,12 @@ import LoginPage from "./scenes/loginPage/LoginPage";
 import QuestionPage from "./scenes/questionPage/QuestionPage";
 import ProfilePage from "./scenes/profilePage/ProfilePage";
 import ChangePwdPage from "./scenes/changePwdPage/ChangePwdPage";
-import HomePage from "./scenes/homePage/homePage";
-import RoomPage from "./scenes/roomPage/roomPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { State } from "./state";
-import QnsHistPage from "./scenes/qnsHistPage/QnsHistPage";
 import * as io from "socket.io-client";
 
 export const socket = io.connect("http://localhost:3001");
@@ -149,13 +146,9 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-          <Route path="/" element={isAuth ?<Navigate to="/homePage" /> : <LoginPage />} />
-            <Route
-              path="/homePage"
-              element={isAuth ? <HomePage/> : <Navigate to="/" />}
-            />
+          <Route path="/" element={<LoginPage />} />
+
             <Route path="/questions" element={<QuestionPage/>} />
-            <Route path="/roompage/:roomid" element={isAuth ? <RoomPage /> : <Navigate to="/"/>} />
             <Route
               path="/profile/:activePage"
               element={<ProfilePage />}
@@ -163,10 +156,6 @@ function App() {
             <Route
               path="/password"
               element={<ChangePwdPage />}
-            />
-            <Route
-              path="/history"
-              element={<QnsHistPage />}
             />
           </Routes>
         </ThemeProvider>
