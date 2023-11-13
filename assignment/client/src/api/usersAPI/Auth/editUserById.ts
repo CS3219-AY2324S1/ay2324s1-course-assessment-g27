@@ -1,13 +1,10 @@
 import { API_URL } from "../../config";
 
-export const editUserById = async (token: any, id: Number, username: String) => {
+export const editUserById = async (id: Number, username: String) => {
   try {
     const response = await fetch(`${API_URL}/users/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username,
         id

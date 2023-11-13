@@ -22,8 +22,6 @@ const MyQuestionWidget = () => {
   const dispatch = useDispatch();
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
-  const isAdmin = user.isAdmin;
-  const token = useSelector((state: State) => state.token);
   // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   // const mediumMain = theme.palette.neutral.mediumMain;
   // const medium = theme.palette.neutral.medium;
@@ -49,7 +47,7 @@ const MyQuestionWidget = () => {
   
   const addQuestion = async (newData: Partial<Question>) => {
     // Get back response status
-    const questionsRes = await createQuestion(newData, token);
+    const questionsRes = await createQuestion(newData);
     // Get back the .json file
     const json = await questionsRes.json();
     if(!questionsRes.ok) {
@@ -68,7 +66,7 @@ const MyQuestionWidget = () => {
   // Get the questions from DB
   useEffect(() => {
     async function getQuestions() {
-      const questionList = await getQuestionList(token);
+      const questionList = await getQuestionList();
       setQuestionData(questionList);
     }
     getQuestions();
@@ -77,7 +75,7 @@ const MyQuestionWidget = () => {
   //Delete the question
   const deleteQuestion = async (id: string) => {
     try {
-      await deleteQuestionByID(id, token);
+      await deleteQuestionByID(id);
       const updatedQuestionData = questionData.filter(
         (question) => question._id !== id
       );
@@ -109,8 +107,7 @@ const MyQuestionWidget = () => {
       try {
         const updatedQuestionRes = await editQuestionById(
           selectedQuestion._id,
-          updatedData,
-          token
+          updatedData
         );
         const updatedQuestion = await updatedQuestionRes.json();
 
@@ -123,7 +120,7 @@ const MyQuestionWidget = () => {
               question._id === selectedQuestion._id ? updatedQuestion : question
             )
           );
-          setQuestionData(await getQuestionList(token));
+          setQuestionData(await getQuestionList());
         }
       } catch (err: any) {
         console.error(`Error editing question: ${err.message}`);
@@ -168,7 +165,7 @@ const MyQuestionWidget = () => {
 
   return (
     <WidgetWrapper sx={{width:"100%"}}>
-      {isAdmin && (<><Button 
+      <><Button 
         onClick={openAddQuestionPopupWindow}
         sx={{
           color: theme.palette.background.alt,
@@ -185,7 +182,7 @@ const MyQuestionWidget = () => {
         }}
         onSave={addQuestion}
         getErrorMsg={getErrorMessages}
-      /></>)}
+      /></>
       <div>
       <div className="questionTable">
         <DataGrid
@@ -194,12 +191,6 @@ const MyQuestionWidget = () => {
           getRowId={(row: any) =>  row.title + row.difficulty + row.tags}
           onCellClick={handleOnCellClick}
           initialState={{
-            columns: {
-              columnVisibilityModel: {
-                  edit: isAdmin,
-                  delete: isAdmin,
-              },
-            },
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },

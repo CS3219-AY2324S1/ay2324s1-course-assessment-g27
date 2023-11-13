@@ -17,7 +17,6 @@ const PwdForm = () => {
     const [cfmErr, setCfmErr] = useState(false);
 
     const user = useSelector((state: State) => state.user);
-    const token = useSelector((state: State) => state.token);
     const navigate = useNavigate();
     const id = user.id; 
     const [alertVisible, setAlertVisible] = useState(false);
@@ -38,12 +37,12 @@ const PwdForm = () => {
                 return false;
             }
 
-            const isMatchRes = await comparePwd(token, id, oldPwd);
+            const isMatchRes = await comparePwd(id, oldPwd);
 
             if (newPwd != cfmPwd) {
                 throw new Error("New passwords do not match");
             }
-            const changePwdRes = await changePwdById(token, id, newPwd);
+            const changePwdRes = await changePwdById(id, newPwd);
             
             if (errorVisible) {
                 setErrorVisible(false);

@@ -1,13 +1,10 @@
 import { API_URL } from "../../config";
 
-export const changePwdById = async (token: any, id: Number, password: string) => {
+export const changePwdById = async (id: Number, password: string) => {
   try {
     const response = await fetch(`${API_URL}/auth/password/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         password,
       }),

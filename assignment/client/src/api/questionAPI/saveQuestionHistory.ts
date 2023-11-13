@@ -1,13 +1,9 @@
 import { API_URL } from "../config";
 
-export async function saveQuestionHistory(qnsId: String, id: Number, token : any) {
+export async function saveQuestionHistory(qnsId: String, id: Number) {
     try {
         const response = await fetch(`${API_URL}/users/${id}`, {
             method: "POST",
-            headers: { 
-                Authorization: `Bearer ${token}`, 
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify(qnsId),
         });
         if (!response.ok) {

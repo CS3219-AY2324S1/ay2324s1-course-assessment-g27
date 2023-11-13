@@ -7,13 +7,12 @@ import { useNavigate } from "react-router-dom";
 const DeleteUserPopup = ({ closePopup }) => {
     const user = useSelector((state: State) => state.user);
     const id = user.id;
-    const token = useSelector((state: State) => state.token);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleDeleteUser = async () => {
         try {
-            const response = await deleteUserById(token, id);
+            const response = await deleteUserById(id);
             navigate('/');
             dispatch(setLogout());
         } catch (error:any) {

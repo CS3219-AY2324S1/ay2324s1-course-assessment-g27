@@ -1,13 +1,10 @@
 import { API_URL } from "../../config";
 
-export const comparePwd = async (token: any, id: Number, password: String) => {
+export const comparePwd = async (id: Number, password: String) => {
   try {
     const response = await fetch(`${API_URL}/auth/password/${id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           password,
         }),

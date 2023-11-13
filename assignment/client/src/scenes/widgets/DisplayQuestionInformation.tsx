@@ -66,14 +66,13 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
     tags: ""
   };
   const[questionData, setQuestionData] = useState<Question>(NoQuestionSelected);
-  const token = useSelector((state: State) => state.token);
   const theme: Theme = useTheme();
 
 
   useEffect(() => {
     async function getQuestionData(id: string) {
       try {
-        const question = await getQuestionById(id, token);
+        const question = await getQuestionById(id);
         setQuestionData(question);
       } catch (err: any) {
         console.error(`Error fetching question in room: ${err.message}`);

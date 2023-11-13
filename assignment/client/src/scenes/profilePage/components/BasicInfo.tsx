@@ -9,7 +9,6 @@ import "./BasicInfo.css";
 
 const BasicInfo = () => { 
     const user = useSelector((state: State) => state.user);
-    const token = useSelector((state: State) => state.token);
     const id = user.id;
     const dispatch = useDispatch(); 
     const [uname, setUname] = useState(user.username);
@@ -19,7 +18,7 @@ const BasicInfo = () => {
 
     useEffect(() => {
         async function getUser() {
-            const user = await getUserById(token, id);
+            const user = await getUserById(id);
             setUname(user[0].username);
         }
         getUser();
@@ -31,8 +30,8 @@ const BasicInfo = () => {
             if (uname.length == 0) {
                 throw new Error("Your username cannot be blank");
             }
-            const response = await editUserById(token, id, uname);
-            const updatedUser = await getUserById(token, id);
+            const response = await editUserById(id, uname);
+            const updatedUser = await getUserById(id);
             const username = updatedUser[0].username;
             const password = "";
             const isAdmin = updatedUser[0].isadmin;

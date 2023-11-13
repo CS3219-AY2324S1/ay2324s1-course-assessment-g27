@@ -133,7 +133,6 @@ const Form = () => {
       dispatch(
         setLogin({
           user: loggedIn.userWithoutPassword,
-          token: loggedIn.token,
         })
       );
       navigate("/questions");

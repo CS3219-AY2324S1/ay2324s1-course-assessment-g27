@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { Request, Response } from "express";
 import { pool } from "./dbConnection";
@@ -53,13 +52,11 @@ export const login = async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(password, result.password);
     if (!isMatch) return res.status(400).json("Invalid username or password. ");
 
-    const token = jwt.sign({ id: result.id, isAdmin: result.isadmin}, process.env.JWT_SECRET!);
-
     const id = result.id;
     const uname = result.username;
     const isAdmin = result.isadmin;
     const userWithoutPassword = new User(id, uname, '', isAdmin)
-    res.status(200).json({ token, userWithoutPassword});
+    res.status(200).json({ userWithoutPassword});
   } catch (err: any) {
     console.error("login has error");
     res.status(500).json({ error: err.message });
