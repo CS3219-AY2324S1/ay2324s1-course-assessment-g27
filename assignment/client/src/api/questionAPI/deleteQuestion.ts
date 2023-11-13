@@ -4,6 +4,7 @@ export const deleteQuestionByID = async (questionId:any) => {
     try {
       const response = await fetch(`${API_URL}/questions/${questionId}`, {
         method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
     
       });
   

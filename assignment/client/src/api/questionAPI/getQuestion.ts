@@ -2,7 +2,8 @@ import { API_URL } from "../config";
 
 export async function getQuestionList() {
     const response = await fetch(`${API_URL}/questions`, {
-        method: "GET",  
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
     });
     return response.json();
 }
