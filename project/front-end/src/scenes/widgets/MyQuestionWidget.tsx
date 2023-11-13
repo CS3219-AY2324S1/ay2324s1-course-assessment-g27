@@ -132,17 +132,17 @@ const MyQuestionWidget = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'title', headerName: 'Title', hideable:false, width: 250,
+    { field: 'title', headerName: 'Title', hideable:false, width: 450,
         renderCell:(params) => {
           return(
             <Tooltip title="Click to see more information" placement="bottom">
-              <Button sx={{textTransform: 'none'}}>{params.row.title}</Button>
+              <Button sx={{display: "flex", textTransform: 'none'}}>{params.row.title}</Button>
           </Tooltip>
           );
         } 
     },
     { field: 'difficulty', headerName: 'Difficulty', hideable:false, width: 120 },
-    { field: 'tags', headerName: 'Tags', hideable:false, width: 120 },
+    { field: 'tags', headerName: 'Tags', hideable:false, width: 200 },
     { field:'edit', headerName: '', sortable:false,hideable:false, disableColumnMenu:true, width:70, renderCell:(params) => {
       return(
         <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(params.row)}>
