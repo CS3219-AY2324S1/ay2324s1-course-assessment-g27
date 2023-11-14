@@ -17,11 +17,12 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Chip,
 } from "@mui/material";
-import { Theme } from "@mui/system";
+import { Stack, Theme } from "@mui/system";
 import { PieChart } from "@mui/x-charts/PieChart";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridCellParams, GridColDef, GridFilterItem, getGridSingleSelectOperators } from "@mui/x-data-grid";
 import Tooltip from "@mui/material/Tooltip";
 
 const convertDateTime = (date: string, time: string) => {
@@ -59,6 +60,10 @@ const QnsHistPage = () => {
   const [questionHistory, setQuestionHistory] = useState<QuestionHistory[]>([]);
   const [openDescriptionPopup, setOpenDescriptionPopup] = useState(false);
   const [openAttemptPopup, setOpenAttemptPopup] = useState(false);
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [difficulties, setDifficulties] = useState<string[]>([]);
+
 
   //for empty selected question state
   const NoQuestionSelected: QuestionHistory = {
@@ -102,6 +107,12 @@ const QnsHistPage = () => {
         (i, j) => i.date.getTime() - j.date.getTime()
       );
       setQuestionHistory(updatedQuestionHistory);
+      const diff1: string[] = updatedQuestionHistory.map((question: QuestionHistory) => question.difficulty);
+      const diff: string[] = [...new Set(diff1)];
+      setDifficulties(diff);
+      const tagArray: string[][] = updatedQuestionHistory.map((question: QuestionHistory) => question.tags.split(', '));
+      const tag: string[] = [...new Set(tagArray.flat())];
+      setTags(tag);
     }
     getQuestionHistory();
   }, []);
@@ -116,6 +127,24 @@ const QnsHistPage = () => {
     setSelectedQuestion(question);
     setOpenAttemptPopup(true);
   };
+
+  //credits to https://stackoverflow.com/questions/73942398/how-to-enable-filtering-and-sorting-for-a-multi-value-array-column-using-muis-d
+  const tagsFilterOperators = getGridSingleSelectOperators()
+  .filter((operator) => operator.value === "isAnyOf")
+  .map((operator) => {
+    const newOperator = { ...operator }
+    const newGetApplyFilterFn = (filterItem: GridFilterItem, column: GridColDef) => {
+      return (params: GridCellParams): boolean => {
+        let isOk = true
+        filterItem?.value?.forEach((fv: any) => {
+          isOk = isOk && params.value.includes(fv)
+        })
+        return isOk
+      }
+    }
+    newOperator.getApplyFilterFn = newGetApplyFilterFn
+    return newOperator
+  });
 
   const columns: GridColDef[] = [
     {
@@ -136,20 +165,31 @@ const QnsHistPage = () => {
       headerName: "Difficulty",
       hideable: false,
       width: 120,
+      type:"singleSelect", 
+      valueOptions: difficulties
     },
-    { field: "tags", headerName: "Tags", hideable: false, width: 120 },
+    { 
+      field: "tags", 
+      headerName: "Tags", 
+      hideable: false, 
+      width: 120, 
+      type:"singleSelect", 
+      valueOptions: tags,
+      renderCell: (params) => (
+        <Stack direction="row" spacing={0.25}>
+          {params.row.tags.split(', ').map((tag: string) => (
+            <Chip label={tag} />
+          ))}
+        </Stack>
+      ),
+      filterOperators: tagsFilterOperators
+    },
     {
       field: "date",
       headerName: "Past Attempts",
       hideable: false,
       width: 200,
-      // valueFormatter: (params) => {
-      //   return new Date(params.value).toLocaleDateString("en-GB", {
-      //     year: "numeric",
-      //     month: "long",
-      //     day: "numeric",
-      //   });
-      // },
+      filterable: false,
       renderCell: (params) => {
         return (
           <Tooltip title="Click to see your attempt" placement="bottom">
@@ -171,8 +211,9 @@ const QnsHistPage = () => {
       headerName: "Completed?",
       sortable: false,
       hideable: false,
-      disableColumnMenu: true,
       width: 100,
+      type: 'boolean',
+      disableColumnMenu: true,
       renderCell: (params) => {
         return params.row.isCompleted ? (
           <CheckCircleOutlineIcon />
@@ -274,7 +315,7 @@ const QnsHistPage = () => {
         <WidgetWrapper sx={{ width: "100%" }}>
           <div>
             <div className="questionTable">
-              <DataGrid
+              <DataGrid disableColumnSelector
                 rows={questionHistory}
                 columns={columns}
                 getRowId={(row: any) =>
