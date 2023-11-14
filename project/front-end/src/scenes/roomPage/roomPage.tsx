@@ -172,13 +172,13 @@ const RoomPage = () => {
     try {
       setShowExecutionDialog(true);
       setOutput({ cpuTime: "", output: "Executing..." });
-      console.log(
-        "getting response from codeExec...",
-        roomDetails.language == "javascript" ? "nodejs" : roomDetails.language,
-        attempt
-      );
+      console.log("getting response from codeExec...");
       const response = await codeExec(
-        roomDetails.language == "javascript" ? "nodejs" : roomDetails.language,
+        roomDetails.language == "javascript"
+          ? "nodejs"
+          : roomDetails.language == "python"
+          ? "python3"
+          : "java",
         attempt,
         token
       );
