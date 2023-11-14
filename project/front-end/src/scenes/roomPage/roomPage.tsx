@@ -19,7 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AssistantIcon from "@mui/icons-material/Assistant";
 import Chat from "./Chat";
 import { codeExec } from "../../api/codeAPI";
-import ExecutionDialog from "../widgets/ExecutionDialog";
+import ExecutionResultDiv from "../widgets/ExecutionResultDiv";
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -41,7 +41,6 @@ const RoomPage = () => {
   };
 
   const [output, setOutput] = useState(initOutput);
-  const [showExecutionDialog, setShowExecutionDialog] = useState(false);
 
   const handleMouseOver = () => {
     setShowChatText(true);
@@ -170,7 +169,6 @@ const RoomPage = () => {
 
   const handleExecCode = async () => {
     try {
-      setShowExecutionDialog(true);
       setOutput({ cpuTime: "", output: "Executing..." });
       console.log("getting response from codeExec...");
       const response = await codeExec(
@@ -182,8 +180,6 @@ const RoomPage = () => {
         attempt,
         token
       );
-
-      // setShowExecutionDialog(false);
       setOutput(initOutput);
 
       if (response.status === 200) {
@@ -198,7 +194,6 @@ const RoomPage = () => {
     } catch (err) {
       console.error("Error executing code:", err);
       setOutput(initOutput);
-      setShowExecutionDialog(false);
       return;
     }
   };
@@ -210,9 +205,9 @@ const RoomPage = () => {
         {" "}
         Close Room{" "}
       </button>
-      <button className="deleteRoom-button" onClick={() => handleExecCode()}>
+      <button className="executeCode-button" onClick={() => handleExecCode()}>
         {" "}
-        Execute Code{" "}
+        Run Code{" "}
       </button>
 
       <div
@@ -247,6 +242,7 @@ const RoomPage = () => {
             saveAttempt={handleAttempt}
             selectedLanguage={roomDetails.language}
           />
+          <ExecutionResultDiv output={output} />
         </div>
         <div className="chat-container">
           <Chat socket={roomSocket} roomid={roomid} />{" "}
@@ -271,11 +267,11 @@ const RoomPage = () => {
         onConfirm={confirmComplete}
       />
 
-      <ExecutionDialog
+      {/* <ExecutionDialog
         open={showExecutionDialog}
         onClose={() => setShowExecutionDialog(false)}
         output={output}
-      />
+      /> */}
 
       <Fab
         id="ChatBotButton"

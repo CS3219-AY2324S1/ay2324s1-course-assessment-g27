@@ -1,9 +1,9 @@
-import { Dialog, DialogTitle, DialogContent, Typography} from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Dialog, DialogTitle, DialogContent, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { Question } from "../../state/question";
 import { Room } from "../../state/room";
-import DOMPurify from 'dompurify';
-import { useState, useEffect} from "react";
+import DOMPurify from "dompurify";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { getQuestionById } from "../../api/questionAPI/getQuestion";
@@ -17,7 +17,7 @@ interface DisplayDescriptionPopupProps {
   question: Question;
 }
 
-interface DisplayDescriptionInRoomPopupProps  {
+interface DisplayDescriptionInRoomPopupProps {
   roomDetails: Room;
 }
 
@@ -28,41 +28,59 @@ interface DisplayAttemptPopupProps {
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }));
 
-export const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({open, onClose, question}) => {
+export const DisplayDescription: React.FC<DisplayDescriptionPopupProps> = ({
+  open,
+  onClose,
+  question,
+}) => {
   return (
     <BootstrapDialog
-        onClose={onClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-        fullWidth
+      onClose={onClose}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+      fullWidth
     >
-      <DialogTitle id="customized-dialog-title" color="primary" fontWeight="bold" fontSize="clamp(1rem, 1rem, 2rem)">
-          {question.title} Additional Information
+      <DialogTitle
+        id="customized-dialog-title"
+        color="primary"
+        fontWeight="bold"
+        fontSize="clamp(1rem, 1rem, 2rem)"
+      >
+        {question.title} Additional Information
       </DialogTitle>
       <DialogContent dividers>
-        <Typography><b>Description:</b></Typography>
-        <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(question.description)}}></Typography>
+        <Typography>
+          <b>Description:</b>
+        </Typography>
+        <Typography
+          gutterBottom
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(question.description),
+          }}
+        ></Typography>
       </DialogContent>
+      <DialogContent>{displayExamples(question)}</DialogContent>
       <DialogContent>
-        {displayExamples(question)}
-      </DialogContent>
-      <DialogContent>
-      <Typography><b>Constraints:</b></Typography>
+        <Typography>
+          <b>Constraints:</b>
+        </Typography>
         {displayConstraints(question)}
       </DialogContent>
     </BootstrapDialog>
   );
 };
 
-export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupProps> = ({roomDetails}) => {
+export const DisplayDescriptionInRoom: React.FC<
+  DisplayDescriptionInRoomPopupProps
+> = ({ roomDetails }) => {
   const NoQuestionSelected: Question = {
     _id: "",
     title: "",
@@ -70,12 +88,12 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
     description: "",
     examples: [],
     constraints: [],
-    tags: ""
+    tags: "",
   };
-  const[questionData, setQuestionData] = useState<Question>(NoQuestionSelected);
+  const [questionData, setQuestionData] =
+    useState<Question>(NoQuestionSelected);
   const token = useSelector((state: State) => state.token);
   const theme: Theme = useTheme();
-
 
   useEffect(() => {
     async function getQuestionData(id: string) {
@@ -90,97 +108,168 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
     getQuestionData(roomDetails.question_id);
   }, []);
 
-  const difficultiesColors:{[key: string]: string} = {
-    Easy: '#186F65',
-    Medium: '#FFC436',
-    Hard: '#D80032',
-  }
+  const difficultiesColors: { [key: string]: string } = {
+    Easy: "#186F65",
+    Medium: "#FFC436",
+    Hard: "#D80032",
+  };
 
   return (
-    <div className="questions-panel" 
-    style={{height:"77%", 
-    boxShadow:"0px 0px 5px "+ theme.palette.primary.dark}}>
-      <h2 style={{color: theme.palette.primary.main}}>{questionData.title}</h2>
-      <Typography style={{color: difficultiesColors[questionData.difficulty]}}>{questionData.difficulty}</Typography>
-      <Typography style={{color: theme.palette.primary.main}}><b>Description:</b></Typography>
-      <Typography style={{color: theme.palette.primary.main}} gutterBottom dangerouslySetInnerHTML=
-      {{__html: DOMPurify.sanitize(questionData.description)}}></Typography>
-      
-      <div className='pre-background' style={{color: theme.palette.primary.main, backgroundColor: theme.palette.primary.darker}}>
+    <div
+      className="questions-panel"
+      style={{
+        height: "80%",
+        boxShadow: "0px 0px 5px " + theme.palette.primary.dark,
+      }}
+    >
+      <h2 style={{ color: theme.palette.primary.main }}>
+        {questionData.title}
+      </h2>
+      <Typography
+        style={{ color: difficultiesColors[questionData.difficulty] }}
+      >
+        {questionData.difficulty}
+      </Typography>
+      <Typography style={{ color: theme.palette.primary.main }}>
+        <b>Description:</b>
+      </Typography>
+      <Typography
+        style={{ color: theme.palette.primary.main }}
+        gutterBottom
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(questionData.description),
+        }}
+      ></Typography>
+
+      <div
+        className="pre-background"
+        style={{
+          color: theme.palette.primary.main,
+          backgroundColor: theme.palette.primary.darker,
+        }}
+      >
         {displayExamples(questionData)}
       </div>
-      <div className='pre-background' style={{color: theme.palette.primary.main, backgroundColor: theme.palette.primary.darker}}>
+      <div
+        className="pre-background"
+        style={{
+          color: theme.palette.primary.main,
+          backgroundColor: theme.palette.primary.darker,
+        }}
+      >
         {displayConstraints(questionData)}
       </div>
     </div>
   );
-}
+};
 
-const displayExamples = (question:Question) => {
-  const currExamplesInfo:any[] = [];
-  for(var index in question.examples) {
-    if(question.examples[index].inputText == "" && question.examples[index].outputText == "" 
-      && question.examples[index].explanation == "" && question.examples[index].image == "") {
+const displayExamples = (question: Question) => {
+  const currExamplesInfo: any[] = [];
+  for (var index in question.examples) {
+    if (
+      question.examples[index].inputText == "" &&
+      question.examples[index].outputText == "" &&
+      question.examples[index].explanation == "" &&
+      question.examples[index].image == ""
+    ) {
       continue;
     }
     currExamplesInfo.push(question.examples[index]);
   }
 
-  if(currExamplesInfo.length == 0) {
-    return(
-    <div> <b>No Example Shown</b></div>
+  if (currExamplesInfo.length == 0) {
+    return (
+      <div>
+        {" "}
+        <b>No Example Shown</b>
+      </div>
     );
   }
-  return(
-    currExamplesInfo.map((field, index) => (
-      <div key={index}> {
+  return currExamplesInfo.map((field, index) => (
+    <div key={index}>
+      {" "}
+      {
         <div>
-          <Typography><b>Example {index + 1}:</b></Typography>
+          <Typography>
+            <b>Example {index + 1}:</b>
+          </Typography>
           <DialogContent style={{ maxWidth: "100%", maxHeight: "100%" }}>
-            {field.image && <img style={{ width: 'auto', height: 'auto' }} src={field.image} />}
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText)}}></Typography>
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Output: </b>" + field.outputText)}}></Typography>
-            <Typography gutterBottom dangerouslySetInnerHTML={{__html: DOMPurify.sanitize("<b>Explanation: </b>" + field.explanation)}}></Typography>
+            {field.image && (
+              <img
+                style={{ width: "auto", height: "auto" }}
+                src={field.image}
+              />
+            )}
+            <Typography
+              gutterBottom
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize("<b>Input: </b>" + field.inputText),
+              }}
+            ></Typography>
+            <Typography
+              gutterBottom
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  "<b>Output: </b>" + field.outputText
+                ),
+              }}
+            ></Typography>
+            <Typography
+              gutterBottom
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  "<b>Explanation: </b>" + field.explanation
+                ),
+              }}
+            ></Typography>
           </DialogContent>
         </div>
       }
-      </div>
-    ))
-  );
+    </div>
+  ));
 };
 
-const displayConstraints= (question:Question) => {
-  const currConstraintsInfo:any[] = [];
-  for(var index in question.constraints) {
-    if(question.constraints[index] != "") {
+const displayConstraints = (question: Question) => {
+  const currConstraintsInfo: any[] = [];
+  for (var index in question.constraints) {
+    if (question.constraints[index] != "") {
       currConstraintsInfo.push(question.constraints[index]);
     }
   }
-  if(currConstraintsInfo.length == 0) {
-    return( <div>No Constraints</div>);
+  if (currConstraintsInfo.length == 0) {
+    return <div>No Constraints</div>;
   }
-  return(
-    currConstraintsInfo?.map((field, index) => (
-      <div key={index}> 
-        <ul>
-          <li dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(field),}}></li>
-        </ul>
-      </div>
-    ))
-  );
+  return currConstraintsInfo?.map((field, index) => (
+    <div key={index}>
+      <ul>
+        <li
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field) }}
+        ></li>
+      </ul>
+    </div>
+  ));
 };
 
-export const DisplayAttempt: React.FC<DisplayAttemptPopupProps> = ({open, onClose, attempt}) => {
+export const DisplayAttempt: React.FC<DisplayAttemptPopupProps> = ({
+  open,
+  onClose,
+  attempt,
+}) => {
   return (
     <BootstrapDialog
-        onClose={onClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-        scroll="body"
-        fullWidth
+      onClose={onClose}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+      scroll="body"
+      fullWidth
     >
-      <DialogTitle id="customized-dialog-title" color="primary" fontWeight="bold" fontSize="clamp(1rem, 1rem, 2rem)">
-          Your Attempt
+      <DialogTitle
+        id="customized-dialog-title"
+        color="primary"
+        fontWeight="bold"
+        fontSize="clamp(1rem, 1rem, 2rem)"
+      >
+        Your Attempt
       </DialogTitle>
       <DialogContent>
         <AttemptPopup attempt={attempt}></AttemptPopup>

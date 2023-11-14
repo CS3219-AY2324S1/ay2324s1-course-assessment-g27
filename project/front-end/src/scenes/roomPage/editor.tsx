@@ -95,7 +95,7 @@ const Editor = ({
   }, [socket, roomId]);
 
   return (
-    <div className="editor" style={{ height: "100%", overflow: "scroll" }}>
+    <div className="editor" style={{ height: "85%", overflow: "scroll" }}>
       <Chip label={selectedLanguage} color="primary" variant="outlined" />
       <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
     </div>
