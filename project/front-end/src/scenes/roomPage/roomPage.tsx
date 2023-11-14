@@ -234,6 +234,7 @@ const RoomPage = () => {
             maxWidth: "50%",
             padding: "10px",
             paddingTop: "0",
+            maxHeight: "85%",
           }}
         >
           <Editor
