@@ -11,6 +11,22 @@
     cursor: pointer;
     border: none;
     transform: translate(-50%);
+    margin: 1rem;
+
+}
+
+.executeCode-button {
+  background-color: #ed2939;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  position: relative;
+  left:50%;
+  cursor: pointer;
+  border: none;
+  transform: translate(-50%);
+  margin: 1rem;
 
 }
 
