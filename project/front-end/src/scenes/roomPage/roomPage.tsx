@@ -268,12 +268,6 @@ const RoomPage = () => {
         onConfirm={confirmComplete}
       />
 
-      {/* <ExecutionDialog
-        open={showExecutionDialog}
-        onClose={() => setShowExecutionDialog(false)}
-        output={output}
-      /> */}
-
       <Fab
         id="ChatBotButton"
         size="large"

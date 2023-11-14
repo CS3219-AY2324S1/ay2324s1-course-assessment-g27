@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import {
-  getAttemptList,
-} from "../../api/usersAPI/qnsHistAPI";
+import { getAttemptList } from "../../api/usersAPI/qnsHistAPI";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { getSingleQuestion } from "../../api/questionAPI/getSingleQuestion";
-import { Question, QuestionHistory } from "../../state/question";
+import { QuestionHistory } from "../../state/question";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import NavBar from "../navBar";
 import "../widgets/MyQuestionWidget.css";
-import { DisplayDescription, DisplayAttempt } from "../widgets/DisplayQuestionInformation";
+import {
+  DisplayDescription,
+  DisplayAttempt,
+} from "../widgets/DisplayQuestionInformation";
 import {
   Box,
   Button,
@@ -71,11 +72,11 @@ const QnsHistPage = () => {
     tags: "",
     date: new Date(),
     attempt: "",
-    isCompleted: false
+    isCompleted: false,
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);
-  const [selectedAttempt, setSelectedAttempt] = useState<String>('');
+  const [selectedAttempt, setSelectedAttempt] = useState<String>("");
 
   // Get the questions from DB
   useEffect(() => {
@@ -143,24 +144,15 @@ const QnsHistPage = () => {
       headerName: "Past Attempts",
       hideable: false,
       width: 200,
-      // valueFormatter: (params) => {
-      //   return new Date(params.value).toLocaleDateString("en-GB", {
-      //     year: "numeric",
-      //     month: "long",
-      //     day: "numeric",
-      //   });
-      // },
       renderCell: (params) => {
         return (
           <Tooltip title="Click to see your attempt" placement="bottom">
             <Button sx={{ textTransform: "none" }}>
-              {
-                new Date(params.value).toLocaleDateString("en-GB", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }
+              {new Date(params.value).toLocaleDateString("en-GB", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </Button>
           </Tooltip>
         );

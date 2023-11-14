@@ -1,6 +1,6 @@
 import { USER_SERVICE_REGISTER_URL } from "../../config";
 
-export async function registerUser(username: String, password: String, confirmPassword: String) {
+export async function registerUser(username: string, password: string, confirmPassword: string) {
     try {
         if (password !== confirmPassword) {
             throw new Error("Passwords do not match!");
@@ -8,7 +8,6 @@ export async function registerUser(username: String, password: String, confirmPa
         
         const response = await fetch(`${USER_SERVICE_REGISTER_URL}`, {
             method: 'POST',
-            // body: formData,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -20,11 +19,6 @@ export async function registerUser(username: String, password: String, confirmPa
         if (!response.ok) {
             throw new Error(`${await response.json()}`)
         }
-        // if (response.ok) {
-        //     return await response.json(); 
-        // } else {
-        //     throw new Error(`${response}`);
-        // }
         return await response.json();
     } catch (err:any) {
         throw new Error(`${err.message}`);

@@ -1,21 +1,11 @@
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  // useMediaQuery,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { Theme } from "@mui/system";
-// import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index";
-// import Dropzone from "react-dropzone";
-// import FlexBetween from "../../components/FlexBetween";
 import { registerUser } from "../../api/usersAPI/registerUser";
 import { loginUser } from "../../api/usersAPI/loginUser";
 import { Alert, AlertTitle } from "@mui/material";
@@ -24,7 +14,6 @@ interface FormValues {
   username: string;
   password: string;
   confirmPassword?: string;
-  // picture?: File | null | undefined;
   [key: string]: string | undefined;
 }
 
@@ -32,7 +21,6 @@ const registerSchema = yup.object().shape({
   username: yup.string().required("required"),
   password: yup.string().required("required"),
   confirmPassword: yup.string().required("required"),
-  // picture: yup.object().required("required"),
 });
 
 const loginSchema = yup.object().shape({
@@ -44,7 +32,6 @@ const initialValuesRegister = {
   username: "",
   password: "",
   confirmPassword: "",
-  // picture: File,
 };
 
 const initialValuesLogin = {
@@ -58,7 +45,6 @@ const Form = () => {
   const theme: Theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const [alertVisible, setAlertVisible] = useState(false);
@@ -68,24 +54,11 @@ const Form = () => {
     values: FormValues,
     onSubmitProps: FormikHelpers<FormValues>
   ) => {
-    // this allows us to send form info with image
     const formData = new FormData();
     for (const key in values) {
-      // if (values[key] !== undefined && values[key] !== null) {
-      //   if (key === "picture" && values.picture instanceof File) {
-      //     // If it's the 'picture' property and it's a File, append it with its name
-      //     formData.append("picture", values.picture, values.picture.name);
-      //   } else {
-      //     // Otherwise, assume it's a string and append it as a string
       formData.append(key, values[key] as string);
-      //   }
-      // }
     }
     try {
-      // const username = formData.get("username").toString() ?? '';
-      // const password = formData.get("password").toString() ?? '';
-
-      // formData.append("picturePath", values.picture!.name);
       const savedUser = await registerUser(
         values.username,
         values.password,
@@ -115,17 +88,8 @@ const Form = () => {
     // this allows us to send form info with image
     const formData = new FormData();
     for (const key in values) {
-      // if (values[key] !== undefined && values[key] !== null) {
-      //   if (key === "picture" && values.picture instanceof File) {
-      // If it's the 'picture' property and it's a File, append it with its name
-      //   formData.append("picture", values.picture, values.picture.name);
-      // } else {
-      // Otherwise, assume it's a string and append it as a string
       formData.append(key, values[key] as string);
-      // }
     }
-    // }
-    // formData.append("picturePath", values.picture!.name);
     try {
       const loggedIn = await loginUser(values.username, values.password);
 
@@ -167,16 +131,11 @@ const Form = () => {
         handleBlur,
         handleChange,
         handleSubmit,
-        // setFieldValue,
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
           <Box pt="35px" display="grid" gap="30px" width="90%">
-            <Typography
-              fontWeight={900}
-              variant="h3"
-              // color="primary"
-            >
+            <Typography fontWeight={900} variant="h3">
               {isLogin ? "Sign in to PeerPrep" : "Register for an account"}
             </Typography>
             <TextField
@@ -253,11 +212,7 @@ const Form = () => {
             )}
           </Box>
           <>
-            <Typography
-              component="span"
-              margin="1rem 0"
-              // color={theme.palette.primary.main}
-            >
+            <Typography component="span" margin="1rem 0">
               {isLogin
                 ? "Don't have an account? "
                 : "Already have an account? "}

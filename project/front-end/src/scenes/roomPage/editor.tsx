@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
@@ -88,7 +88,6 @@ const Editor = ({
       }
     });
 
-    // setText(editorRef.current!.getValue());
     return () => {
       socket.off("code_change");
     };
