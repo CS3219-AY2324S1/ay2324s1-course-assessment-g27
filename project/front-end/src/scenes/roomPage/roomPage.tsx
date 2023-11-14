@@ -4,6 +4,7 @@ import { Box, Fab } from '@mui/material';
 import './roomPage.css'
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
 import { saveAttemptedQns, completeQns } from "../../api/usersAPI/qnsHistAPI"
+import { getRandQuestion, getQuestionById } from '../../api/questionAPI/getQuestion';
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
@@ -14,10 +15,13 @@ import Chatbot from './Chatbot';
 import Editor from './editor';
 import {roomSocket} from "../../App";
 import CompleteQnsPopup from './completeQnsPopup';
+import NextQnsPopup from './nextQnsPopup';
+import SaveQnsPopup from './saveQnsPopup';
 import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
 import CircularProgress from '@mui/material/CircularProgress';
 import AssistantIcon from '@mui/icons-material/Assistant';
 import Chat from './Chat';
+import { Question } from '../../state/question';
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -25,9 +29,13 @@ const RoomPage = () => {
   const userId = useSelector((state: State) => state.user.id);
   const token = useSelector((state: State) => state.token);
   const [roomDetails, setRoomDetails] = useState<Room>();
+  const [currQns, setCurrQns] = useState<Question>();
+  const [newQid, setNewQid] = useState("");
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+  const [showNext, setShowNext] = useState(false);
+  const [showSave, setShowSave] = useState(false);
 
   const [showChat, setShowChat] = useState(false);
   const [showChatText, setShowChatText] = useState(false);
@@ -43,7 +51,6 @@ const RoomPage = () => {
 
   const handleAttempt = (attempt: String) => {
     setAttempt(attempt);
-    console.log("handle attempt: ", attempt);
   }
 
 
@@ -59,6 +66,8 @@ const RoomPage = () => {
     try {
       const data = await getRoomDetails(roomid ,token);
       setRoomDetails(data);
+      const qns = await getQuestionById(data.question_id, token);
+      setCurrQns(qns);
       const res = await completeQns(false, data.question_id, userId, token);
     } catch (err) {
       console.log('Error fetching room details:', err);
@@ -69,6 +78,24 @@ const RoomPage = () => {
   roomSocket.on("leave_room_request", () => {
     deleteCurrentRoom();
   })
+
+  //when partner moves to the next question
+  roomSocket.on("next_qns", async (qnsId) => {
+    //update
+    try {
+      if (roomDetails == undefined) {
+        throw new Error("something went wrong");
+      }
+      setNewQid(qnsId);
+      setShowSave(true);
+      // const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: qnsId, language: roomDetails.language, users: roomDetails.users};
+      // setRoomDetails(updatedRoomDetails);
+      // const qns = await getQuestionById(qnsId, token);
+      // setCurrQns(qns);
+    } catch (err) {
+      console.log('Error getting new question:', err);
+    }
+  });
   
   const handleYesDelete = () => {
     roomSocket.emit("leaving_room", roomid);
@@ -80,7 +107,6 @@ const RoomPage = () => {
         throw new Error("There is an error exiting, please try again later");
       } else {
         await deleteRoom(roomid, token);
-        console.log("delete room attempt: ", attempt);
         setShowConfirmation(false);
         setShowComplete(true);
         roomSocket.emit("leave_room", roomid);
@@ -131,6 +157,69 @@ const RoomPage = () => {
     }
   };
 
+  const handleNextQuestion = () => {
+    setShowNext(true);
+  };
+
+  const handleCancelNextQuestion = () => {
+    setShowNext(false);
+  };
+
+  //when the user want to save an incompleted question after this partner proceed to the next question
+  const handleCancelSave = async () => {
+    setShowSave(false)
+    try {
+      if (currQns == undefined) {
+        throw new Error("something went wrong");
+      }
+      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      setRoomDetails(updatedRoomDetails);
+      const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
+      const qns = await getQuestionById(newQid, token);
+      setCurrQns(qns);
+    } catch (err) {
+      console.log("Error saving attempt: ", err);
+    }
+  };
+
+  //when user want to save a completed question after his partner proceed to the next question
+  const confirmSave = async () => {
+    setShowSave(false)
+    try {
+      if (currQns == undefined) {
+        throw new Error("something went wrong");
+      }
+      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      setRoomDetails(updatedRoomDetails);
+      const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
+      const complete = await completeQns(true, currQns._id, userId, token);
+      const qns = await getQuestionById(newQid, token);
+      setCurrQns(qns);
+    } catch (err) {
+      console.log("Error saving attempt: ", err);
+    }
+  }
+
+  //when you click on next question and confirm
+  const confirmNextQuestion = async () => {
+    setShowNext(false);
+    try {
+      if (currQns == undefined || roomDetails == undefined) {
+        throw new Error("something went wrong");
+      }
+      const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
+      const complete = await completeQns(true, roomDetails.question_id, userId, token);
+      const newQns: Question = await getRandQuestion(currQns.difficulty, token);
+      setCurrQns(newQns);
+      const newId = newQns._id;
+      roomSocket.emit("change_qns", roomid, newId);
+      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newId, language: roomDetails.language, users: roomDetails.users};
+      setRoomDetails(updatedRoomDetails);
+    } catch (err) {
+      console.log("Error getting next question: ", err);
+    } 
+  };
+
   const openChat = () => {
     setShowChat(true);
   }
@@ -147,6 +236,7 @@ const RoomPage = () => {
         <Box>
     <Navbar/>
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
+      <button className="deleteRoom-button" onClick={() => handleNextQuestion()}> Next Question </button>
 
       <div className="leetcode-layout" style={{ width:"100%", height:"90vh", display: 'flex', flexWrap: 'wrap' }}>
         { (!roomDetails) ? <div><CircularProgress /></div> :
@@ -173,6 +263,17 @@ const RoomPage = () => {
         open={showComplete}
         onClose={handleCancelComplete}
         onConfirm={confirmComplete} />
+
+      <NextQnsPopup
+        open={showNext}
+        onClose={handleCancelNextQuestion}
+        onConfirm={confirmNextQuestion}/>
+      
+      <SaveQnsPopup 
+       open={showSave}
+       onClose={handleCancelSave}
+       onConfirm={confirmSave} />
+
       <Fab id="ChatBotButton" size="large" 
       style={{position:"fixed", right:"10px", bottom:"8px"}} onClick={() => openChat()}
       onMouseOver={handleMouseOver}

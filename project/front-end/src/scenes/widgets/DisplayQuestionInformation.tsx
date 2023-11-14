@@ -90,6 +90,19 @@ export const DisplayDescriptionInRoom: React.FC<DisplayDescriptionInRoomPopupPro
     getQuestionData(roomDetails.question_id);
   }, []);
 
+  useEffect(() => {
+    async function getQuestionData(id: string) {
+      try {
+        const question = await getQuestionById(id, token);
+        setQuestionData(question);
+      } catch (err: any) {
+        console.error(`Error fetching question in room: ${err.message}`);
+      }
+    }
+    console.log("Room ID detail: " + roomDetails.question_id);
+    getQuestionData(roomDetails.question_id);
+  }, [roomDetails]);
+
   const difficultiesColors:{[key: string]: string} = {
     Easy: '#186F65',
     Medium: '#FFC436',
