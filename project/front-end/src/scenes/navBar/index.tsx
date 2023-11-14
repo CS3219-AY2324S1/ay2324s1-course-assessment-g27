@@ -65,13 +65,13 @@ const Navbar = () => {
         </Typography>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/homePage");}}>HomePage</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/homePage");}}>Home</Button>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/questions");}}>QuestionPage</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/questions");}}>Questions</Button>
         <Button 
           sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/history");}}>History</Button>
+          onClick={() => {roomSocket.emit("roommate_navigate"); navigate("/history");}}>Learning Progress</Button>
       </FlexBetween>
 
       {/* DESKTOP NAV */}
