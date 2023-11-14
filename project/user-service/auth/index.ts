@@ -66,41 +66,4 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-// export const comparePwd = async (req: Request, res: Response) => {
-//   const id = parseInt(req.params.id);
-//   const { password } = req.body;
-//   console.log(password);
-//   const oldUser = await pool.query(queries.findUserById, [id]);
-//   if (oldUser.rowCount == 0) {
-//       res.status(400).json("User does not exist")
-//   }
-  
-//   const salt = await bcrypt.genSalt();
-//   const passwordHash = await bcrypt.hash(password, salt);
-
-//   const result = oldUser.rows[0];
-//   const isMatch = await bcrypt.compare(password, result.password);
-//   if (!isMatch) {
-//     res.status(400).json("Old password is incorrect");
-//     return
-//   }
-//   res.status(200).json("Passwords match");
-// };
-
-// export const updatePwd = async (req: Request, res: Response) => {
-//   const id = parseInt(req.params.id);
-//   const { password } = req.body;
-//   const oldUser = await pool.query(queries.findUserById, [id]);
-//   if (oldUser.rowCount == 0) {
-//       res.status(400).json("User does not exist")
-//   }
-  
-//   const salt = await bcrypt.genSalt();
-//   const passwordHash = await bcrypt.hash(password, salt);
-
-//   pool.query(queries.updatePwd, [passwordHash, id], (error: Error, results: QueryResult) => {
-//       if (error) throw error;
-//       res.status(200).json("updated successfully.");
-//   })
-// };
 
