@@ -1,6 +1,5 @@
 /* SQL Queries */
 const user_table = "users";
-const info_table = "user_info";
 const attempts = "attempted_qns";
 const completed = "completed_qns";
 

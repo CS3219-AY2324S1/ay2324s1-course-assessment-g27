@@ -46,6 +46,11 @@ export const initSocketMatch = async () => {
         socket.on("disconnect", () => {
             console.log(`User Disconnected`, socket.id);
         })
+
+        socket.on("change_qns", (roomId, qnsId) => {
+            console.log(`emitted to ${roomId} qid ${qnsId}`);
+            socket.to(roomId).emit("next_qns", qnsId);
+        })
     });
 }
 

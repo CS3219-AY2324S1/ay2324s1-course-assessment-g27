@@ -1,7 +1,7 @@
 /* RoomPage.css */
 
 .deleteRoom-button {
-    background-color: #3498db;
+    background-color: #ed2939;
     color: #fff;
     font-size: 18px;
     padding: 10px 10px;
@@ -11,15 +11,39 @@
     cursor: pointer;
     border: none;
     transform: translate(-50%);
+    margin: 1rem;
 
 }
 
 .deleteRoom-button:hover {
+  background-color:#BE3144;
+  box-shadow: 5px 5px 0px #872341;
+}
+
+.deleteRoom-button:active {
+  background-color:#F05941;
+}
+
+.executeCode-button {
+  background-color: #3498db;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  position: relative;
+  left:50%;
+  cursor: pointer;
+  border: none;
+  transform: translate(-50%);
+  margin: 1rem;
+}
+
+.executeCode-button:hover {
   background-color:#256c9b;
   box-shadow: 5px 5px 0px #1a4d6f;
 }
 
-.deleteRoom-button:active {
+.executeCode-button:active {
   background-color:#4eb8ff;
 }
 
