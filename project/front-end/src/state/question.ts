@@ -17,6 +17,7 @@ export interface QuestionHistory {
   examples: Example[],
   constraints: string[],
   date: Date, // date attempted/completed
+  attempt: String,
   isCompleted: boolean,
 }
 

@@ -1,6 +1,6 @@
 
 .chat-container {
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: auto;
     border: 1px solid #bfbfbf;
     padding: 10px;
@@ -41,6 +41,8 @@
     margin-top: 5px;
     float: right;
     flex: 1;
+    position: static;
+    bottom:0;
     
 }
 

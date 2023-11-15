@@ -1,7 +1,5 @@
 import {Button, Dialog, DialogTitle, DialogContent,FormControl,InputLabel, MenuItem, Select, TextField, useTheme} from "@mui/material";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { State, setQuestions } from "../../state";
+import { useState } from "react";
 import { Question } from "../../state/question";
 import { Theme } from "@mui/system";
 import ExampleFields from "./QuestionFields/ExampleFields";

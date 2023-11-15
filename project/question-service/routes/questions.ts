@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, likeQuestion, updateQuestion } from "../controllers/questions";
+import { getAllQuestions, createQuestion, deleteQuestion, getSingleQuestion, updateQuestion } from "../controllers/questions";
 import { verifyToken, verifyIsAdmin } from "../middleware/auth";
 
 const router = express.Router();

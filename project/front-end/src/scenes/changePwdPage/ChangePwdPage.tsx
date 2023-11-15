@@ -5,7 +5,7 @@ import "./ChangePwdPage.css";
 const changePwdPage = () => {
   return (
     <div>
-      <Navbar />
+      <Navbar inRoomStatus={false} />
       <div className="changepwdpage">
         <div className="form">
           <PwdForm />

@@ -1,12 +1,12 @@
 import { EditOutlined, DeleteOutlined } from "@mui/icons-material";
-import { useTheme, Button } from "@mui/material";
+import { useTheme, Button, Chip } from "@mui/material";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import "./MyQuestionWidget.css";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { Question } from "../../state/question";
-import { Theme } from "@mui/system";
+import { Stack, Theme } from "@mui/system";
 import { createQuestion } from "../../api/questionAPI/createQuestion";
 import { getQuestionList } from "../../api/questionAPI/getQuestion";
 import { deleteQuestionByID } from "../../api/questionAPI/deleteQuestion";
@@ -14,24 +14,23 @@ import { editQuestionById } from "../../api/questionAPI/editQuestion";
 import {DisplayDescription} from "./DisplayQuestionInformation"
 import EditQuestionPopup from "./editQuestionPopup";
 import AddQuestionFormPopup from "./AddQuestionForm";
-import { DataGrid, GridColDef} from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef, GridFilterItem, getGridSingleSelectOperators} from '@mui/x-data-grid';
 import Tooltip from '@mui/material/Tooltip';
 
 
 const MyQuestionWidget = () => {
-  const dispatch = useDispatch();
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
   const isAdmin = user.isAdmin;
   const token = useSelector((state: State) => state.token);
-  // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  // const mediumMain = theme.palette.neutral.mediumMain;
-  // const medium = theme.palette.neutral.medium;
 
   const[questionData, setQuestionData] = useState<Question[]>([]);
   const [openAddFormPopup, setOpenAddFormPopup] = useState(false);
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [openDescriptionPopup, setOpenDescriptionPopup] = useState(false);
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [difficulties, setDifficulties] = useState<string[]>([]);
 
   //for empty selected question state
   const NoQuestionSelected: Question = {
@@ -70,6 +69,12 @@ const MyQuestionWidget = () => {
     async function getQuestions() {
       const questionList = await getQuestionList(token);
       setQuestionData(questionList);
+      const diff1: string[] = questionList.map((question: Question) => question.difficulty);
+      const diff: string[] = [...new Set(diff1)];
+      setDifficulties(diff);
+      const tagArray: string[][] = questionList.map((question: Question) => question.tags.split(', '));
+      const tag: string[] = [...new Set(tagArray.flat())];
+      setTags(tag);
     }
     getQuestions();
   }, []);
@@ -131,18 +136,53 @@ const MyQuestionWidget = () => {
     }
   };
 
+  //credits to https://stackoverflow.com/questions/73942398/how-to-enable-filtering-and-sorting-for-a-multi-value-array-column-using-muis-d
+  const tagsFilterOperators = getGridSingleSelectOperators()
+  .filter((operator) => operator.value === "isAnyOf")
+  .map((operator) => {
+    const newOperator = { ...operator }
+    const newGetApplyFilterFn = (filterItem: GridFilterItem, column: GridColDef) => {
+      return (params: GridCellParams): boolean => {
+        let isOk = true
+        filterItem?.value?.forEach((fv: any) => {
+          isOk = isOk && params.value.includes(fv)
+        })
+        return isOk
+      }
+    }
+    newOperator.getApplyFilterFn = newGetApplyFilterFn
+    return newOperator
+  });
+
   const columns: GridColDef[] = [
-    { field: 'title', headerName: 'Title', hideable:false, width: 250,
+    { field: 'title', headerName: 'Title', hideable:false, width: 450,
         renderCell:(params) => {
           return(
             <Tooltip title="Click to see more information" placement="bottom">
-              <Button>{params.row.title}</Button>
+              <Button sx={{display: "flex", textTransform: 'none'}}>{params.row.title}</Button>
           </Tooltip>
           );
         } 
     },
-    { field: 'difficulty', headerName: 'Difficulty', hideable:false, width: 120 },
-    { field: 'tags', headerName: 'Tags', hideable:false, width: 120 },
+
+    { field: 'difficulty', headerName: 'Difficulty', hideable:false, width: 120, type:"singleSelect", valueOptions: difficulties},
+    { 
+      field: 'tags', 
+      headerName: 'Tags', 
+      hideable:false, 
+      width: 220, 
+      type:"singleSelect", 
+      valueOptions: tags,
+      renderCell: (params) => (
+        <Stack direction="row" spacing={0.25}>
+          {params.row.tags.split(', ').map((tag: string) => (
+            <Chip label={tag} />
+          ))}
+        </Stack>
+      ),
+      filterOperators: tagsFilterOperators
+    },
+    
     { field:'edit', headerName: '', sortable:false,hideable:false, disableColumnMenu:true, width:70, renderCell:(params) => {
       return(
         <Button style={{padding:"0"}} onClick={() => openEditPopupWindow(params.row)}>
@@ -163,8 +203,8 @@ const MyQuestionWidget = () => {
     if(param.field === "title") {
       openDescriptionPopupWindow(param.row);
     }
-  }
-  
+  };
+
 
   return (
     <WidgetWrapper sx={{width:"100%"}}>
@@ -188,7 +228,7 @@ const MyQuestionWidget = () => {
       /></>)}
       <div>
       <div className="questionTable">
-        <DataGrid
+        <DataGrid disableColumnSelector
           rows={questionData}
           columns={columns}
           getRowId={(row: any) =>  row.title + row.difficulty + row.tags}

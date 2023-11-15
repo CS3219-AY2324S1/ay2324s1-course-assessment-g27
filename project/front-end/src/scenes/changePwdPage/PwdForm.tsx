@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { changePwdById } from "../../api/usersAPI/Auth/changePwdById"
@@ -23,7 +23,7 @@ const PwdForm = () => {
     const [alertVisible, setAlertVisible] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
 
-    const handleSubmit = async (event) => {  
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {  
         event.preventDefault();
         try {
             if (oldPwd == '') setOldErr(true);
@@ -86,14 +86,6 @@ const PwdForm = () => {
                         error={oldErr}
                         helperText={oldErr && "required"}
                     />
-                    {/* <input 
-                    required
-                    type="text" 
-                    name="oldpwd" 
-                    id="oldpwd" 
-                    onChange={(event) => {
-                        setOldPwd(event.target.value);
-                    }}></input> */}
 
                     <TextField 
                         required
@@ -109,15 +101,7 @@ const PwdForm = () => {
                         error={newErr}
                         helperText={newErr && "required"}
                     />
-                    {/* <label htmlFor="newpwd">New Password<span>*</span></label>
-                    <input 
-                    type="text" 
-                    name="newpwd" 
-                    id="newpwd"
-                    onChange={(event) => {
-                        setNewPwd(event.target.value);
-                    }}></input> */}
-
+                
                     <TextField 
                         required
                         className="form-group"
@@ -132,16 +116,6 @@ const PwdForm = () => {
                         error={cfmErr}
                         helperText={cfmErr && "required"}
                     />
-                {/* <div className="form-group">
-                    <label htmlFor="cfmpwd">Confirm New Password<span>*</span></label>
-                    <input 
-                    type="text" 
-                    name="cfmpwd" 
-                    id="cfmpwd"
-                    onChange={(event) => {
-                        setCfmPwd(event.target.value);
-                    }}></input>
-                </div> */}
                 {alertVisible && 
                 <Alert 
                     severity="success"

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { QueryResult } from "pg";
 import { pool } from "../db";
 import * as queries from "../db/dbQueries";
+import bcrypt from "bcrypt";
 
 export const findUserByUname = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -96,53 +97,42 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-//adds a question that user attempted as a quesiton ID into the sql DB
-export const addAttemptedQns = async (req: Request, res: Response) => {
+export const comparePwd = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    try {
-        const { qid } = req.body; 
-        const response = await pool.query(queries.addAttempt, [id, qid]);
-        console.log(`added attempt`, qid);
-        res.status(201).json(`added attempt ${qid}`);
-        return;
-    } catch (err:any) {
-        throw err;
+    const { password } = req.body;
+    console.log(password);
+    const oldUser = await pool.query(queries.findUserById, [id]);
+    if (oldUser.rowCount == 0) {
+        res.status(400).json("User does not exist")
     }
-};
-
-export const addCompletedQns = async (req: Request, res: Response) => {
+    
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+  
+    const result = oldUser.rows[0];
+    const isMatch = await bcrypt.compare(password, result.password);
+    if (!isMatch) {
+      res.status(400).json("Old password is incorrect");
+      return
+    }
+    res.status(200).json("Passwords match");
+  };
+  
+  export const updatePwd = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    try {
-        const { qid } = req.body; 
-        const response = await pool.query(queries.addCompleted, [id, qid]);
-        console.log(`added completed ${qid}`);
-        res.status(201).json(`added completed ${qid}`);
-        return;
-    } catch (err:any) {
-        throw err;
+    const { password } = req.body;
+    const oldUser = await pool.query(queries.findUserById, [id]);
+    if (oldUser.rowCount == 0) {
+        res.status(400).json("User does not exist")
     }
-};
-
-export const getAttemptList = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    try {
-        const results = await pool.query(queries.getAttempts, [id]);
-        res.status(200).json(results.rows);
-        return;
-    } catch (err:any) {
-        throw err;
-    }
-};
-
-export const getCompletedList = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    try {
-        const results = await pool.query(queries.getCompleted, [id]);
-        res.status(200).json(results.rows);
-        return;
-    } catch (err:any) {
-        throw err;
-    }
-};
+    
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+  
+    pool.query(queries.updatePwd, [passwordHash, id], (error: Error, results: QueryResult) => {
+        if (error) throw error;
+        res.status(200).json("updated successfully.");
+    })
+  };
 
 

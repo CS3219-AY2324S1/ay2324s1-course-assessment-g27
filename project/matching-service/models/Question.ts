@@ -26,15 +26,6 @@ const questionSchema = new mongoose.Schema(
     tags: {
       type: String,
     },
-    // picturePath: String,
-    // likes: {
-    //   type: Number,
-    //   default: 0
-    // },
-    // dislikes: {
-    //   type: Number,
-    //   default: 0
-    // },
   }, 
   { timestamps: true}
 );

@@ -1,6 +1,5 @@
 /* SQL Queries */
 const user_table = "users";
-const info_table = "user_info";
 const attempts = "attempted_qns";
 const completed = "completed_qns";
 
@@ -42,20 +41,13 @@ export const deleteUser = "DELETE FROM users WHERE id = $1";
 //export const findAttempt = "SELECT * FROM attempted_qns WHERE id = $1 and qid = $2";
 export const addAttempt = 
 `
-INSERT INTO attempted_qns (id, qid, attempted_date) 
-VALUES ($1, $2, NOW())
-ON CONFLICT ON CONSTRAINT attempted_qns_pkey
-DO UPDATE SET attempted_date = NOW()
+INSERT INTO attempted_qns (id, qid, attempted_date, attempt) 
+VALUES ($1, $2, NOW(), $3)
+
 `;
 //export const findCompleted = "SELECT * FROM completed_qns WHERE id = $1 and qid = $2";
-export const addCompleted = 
-`
-INSERT INTO completed_qns (id, qid, completed_date) 
-VALUES ($1, $2, NOW())
-ON CONFLICT ON CONSTRAINT completed_qns_pkey
-DO UPDATE SET completed_date = NOW()
-`;
-export const getAttempts = "SELECT id, qid, TO_CHAR(attempted_date::date, 'dd-mm-yyyy') as date, attempted_date::time(0) as time FROM attempted_qns WHERE id = $1";
-export const getCompleted = "SELECT id, qid, TO_CHAR(completed_date::date, 'dd-mm-yyyy') as date, completed_date::time(0) as time FROM completed_qns WHERE id = $1";
-// export const getAttempts = "SELECT * FROM attempted_qns WHERE id = $1";
-// export const getCompleted = "SELECT * FROM completed_qns WHERE id = $1";
+
+
+export const completedAttempt = `UPDATE attempted_qns SET isCompleted = $1 WHERE qid = $2 and id = $3`;
+
+export const getAttempts = "SELECT id, qid, TO_CHAR(attempted_date::date, 'dd-mm-yyyy') as date, attempted_date::time(0) as time, attempt, isCompleted FROM attempted_qns WHERE id = $1";

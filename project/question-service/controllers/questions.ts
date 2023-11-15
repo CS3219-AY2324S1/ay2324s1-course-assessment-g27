@@ -5,7 +5,9 @@ import Question from "../models/Question";
 export const createQuestion = async (req: Request, res: Response) => {
   try {  
     const { title, difficulty, description, examples, constraints, tags, picturePath } = req.body;
-    const titleTaken = await Question.findOne({ title });
+    const titleTaken = await Question.findOne({ "title": { 
+      "$regex": "^" + title + "\\b", "$options": "i"
+    }});
     if (titleTaken) {
       return res.status(400).json({ message: "Title is already in use! Please enter new title" });
     }
@@ -17,7 +19,6 @@ export const createQuestion = async (req: Request, res: Response) => {
       examples: examples,
       constraints: constraints,
       tags: tags,
-      // picturePath: picturePath,
     });
 
     await newQuestion.save();
@@ -78,7 +79,9 @@ export const updateQuestion = async (req: Request, res: Response) => {
     const questionId = req.params.id;
     const {title, difficulty, description, examples, constraints, tags} = req.body;
     const oldData = await Question.findById(questionId);
-    const titleTaken = await Question.findOne({ title });
+    const titleTaken = await Question.findOne({ "title": { 
+      "$regex": "^" + title + "\\b", "$options": "i"
+    }})
     if (titleTaken && oldData?.title != title) {
       return res.status(400).json({ message: "Title is already in use! Please enter new title" });
     }
@@ -94,16 +97,3 @@ export const updateQuestion = async (req: Request, res: Response) => {
   }
 }
 
-/* UPDATE */
-/**
- * TODO: Update number of likes.
- */
-export const likeQuestion = async (req: Request, res: Response) => {
-  try {
-    // const { username } = req.params;
-    // const questions = await Question.find({ username });
-    // res.status(200).json(questions);
-  } catch (err) {
-    // res.status(404).json({ message: err.message });
-  }
-}
