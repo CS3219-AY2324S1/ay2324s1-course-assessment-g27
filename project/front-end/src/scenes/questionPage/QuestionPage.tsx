@@ -6,7 +6,7 @@ const QuestionPage = () => {
 
   return (
     <Box>
-      <Navbar />
+      <Navbar inRoomStatus={false}/>
       <Box
         width="100%"
         padding="2rem 6%"

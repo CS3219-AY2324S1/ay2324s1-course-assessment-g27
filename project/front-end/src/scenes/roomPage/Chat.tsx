@@ -48,7 +48,7 @@ const Chat: React.FC<ChatProps> = ({ socket, roomid }) => {
 
   return (
     <div className="chat-container" ref={chatContainerRef}>
-        <div>
+      <div>
       <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`chat-message ${msg.isSent ? 'sent' : 'received'}` }>

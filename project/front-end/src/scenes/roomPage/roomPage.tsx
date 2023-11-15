@@ -190,7 +190,7 @@ const RoomPage = () => {
       if (currQns == undefined) {
         throw new Error("something went wrong");
       }
-      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      const updatedRoomDetails: Room = {_id: roomDetails!._id, question_id: newQid, language: roomDetails!.language, users: roomDetails!.users};
       setRoomDetails(updatedRoomDetails);
       const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
       const qns = await getQuestionById(newQid, token);
@@ -207,7 +207,7 @@ const RoomPage = () => {
       if (currQns == undefined) {
         throw new Error("something went wrong");
       }
-      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      const updatedRoomDetails: Room = {_id: roomDetails!._id, question_id: newQid, language: roomDetails!.language, users: roomDetails!.users};
       setRoomDetails(updatedRoomDetails);
       const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
       const complete = await completeQns(true, currQns._id, userId, token);
@@ -240,10 +240,12 @@ const RoomPage = () => {
 
   const openChat = () => {
     setShowChat(true);
-  };
+    document.body.classList.add('chatbot-open');
+  }
   const closeChat = () => {
     setShowChat(false);
-  };
+    document.body.classList.remove('chatbot-open');
+  }
   if (!roomid) {
     // Handle the case when roomid is undefined
     return <div>No room id provided</div>;
@@ -283,59 +285,20 @@ const RoomPage = () => {
   };
 
   return (
-    <Box>
-      <Navbar />
-      <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}>
-        {" "}
-        Close Room{" "}
-      </button>
-      <button className="executeCode-button" onClick={() => handleExecCode()}>
-        {" "}
-        Run Code{" "}
-      </button>
-      <button className="executeCode-button" onClick={() => handleNextQuestion()}> 
-        {" "}
-        Next Question{" "} 
-      </button>
+        <Box>
+    <Navbar inRoomStatus={true}/>
+      <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}> Close Room </button>
 
-      <div
-        className="leetcode-layout"
-        style={{
-          width: "100%",
-          height: "90vh",
-          display: "flex",
-          flexWrap: "wrap",
-        }}
-      >
-        {!roomDetails ? (
-          <div>
-            <CircularProgress />
-          </div>
-        ) : (
-          <DisplayDescriptionInRoom roomDetails={roomDetails} />
-        )}
-        <div
-          id="codeEditor"
-          style={{
-            flex: "1",
-            minWidth: "50%",
-            maxWidth: "50%",
-            padding: "10px",
-            paddingTop: "0",
-            maxHeight: "85%",
-          }}
-        >
-          <Editor
-            socket={roomSocket}
-            roomId={roomid}
-            saveAttempt={handleAttempt}
-            selectedLanguage={roomDetails.language}
-          />
-          <ExecutionResultDiv output={output} />
-        </div>
-        <div className="chat-container">
-          <Chat socket={roomSocket} roomid={roomid} />{" "}
-        </div>
+      <div className="leetcode-layout" style={{ width:"100%", height:"90vh", display: 'flex', flexWrap: 'wrap' }}>
+        { (!roomDetails) ? <div><CircularProgress /></div> :
+        <DisplayDescriptionInRoom 
+          roomDetails = {roomDetails}/>
+        }
+        <div id='codeEditor' style={{flex: '1', minWidth: '50%', maxWidth: '50%', padding:"10px", paddingTop:"0"}}>
+          <Editor socket={roomSocket} roomId={roomid} saveAttempt={handleAttempt} selectedLanguage={roomDetails.language}/>
+        </div> 
+
+        <div className='chat-container'><Chat socket={roomSocket} roomid={roomid} /> </div>
       </div>
       {showChatText && (
         <div className="chat-text" placeholder="CHAT">

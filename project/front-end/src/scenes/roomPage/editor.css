@@ -1,8 +1,8 @@
 /* .editor {
     display: flex;
     overflow-y: scroll;
-  } */
-  
+  }
+   */
   .dropDownMenu {
     color-scheme:inherit;
     /* margin-bottom: 10px; */
@@ -32,4 +32,8 @@
       background-color: #f0f0f0; /* Change the background color on hover */
       cursor: pointer; /* Change cursor on hover (optional) */
     }
+  }
+
+  .realtimeEditor {
+    overflow-y: scroll;
   }
