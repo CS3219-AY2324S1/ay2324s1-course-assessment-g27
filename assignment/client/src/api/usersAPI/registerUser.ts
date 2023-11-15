@@ -20,11 +20,6 @@ export async function registerUser(username: String, password: String, confirmPa
         if (!response.ok) {
             throw new Error(`${await response.json()}`)
         }
-        // if (response.ok) {
-        //     return await response.json(); 
-        // } else {
-        //     throw new Error(`${response}`);
-        // }
         return await response.json();
     } catch (err:any) {
         throw new Error(`${err.message}`);

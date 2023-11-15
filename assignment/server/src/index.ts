@@ -15,12 +15,6 @@ import questionRoutes from "./routes/questions";
 import http from "http";
 import { Server } from "socket.io";
 
-//for seeding the sql databases
-//import { seedDb } from "./dbSeed";
-
-/* CONFIGURATIONS */
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
 require("dotenv").config('./.env');
 const app = express();
 app.use(express.json()); 
@@ -52,9 +46,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* ROUTES WITH FILES */
-// app.post("/auth/register", upload.single("picture"), register);
-// app.post("/questions", verifyToken, upload.single("picture"), createQuestion);
 
 /* ROUTES */
 app.use("/auth", authRoutes);
@@ -68,11 +59,8 @@ mongoose
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-    /* ADD DATA ONE TIME */
-    // User.insertMany(users);
-    // Question.insertMany(questions);
   })
   .catch((error) => console.log(`${error} did not connect`));
 
-//const db = seedDb();
+
 
