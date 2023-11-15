@@ -1,7 +1,5 @@
 /* SQL Queries */
 const user_table = "users";
-const attempts = "attempted_qns";
-const completed = "completed_qns";
 
 /**
  * Check if a new user already exists
@@ -34,17 +32,3 @@ export const updateAdminStatus = "UPDATE users SET isAdmin = $1 WHERE id = $2";
  * deletes it from the db
  */
 export const deleteUser = "DELETE FROM users WHERE id = $1";
-
-/**
- * Adds the id of the question from mongodb
- */
-//export const findAttempt = "SELECT * FROM attempted_qns WHERE id = $1 and qid = $2";
-export const addAttempt = 
-`
-INSERT INTO attempted_qns (id, qid, attempted_date, attempt) 
-VALUES ($1, $2, NOW(), $3)
-`;
-
-export const completedAttempt = `UPDATE attempted_qns SET isCompleted = $1 WHERE qid = $2 and id = $3`;
-
-export const getAttempts = "SELECT id, qid, TO_CHAR(attempted_date::date, 'dd-mm-yyyy') as date, attempted_date::time(0) as time, attempt, isCompleted FROM attempted_qns WHERE id = $1";
