@@ -12,9 +12,6 @@ export const register = async (req: Request, res: Response) => {
     const {
       username,
       password, 
-      // isAdmin,
-      // picturePath,
-      // questions,
     } = req.body;
     
     const salt = await bcrypt.genSalt();

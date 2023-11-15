@@ -7,15 +7,7 @@ export const db =
     isAdmin BOOLEAN DEFAULT false, 
     PRIMARY KEY(id)
 );
-
-CREATE TABLE IF NOT EXISTS attempted_qns (
-    id INT,
-    qid TEXT NOT NULL,
-    attempted_date TIMESTAMP NOT NULL,
-    attempt TEXT,
-    isCompleted BOOLEAN DEFAULT false,
-    FOREIGN KEY(id) REFERENCES users(id)
-);`;
+`;
 
 /**
  * Connection to your psql database 
