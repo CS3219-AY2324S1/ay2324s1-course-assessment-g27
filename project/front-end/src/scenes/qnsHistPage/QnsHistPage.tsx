@@ -5,7 +5,7 @@ import {
 import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { getSingleQuestion } from "../../api/questionAPI/getSingleQuestion";
-import { Question, QuestionHistory } from "../../state/question";
+import { QuestionHistory } from "../../state/question";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import NavBar from "../navBar";
@@ -80,7 +80,6 @@ const QnsHistPage = () => {
   };
 
   const [selectedQuestion, setSelectedQuestion] = useState(NoQuestionSelected);
-  const [selectedAttempt, setSelectedAttempt] = useState<String>('');
 
   // Get the questions from DB
   useEffect(() => {
@@ -151,7 +150,7 @@ const QnsHistPage = () => {
       field: "title",
       headerName: "Title",
       hideable: false,
-      width: 250,
+      width: 300,
       renderCell: (params) => {
         return (
           <Tooltip title="Click to see more information" placement="bottom">
@@ -237,7 +236,7 @@ const QnsHistPage = () => {
   if (questionHistory.length == 0) {
     return (
       <>
-        <NavBar />
+        <NavBar inRoomStatus={false} />
         <Box
           width="100%"
           padding="2rem 6%"
@@ -265,7 +264,7 @@ const QnsHistPage = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar inRoomStatus={false} />
       <Box
         sx={
           Object.keys(difficultyCounts).length > 1

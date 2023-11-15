@@ -12,7 +12,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { Search, DarkMode, LightMode, Menu, Close } from "@mui/icons-material";
+import { DarkMode, LightMode, Menu, Close } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout, State } from "../../state";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +55,6 @@ const Navbar: React.FC<NavbarProps> = ({inRoomStatus}) => {
           <Typography
             fontWeight="bold"
             fontSize="clamp(1rem, 2rem, 2.25rem)"
-            // color="primary"
             onClick={() => {navigate("/homePage")}}
             sx={{
               "&:hover": {
@@ -71,13 +70,13 @@ const Navbar: React.FC<NavbarProps> = ({inRoomStatus}) => {
           </Typography>
           <Button 
             sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-            onClick={() => {navigate("/homePage");}}>HomePage</Button>
+            onClick={() => {navigate("/homePage");}}>Home</Button>
           <Button 
             sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-            onClick={() => {navigate("/questions");}}>QuestionPage</Button>
+            onClick={() => {navigate("/questions");}}>Questions</Button>
           <Button 
             sx ={{color: theme.palette.mode === dark ? neutralLight : dark}}
-            onClick={() => {navigate("/history");}}>History</Button>
+            onClick={() => {navigate("/history");}}>Learning Progress</Button>
         </FlexBetween>
 
         {/* DESKTOP NAV */}

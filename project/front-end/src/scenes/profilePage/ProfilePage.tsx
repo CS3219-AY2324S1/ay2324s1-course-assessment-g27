@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../navBar";
 import UserLeftBar from "./components/UserLeftBar";
@@ -13,7 +12,7 @@ const ProfilePage = () => {
 
   return (
     <div className="userprofile">
-      <Navbar />
+      <Navbar inRoomStatus={false} />
       <div className="userinfo">
         <div className="leftbar">
           <UserLeftBar activePage={currPage} />

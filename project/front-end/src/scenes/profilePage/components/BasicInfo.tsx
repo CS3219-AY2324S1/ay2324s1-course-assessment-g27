@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State, setUser } from "../../../state";
 import { getUserById } from "../../../api/usersAPI/Auth/getUserById";
@@ -25,7 +25,7 @@ const BasicInfo = () => {
         getUser();
     }, [])
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             if (uname.length == 0) {

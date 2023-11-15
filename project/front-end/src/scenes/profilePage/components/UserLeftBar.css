@@ -18,19 +18,6 @@
     color: gray;
 }
 
-/* .userleftbar svg:hover {
-    width: 30px;
-    height: 30px;
-    stroke: rgb(250, 250, 250);
-} */
-
-/* .userleftbar .s1:hover {
-    background-color: rgb(83, 208, 245);
-    border-radius: 5px;
-    cursor: pointer;
-    color: rgb(250, 250, 250);
-} */
-
 .userleftbar .s2 {
     background-color: rgb(83, 208, 245);
     border-radius: 5px;

@@ -36,16 +36,8 @@ export const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload.user;
-      //console.log('curr state : ', state.user)
     }
-
-    // setQuestion: (state, action) => {
-    //   const updatedQuestions = state.questions.map((question) => {
-    //     if (question._id === action.payload.question_id) return action.payload.question;
-    //     return question;
-    //   });
-    //   state.questions = updatedQuestions;
-    // }
+    
   }
 })
 

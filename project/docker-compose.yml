@@ -31,7 +31,7 @@ services:
     environment:
       ENV: production
     env_file:
-      - ./user-service/.env.prod
+      - ./user-service/.env
     links:
       - postgres_db
     restart: on-failure
@@ -116,7 +116,7 @@ services:
     environment:
       ENV: production
     env_file:
-      - ./history-service/.env.prod
+      - ./history-service/.env
     links:
       - postgres_db
     restart: on-failure
