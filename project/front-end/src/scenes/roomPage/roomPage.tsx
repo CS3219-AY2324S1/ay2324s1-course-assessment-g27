@@ -3,25 +3,28 @@ import Navbar from "../navBar";
 import { Box, Fab } from "@mui/material";
 import "./roomPage.css";
 import { deleteRoom, getRoomDetails } from "../../api/roomAPI";
-import { saveAttemptedQns, completeQns } from "../../api/usersAPI/qnsHistAPI"
-import { getRandQuestion, getQuestionById } from '../../api/questionAPI/getQuestion';
+import { saveAttemptedQns, completeQns } from "../../api/usersAPI/qnsHistAPI";
+import {
+  getRandQuestion,
+  getQuestionById,
+} from "../../api/questionAPI/getQuestion";
 import { Room } from "../../state/room";
 import { useSelector } from "react-redux";
 import { State } from "../../state";
-import { useEffect , useRef, useState} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import ConfirmationPopup from './confirmationPopup';
-import Chatbot from './Chatbot';
-import Editor from './editor';
-import {roomSocket} from "../../App";
-import CompleteQnsPopup from './completeQnsPopup';
-import NextQnsPopup from './nextQnsPopup';
-import SaveQnsPopup from './saveQnsPopup';
-import { DisplayDescriptionInRoom } from '../widgets/DisplayQuestionInformation';
-import CircularProgress from '@mui/material/CircularProgress';
-import AssistantIcon from '@mui/icons-material/Assistant';
-import Chat from './Chat';
-import { Question } from '../../state/question';
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import ConfirmationPopup from "./confirmationPopup";
+import Chatbot from "./Chatbot";
+import Editor from "./editor";
+import { roomSocket } from "../../App";
+import CompleteQnsPopup from "./completeQnsPopup";
+import NextQnsPopup from "./nextQnsPopup";
+import SaveQnsPopup from "./saveQnsPopup";
+import { DisplayDescriptionInRoom } from "../widgets/DisplayQuestionInformation";
+import CircularProgress from "@mui/material/CircularProgress";
+import AssistantIcon from "@mui/icons-material/Assistant";
+import Chat from "./Chat";
+import { Question } from "../../state/question";
 import { codeExec } from "../../api/codeAPI";
 import ExecutionResultDiv from "../widgets/ExecutionResultDiv";
 
@@ -60,7 +63,7 @@ const RoomPage = () => {
 
   const handleAttempt = (attempt: string) => {
     setAttempt(attempt);
-  }
+  };
 
   useEffect(() => {
     roomSocket.emit("join_room", roomid);
@@ -85,7 +88,7 @@ const RoomPage = () => {
 
   roomSocket.on("leave_room_request", () => {
     deleteCurrentRoom();
-  })
+  });
 
   //when partner moves to the next question
   roomSocket.on("next_qns", async (qnsId) => {
@@ -97,7 +100,7 @@ const RoomPage = () => {
       setNewQid(qnsId);
       setShowSave(true);
     } catch (err) {
-      console.log('Error getting new question:', err);
+      console.log("Error getting new question:", err);
     }
   });
 
@@ -185,12 +188,17 @@ const RoomPage = () => {
 
   //when the user want to save an incompleted question after this partner proceed to the next question
   const handleCancelSave = async () => {
-    setShowSave(false)
+    setShowSave(false);
     try {
       if (currQns == undefined) {
         throw new Error("something went wrong");
       }
-      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      const updatedRoomDetails: Room = {
+        _id: roomDetails._id,
+        question_id: newQid,
+        language: roomDetails.language,
+        users: roomDetails.users,
+      };
       setRoomDetails(updatedRoomDetails);
       const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
       const qns = await getQuestionById(newQid, token);
@@ -202,12 +210,17 @@ const RoomPage = () => {
 
   //when user want to save a completed question after his partner proceed to the next question
   const confirmSave = async () => {
-    setShowSave(false)
+    setShowSave(false);
     try {
       if (currQns == undefined) {
         throw new Error("something went wrong");
       }
-      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newQid, language: roomDetails.language, users: roomDetails.users};
+      const updatedRoomDetails: Room = {
+        _id: roomDetails._id,
+        question_id: newQid,
+        language: roomDetails.language,
+        users: roomDetails.users,
+      };
       setRoomDetails(updatedRoomDetails);
       const res = await saveAttemptedQns(attempt, currQns._id, userId, token);
       const complete = await completeQns(true, currQns._id, userId, token);
@@ -216,7 +229,7 @@ const RoomPage = () => {
     } catch (err) {
       console.log("Error saving attempt: ", err);
     }
-  }
+  };
 
   //when you click on next question and confirm
   const confirmNextQuestion = async () => {
@@ -225,17 +238,32 @@ const RoomPage = () => {
       if (currQns == undefined || roomDetails == undefined) {
         throw new Error("something went wrong");
       }
-      const res = await saveAttemptedQns(attempt, roomDetails.question_id, userId, token);
-      const complete = await completeQns(true, roomDetails.question_id, userId, token);
+      const res = await saveAttemptedQns(
+        attempt,
+        roomDetails.question_id,
+        userId,
+        token
+      );
+      const complete = await completeQns(
+        true,
+        roomDetails.question_id,
+        userId,
+        token
+      );
       const newQns: Question = await getRandQuestion(currQns.difficulty, token);
       setCurrQns(newQns);
       const newId = newQns._id;
       roomSocket.emit("change_qns", roomid, newId);
-      const updatedRoomDetails: Room = {_id: roomDetails._id, question_id: newId, language: roomDetails.language, users: roomDetails.users};
+      const updatedRoomDetails: Room = {
+        _id: roomDetails._id,
+        question_id: newId,
+        language: roomDetails.language,
+        users: roomDetails.users,
+      };
       setRoomDetails(updatedRoomDetails);
     } catch (err) {
       console.log("Error getting next question: ", err);
-    } 
+    }
   };
 
   const openChat = () => {
@@ -293,9 +321,12 @@ const RoomPage = () => {
         {" "}
         Run Code{" "}
       </button>
-      <button className="executeCode-button" onClick={() => handleNextQuestion()}> 
+      <button
+        className="executeCode-button"
+        onClick={() => handleNextQuestion()}
+      >
         {" "}
-        Next Question{" "} 
+        Next Question{" "}
       </button>
 
       <div
@@ -353,18 +384,21 @@ const RoomPage = () => {
       <CompleteQnsPopup
         open={showComplete}
         onClose={handleCancelComplete}
-        onConfirm={confirmComplete} />
+        onConfirm={confirmComplete}
+      />
 
       <NextQnsPopup
         open={showNext}
         onClose={handleCancelNextQuestion}
-        onConfirm={confirmNextQuestion}/>
-      
-      <SaveQnsPopup 
-       open={showSave}
-       onClose={handleCancelSave}
-       onConfirm={confirmSave} />
-      
+        onConfirm={confirmNextQuestion}
+      />
+
+      <SaveQnsPopup
+        open={showSave}
+        onClose={handleCancelSave}
+        onConfirm={confirmSave}
+      />
+
       <Fab
         id="ChatBotButton"
         size="large"
