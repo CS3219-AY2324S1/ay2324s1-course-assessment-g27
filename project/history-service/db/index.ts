@@ -14,12 +14,7 @@ export const db =
   isAdmin BOOLEAN DEFAULT false, 
   PRIMARY KEY(id)
 );
-CREATE TABLE IF NOT EXISTS user_info (
-  id INT PRIMARY KEY,
-  dname TEXT NOT NULL,
-  pic_path TEXT DEFAULT '',
-  FOREIGN KEY(id) REFERENCES users(id)
-);
+
 CREATE TABLE IF NOT EXISTS attempted_qns (
   id INT,
   qid TEXT NOT NULL,
