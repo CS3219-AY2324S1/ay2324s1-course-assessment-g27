@@ -268,12 +268,12 @@ const RoomPage = () => {
 
   const openChat = () => {
     setShowChat(true);
-    document.body.classList.add('chatbot-open');
-  }
+    document.body.classList.add("chatbot-open");
+  };
   const closeChat = () => {
     setShowChat(false);
-    document.body.classList.remove('chatbot-open');
-  }
+    document.body.classList.remove("chatbot-open");
+  };
   if (!roomid) {
     // Handle the case when roomid is undefined
     return <div>No room id provided</div>;
@@ -314,7 +314,7 @@ const RoomPage = () => {
 
   return (
     <Box>
-      <Navbar inRoomStatus={true}/>
+      <Navbar inRoomStatus={true} />
       <button className="deleteRoom-button" onClick={() => handleDeleteRoom()}>
         {" "}
         Close Room{" "}
@@ -356,6 +356,7 @@ const RoomPage = () => {
             padding: "10px",
             paddingTop: "0",
             maxHeight: "85%",
+            overflow: "auto",
           }}
         >
           <Editor
