@@ -108,10 +108,23 @@ export const DisplayDescriptionInRoom: React.FC<
     getQuestionData(roomDetails.question_id);
   }, []);
 
-  const difficultiesColors: { [key: string]: string } = {
-    Easy: "#186F65",
-    Medium: "#FFC436",
-    Hard: "#D80032",
+  useEffect(() => {
+    async function getQuestionData(id: string) {
+      try {
+        const question = await getQuestionById(id, token);
+        setQuestionData(question);
+      } catch (err: any) {
+        console.error(`Error fetching question in room: ${err.message}`);
+      }
+    }
+    console.log("Room ID detail: " + roomDetails.question_id);
+    getQuestionData(roomDetails.question_id);
+  }, [roomDetails]);
+
+  const difficultiesColors:{[key: string]: string} = {
+    Easy: '#186F65',
+    Medium: '#FFC436',
+    Hard: '#D80032',
   };
 
   return (
