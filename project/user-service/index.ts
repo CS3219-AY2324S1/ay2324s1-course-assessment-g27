@@ -16,6 +16,9 @@ app.use(morgan("common"));
 app.use(cors());
 
 /* ROUTES */
+app.get('/', (req, res) => {
+  res.send('Hello from user-service!');
+});
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 

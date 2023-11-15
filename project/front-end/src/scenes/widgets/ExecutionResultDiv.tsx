@@ -11,7 +11,7 @@ const ExecutionResultDiv: React.FC<ExecutionResultDivProps> = ({ output }) => {
     <div
       style={{
         width: "100%",
-        height: "6rem",
+        height: "20%",
         overflowX: "hidden",
         overflowY: "auto",
       }}

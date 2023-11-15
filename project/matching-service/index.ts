@@ -26,6 +26,10 @@ export const io = new Server( server, {
 
 initSocketMatch();
 
+app.get('/', (req, res) => {
+  res.send('Hello from matching-service!');
+});
+
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 8001;
 mongoose

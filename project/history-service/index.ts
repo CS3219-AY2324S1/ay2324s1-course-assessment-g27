@@ -15,6 +15,9 @@ app.use(morgan("common"));
 app.use(cors());
 
 /* ROUTES */
+app.get('/', (req, res) => {
+  res.send('Hello from history-service!');
+});
 app.use("/users", userRoutes);
 
 /* DATABASE SETUP */

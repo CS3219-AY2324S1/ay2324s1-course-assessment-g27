@@ -29,6 +29,9 @@ export const io = new Server( server, {
 initSocketMatch();
 
 /* ROUTES */
+app.get('/', (req, res) => {
+  res.send('Hello from room-service!');
+});
 app.use("/rooms", roomRoutes);
 
 /* MONGOOSE SETUP */
