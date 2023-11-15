@@ -35,10 +35,8 @@ services:
         depends_on:
             postgres_db:
                 condition: service_healthy
-        environment:
-            ENV: production
         env_file:
-            - .env.prod
+            - .env
         links:
             - postgres_db
         restart: on-failure

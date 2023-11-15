@@ -19,7 +19,6 @@ export const createQuestion = async (req: Request, res: Response) => {
       examples: examples,
       constraints: constraints,
       tags: tags,
-      // picturePath: picturePath,
     });
 
     await newQuestion.save();
@@ -98,16 +97,3 @@ export const updateQuestion = async (req: Request, res: Response) => {
   }
 }
 
-/* UPDATE */
-/**
- * TODO: Update number of likes.
- */
-export const likeQuestion = async (req: Request, res: Response) => {
-  try {
-    // const { username } = req.params;
-    // const questions = await Question.find({ username });
-    // res.status(200).json(questions);
-  } catch (err) {
-    // res.status(404).json({ message: err.message });
-  }
-}

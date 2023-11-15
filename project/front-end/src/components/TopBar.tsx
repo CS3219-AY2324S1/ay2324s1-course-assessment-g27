@@ -17,7 +17,6 @@ const TopBar = () => {
       <Typography
         fontWeight="bold"
         fontSize="40px"
-        // color={theme.palette.background.alt}
       >
         PeerPrep
       </Typography>

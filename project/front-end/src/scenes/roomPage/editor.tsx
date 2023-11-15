@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
@@ -10,6 +10,7 @@ import "codemirror/addon/edit/closebrackets";
 import { Socket } from "socket.io-client";
 import "./editor.css";
 import Chip from "@mui/material/Chip";
+import {LANGUAGE} from "../../constants/constants"
 
 const Editor = ({
   socket,
@@ -89,7 +90,6 @@ const Editor = ({
       }
     });
 
-    // setText(editorRef.current!.getValue());
     return () => {
       socket.off("code_change");
     };
@@ -100,7 +100,7 @@ const Editor = ({
       className="editor"
       style={{ height: "80%", maxHeight: "68vh", overflow: "scroll" }}
     >
-      <Chip label={selectedLanguage} color="primary" variant="outlined" />
+      <Chip label={Object.keys(LANGUAGE)[Object.values(LANGUAGE).indexOf(selectedLanguage)]} color="primary" variant="outlined" />
       <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
     </div>
   );

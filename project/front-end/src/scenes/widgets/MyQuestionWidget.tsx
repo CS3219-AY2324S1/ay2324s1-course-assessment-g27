@@ -3,7 +3,7 @@ import { useTheme, Button, Chip } from "@mui/material";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import "./MyQuestionWidget.css";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { State } from "../../state";
 import { Question } from "../../state/question";
 import { Stack, Theme } from "@mui/system";
@@ -19,14 +19,10 @@ import Tooltip from '@mui/material/Tooltip';
 
 
 const MyQuestionWidget = () => {
-  const dispatch = useDispatch();
   const theme: Theme = useTheme();
   const user = useSelector((state: State) => state.user);
   const isAdmin = user.isAdmin;
   const token = useSelector((state: State) => state.token);
-  // const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  // const mediumMain = theme.palette.neutral.mediumMain;
-  // const medium = theme.palette.neutral.medium;
 
   const[questionData, setQuestionData] = useState<Question[]>([]);
   const [openAddFormPopup, setOpenAddFormPopup] = useState(false);
@@ -174,7 +170,7 @@ const MyQuestionWidget = () => {
       field: 'tags', 
       headerName: 'Tags', 
       hideable:false, 
-      width: 120, 
+      width: 220, 
       type:"singleSelect", 
       valueOptions: tags,
       renderCell: (params) => (

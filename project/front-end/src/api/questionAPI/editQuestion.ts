@@ -11,10 +11,4 @@ export async function editQuestionById(questionId: any, updatedData: Partial<Que
     body: JSON.stringify(updatedData),
   });
   return response;
-  // if (response.ok) {
-  //   return await response.json(); 
-  // } else {
-  //   throw new Error(`Error editing question: ${response.statusText}`);
-  // }
-  
 };

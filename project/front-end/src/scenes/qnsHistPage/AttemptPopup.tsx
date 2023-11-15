@@ -13,18 +13,8 @@ interface AttemptPopupProps {
 }
 
 const AttemptPopup: React.FC<AttemptPopupProps> = ({ attempt }) => {
-    // const editorElement = document.getElementById('codeblock') as HTMLTextAreaElement;
     const text = attempt.toString();
-    // const editor = CodeMirror.fromTextArea(editorElement, {
-    //   mode: 'javascript',
-    //   theme: 'dracula',
-    //   autoCloseTags: true,
-    //   autoCloseBrackets: true,
-    //   lineNumbers: true,
-    // })
-  
-    // editor.setValue(attempt.toString());
-  
+
     return (
       <div>
         <textarea 
