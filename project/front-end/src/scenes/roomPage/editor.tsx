@@ -51,9 +51,10 @@ const Editor = ({
               saveAttempt(code);
             }
           });
-          editorRef.current.getWrapperElement().style.borderRadius = "15px";
-          editorRef.current.getWrapperElement().style.height = "95%";
-          editorRef.current.getWrapperElement().style.width = "100%";
+          editorRef.current.getWrapperElement().style.borderRadius = '15px';
+          editorRef.current.getWrapperElement().style.height = '95%';
+          editorRef.current.getWrapperElement().style.width = '100%';
+          editorRef.current.getWrapperElement().style.overflow = "scroll";
 
           if (editorRef.current.getValue() === "") {
             editorRef.current.setValue("// TYPE CODE HERE");
@@ -94,8 +95,8 @@ const Editor = ({
     };
   }, [socket, roomId]);
 
-  return (
-    <div className="editor" style={{ height: "85%", overflow: "scroll" }}>
+  return(
+    <div className='editor' style={{height:"100%", maxHeight:"68vh",overflow:"scroll"}}>
       <Chip label={selectedLanguage} color="primary" variant="outlined" />
       <textarea id="realtimeEditor" placeholder="//TYPE CODE HERE"></textarea>
     </div>
