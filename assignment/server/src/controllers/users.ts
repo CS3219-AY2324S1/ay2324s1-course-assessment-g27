@@ -71,22 +71,6 @@ export const updateUsername = async (req: Request, res: Response) => {
     }
 };
 
-export const updateAdminStatus = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { username, password, isAdmin} = req.body;
-    const oldUser = await pool.query(queries.findUserById, [id]);
-    if (oldUser.rowCount == 0) {
-        res.status(400).json("User does not exist")
-        return;
-    }
-
-    pool.query(queries.updateAdminStatus, [isAdmin, id], (error: Error, results: QueryResult) => {
-        if (error) throw error;
-        res.status(200).json("Updated successfully");
-        return;
-    })
-};
-
 export const deleteUser = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   try {

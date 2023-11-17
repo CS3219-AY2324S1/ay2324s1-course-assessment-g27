@@ -34,14 +34,13 @@ const BasicInfo = () => {
             const updatedUser = await getUserById(id);
             const username = updatedUser[0].username;
             const password = "";
-            const isAdmin = updatedUser[0].isadmin;
             
             if (errorVisible) {
                 setErrorVisible(false);
             }
             setMsg("Username updated successfully");
             setAlertVisible(true);
-            dispatch(setUser({ user: { id, username, password, isAdmin } }));
+            dispatch(setUser({ user: { id, username, password } }));
         } catch (error: any) {
             setMsg(error.message);
             if (alertVisible) {
