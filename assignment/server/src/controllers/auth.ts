@@ -54,8 +54,7 @@ export const login = async (req: Request, res: Response) => {
 
     const id = result.id;
     const uname = result.username;
-    const isAdmin = result.isadmin;
-    const userWithoutPassword = new User(id, uname, '', isAdmin)
+    const userWithoutPassword = new User(id, uname, '')
     res.status(200).json({ userWithoutPassword});
   } catch (err: any) {
     console.error("login has error");

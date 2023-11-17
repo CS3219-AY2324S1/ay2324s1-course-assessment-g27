@@ -14,12 +14,13 @@
 
 1. Ensure that you have PostgreSQL downloaded on your local machine. If not, please refer to this [section](https://github.com/CS3219-AY2324S1/ay2324s1-course-assessment-g27/edit/Assignment-2/assignment/readme.md#setting-up-your-postgresql) for more information about setting up PostgreSQL.
 2. In the file ```assignment/server/dbConnection.ts```, change the username and password to the one you have set up during the installation of PostgreSQL.
-3. Run ```npm run initdb``` to initialise the database.
-    - Note that doing this will clear any user profile data saved in the database before this.
-4. The app is now set up for you to register and login.
+3. Install npm packages using ```npm install```.
+4. Run ```npm run initdb``` to initialise the database.
+    - Note that doing this will clear any user profile data saved in the database before this. 
+5. Run Question Service using ```npm run dev```.
 
 ### Subsequent usage:
-1. As long as you do not re-initialise the databse, your user data should persist, and you can login as per normal.
+1. As long as you do not re-initialise the database, your user data should persist, and you can login as per normal.
 
 ## Setting up your PostgreSQL
 1. [Guide](https://www.w3schools.com/postgresql/postgresql_install.php) to installing PostgreSQL.

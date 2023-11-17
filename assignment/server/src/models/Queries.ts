@@ -28,7 +28,6 @@ export const findOtherUsers = "SELECT * FROM users WHERE username = $1 and id !=
  */
 export const updateUsername = "UPDATE users SET username = $1 WHERE id = $2";
 export const updatePwd = "UPDATE users SET password = $1 WHERE id = $2";
-export const updateAdminStatus = "UPDATE users SET isAdmin = $1 WHERE id = $2";
 
 /**
  * Finds a user from an input username and
