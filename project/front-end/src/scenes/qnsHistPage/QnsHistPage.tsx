@@ -175,11 +175,14 @@ const QnsHistPage = () => {
       type:"singleSelect", 
       valueOptions: tags,
       renderCell: (params) => (
-        <Stack direction="row" spacing={0.25}>
-          {params.row.tags.split(', ').map((tag: string) => (
-            <Chip label={tag} />
-          ))}
-        </Stack>
+        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <style>{`div::-webkit-scrollbar {display: none;}`}</style>
+          <Stack direction="row" spacing={0.25}>
+            {params.row.tags.split(', ').map((tag: string) => (
+              <Chip label={tag} />
+            ))}
+          </Stack>
+        </div>
       ),
       filterOperators: tagsFilterOperators
     },
