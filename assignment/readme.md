@@ -1,14 +1,14 @@
-# Question service
+## Assignment 3
 
-## Usage
+- Assumption: You have done the basic set up mentioned in the previous assignments
 
-1. Rename .env.sample to .env, and change the values of variables `MONGO_URL` and `JWT_SECRET`. You can get these values by emailing any of our group members. 
-2. Install npm packages using `npm install`.
-3. Ensure postgresdb is available locally.
-4. Run Question Service using `npm run dev`.
+- To evaluate this assignment, you will need to change a user admin status in postgresSQL. (Assume you have followed Assignment 2 and have created a user inside the postgres database)
+    - Go to postgresSQL command prompt
+    - Enter `UPDATE users SET isadmin = true WHERE id = 1;` and press enter
 
-## Docker
+- In the server folder, create a `.env` file and copy the format from `.env-sample` file to it.
+    - Set the `MONGO_URL` same as Assignment 2
+    - Set `JWT_SECRET` to random string
+    - Set `PORT` to 3000
 
--   Via docker-compose: `docker-compose up --build`
-
-Then visit `http://localhost:8080` to see that hello from question-service!
+- Enter the command `npm run dev` in both the client and server file
