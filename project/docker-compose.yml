@@ -1,0 +1,144 @@
+version: '3.3'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  user-service:
+    container_name: "user-service"
+    build:
+      context: ./user-service
+    ports:
+      - '8000:8000'
+    depends_on:
+      postgres_db:
+          condition: service_healthy
+    environment:
+      ENV: production
+    env_file:
+      - ./user-service/.env
+    links:
+      - postgres_db
+    restart: on-failure
+
+  matching-service:
+    container_name: "matching-service"
+    build:
+      context: ./matching-service
+    ports:
+      - '8001:8001'
+      - '3001:3001'
+    depends_on:
+      - rabbitmq
+      - mongo
+      - question-service
+      - room-service
+    links: 
+      - rabbitmq
+      - mongo
+    env_file:
+      - ./matching-service/.env
+    restart: on-failure
+
+
+  room-service:
+    container_name: "room-service"
+    build:
+      context: ./room-service
+    ports:
+      - '8888:8888'
+      - '3002:3002'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file:
+      - ./room-service/.env
+    restart: on-failure
+
+
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: postgres_db
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres_db', '-U', 'postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  question-service:
+    container_name: "question-service"
+    build:
+      context: ./question-service
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file:
+      - ./question-service/.env
+    restart: on-failure
+
+  history-service:
+    container_name: "history-service"
+    build:
+      context: ./history-service
+    ports:
+      - '8500:8500'
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      ENV: production
+    env_file:
+      - ./history-service/.env
+    links:
+      - postgres_db
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - /app/node_modules
+      - ./front-end:/app
+    depends_on:
+      - user-service
+      - matching-service
+      - question-service
+      - history-service
+      - room-service
+    environment:
+      - MATCHING_SERVICE_URL="http://matching-service:8001"
+      - USER_SERVICE_URL="http://user-service:8000"
+      - ROOM_SERVICE_URL="http://room-service:8888"
+      - QUESTION_SERVICE_URL="http://question-service:8080"
+      - HISTORY_SERVICE_URL="http://history-service:8500"

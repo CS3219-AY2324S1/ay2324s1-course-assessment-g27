@@ -1,0 +1,33 @@
+  .dropDownMenu {
+    color-scheme:inherit;
+    /* margin-bottom: 10px; */
+    top:0;
+    right:0;
+    position:initial;
+  }
+  
+  select {
+    padding: 5px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 70%;
+  }
+
+  .selection {
+    option {
+      background-color: white; /* Set the background color of the options */
+      transition: background-color 0.3s; /* Add transition for smooth effect */
+    }
+  
+    /* Styles for the hover effect */
+    option:hover {
+      background-color: #f0f0f0; /* Change the background color on hover */
+      cursor: pointer; /* Change cursor on hover (optional) */
+    }
+  }
+
+  .realtimeEditor {
+    overflow-y: scroll;
+  }

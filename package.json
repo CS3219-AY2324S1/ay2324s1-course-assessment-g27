@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
+    "axios": "^1.5.1",
+    "codemirror": "^5.65.2",
+    "react-codemirror": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/codemirror": "^5.60.12",
+    "@types/react-codemirror": "^1.0.10"
+  }
+}

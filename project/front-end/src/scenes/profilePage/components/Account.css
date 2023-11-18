@@ -1,0 +1,42 @@
+.account h1 {
+    padding: 10px 20px;
+}
+
+.account .changepwd {
+    background: rgb(83, 208, 245);
+    border: 1px solid var(--col1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin: 1rem;
+    cursor: pointer;
+    color: var(--col1);
+    width: 200px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+}
+
+.account .changepwd:hover {
+    background: rgb(131, 212, 237);
+    border: 1px solid var(--col1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin: 1rem;
+    cursor: pointer;
+    color: white;
+    transform: scale(1.05);
+    transition: all 0.1s ease-in-out;
+}
+
+.account .mainbutton {
+    background: rgb(226, 46, 46);
+    bottom: 30%;
+    left: 50%;
+}
+
+.account .mainbutton:hover{
+    background: rgb(231, 79, 79);
+}

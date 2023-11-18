@@ -1,0 +1,11 @@
+.changepwdpage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.changepwdpage .form {
+    width: 70%;
+    border-radius: 10px;
+    min-height: 70vh;
+}

@@ -1,0 +1,144 @@
+/* homePage.css */
+.container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.container > div {
+    flex: 1;
+    padding: 0.5rem;
+}
+
+input[type="radio"] {
+    display: none;
+    &:not(:disabled) ~ label {
+      cursor: pointer;
+    }
+    &:disabled ~ label {
+      color: hsla(150, 5%, 75%, 1);
+      border-color: hsla(150, 5%, 75%, 1);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+}
+
+input[id="buttonMedium"] + label  {
+    height: 100%;
+    display: block;
+    background: white;
+    color: black;
+    border: 2px solid rgba(247, 182, 4, 0.983);
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+    position: relative;
+}
+
+input[id="buttonEasy"] + label  {
+    height: 100%;
+    display: block;
+    background: white;
+    color: black;
+    border: 2px solid hsla(150, 75%, 50%, 1);
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+    position: relative;
+}
+
+input[id="buttonHard"] + label  {
+    height: 100%;
+    display: block;
+    background: white;
+    color: black;
+    border: 2px solid rgb(246, 22, 2);
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+    position: relative;
+}
+
+input[name="lang-radio"] + label {
+    height: 100%;
+    display: block;
+    background: white;
+    color: black;
+    border: 2px solid #03e9f4;
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0px 3px 10px -2px hsla(150, 5%, 65%, 0.5);
+    position: relative;
+}
+
+input[id="buttonEasy"]:checked + label {
+    background: hsla(150, 75%, 50%, 1);
+    color: hsla(215, 0%, 100%, 1);
+    box-shadow: 0px 0px 20px hsla(150, 100%, 50%, 0.75);
+}
+
+input[id="buttonMedium"]:checked + label {
+    background: rgb(255, 208, 0);
+    color: hsla(215, 0%, 100%, 1);
+    box-shadow: 0px 0px 20px hsla(55, 100%, 50%, 0.75);
+}
+
+input[id="buttonHard"]:checked + label {
+    background: red;
+    color: hsla(215, 0%, 100%, 1);
+    box-shadow: 0px 0px 20px hsla(11, 100%, 64%, 0.716);
+}
+
+input[name="lang-radio"]:checked + label {
+    background: rgb(109, 224, 250);
+    color: hsla(215, 0%, 100%, 1);
+    box-shadow: 0px 0px 20px hsla(185, 94%, 67%, 0.716);
+}
+
+.matchDarkButton{
+    padding: 25px 30px;
+    background-color: #535c49;
+    color: #03e9f4;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    letter-spacing: 4px;
+    overflow: hidden;
+    transition: 0.5s;
+    cursor: pointer;
+}
+  
+.matchDarkButton:hover{
+    background: #03e9f4;
+    color: #050801;
+    box-shadow: 0 0 5px #03e9f4,
+                0 0 25px #03e9f4,
+                0 0 50px #03e9f4,
+                0 0 200px #03e9f4;
+    -webkit-box-reflect:below 1px linear-gradient(transparent, #0005);
+}
+
+.matchLightButton{
+    padding: 25px 30px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    border: 2px solid purple;
+    border-radius: 5px;
+    letter-spacing: 4px;
+    overflow: hidden;
+    transition: 0.5s;
+    cursor: pointer;
+}
+  
+.matchLightButton:hover{
+    background: purple;
+    color: white;
+}

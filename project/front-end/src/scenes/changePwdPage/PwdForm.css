@@ -1,0 +1,47 @@
+.pwdform {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.pwdform h1 {
+    text-align: center;
+    width: 100%;
+}
+
+.pwdform .form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 10px 20px;
+    padding-left: 0px;
+    align-items: center;
+    border: 1px solid rgb(207, 207, 207);
+}
+
+.pwdform .form .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    margin: 20px;
+    padding-bottom: 20px;
+}
+
+.pwdform .form .form-group label{
+    font-size: 1rem;
+    padding-bottom: 5px;
+}
+.pwdform .form .form-group input{
+    font-size: 1rem;
+    padding-bottom: 10px;
+    border: none;
+    line-height: 50%;
+    color:rgb(78, 78, 78);;
+}
+
+.pwdform .mainbutton {
+    position: absolute;
+    bottom: 20%;
+}
