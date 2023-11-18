@@ -1,14 +1,21 @@
-# Question service
+# How to run the Assignment 4
 
 ## Usage
 
-1. Rename .env.sample to .env, and change the values of variables `MONGO_URL` and `JWT_SECRET`. You can get these values by emailing any of our group members. 
-2. Install npm packages using `npm install`.
-3. Ensure postgresdb is available locally.
-4. Run Question Service using `npm run dev`.
+### Starting the Question-Service
+1. Change directory to question-service using `cd question-service`.
+2. Run `npm install`.
+3. Make a copy of `.env.sample` and fill in the values of the variables.
+4. Make the Docker image and container of this question repository application using `docker-compose up`.
 
-## Docker
+### Starting the User-Service
+1. Change directory to question-service using `cd user-service`.
+2. Run `npm install`.
+3. Make a copy of `.env.sample` and fill in the values of the variables.
+4. Make the Docker image and container of this user profile management application using `docker-compose up`.
 
--   Via docker-compose: `docker-compose up --build`
-
-Then visit `http://localhost:8080` to see that hello from question-service!
+### Starting the Front-End for Testing
+1. Change directory to front-end using `cd front-end`.
+2. Run `npm install`.
+3. Run the application using `npm run dev`.
+4. Visit the site that is shown to see both the question and user services at work. e.g `http://localhost:5173`.
